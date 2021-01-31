@@ -125,16 +125,16 @@ The ranked objects have their attributes filled out.
 ## Class Diagram  
 ![Rankine class diagram](https://user-images.githubusercontent.com/47836607/106396906-cb4f7500-63d8-11eb-9816-cce4236abd52.png)
 ### Class Diagram Description  
-**MainActivity:** The first screen the user sees. Shows a list of saved ranked and unranked data sets
-**SetCreationActivity:** The screen to create/modify a set
-**SetRankActivity:** The screen to rank a set
-**ObjectSet:** A set of similar objects that can be ranked
-**RankedSet:** A set that's ranked or is in the process of being ranked
-**Element:** An object in the ObjectSet that can be ranked
-**Field:** An object that constrain element attributes
-**Data:** Objects that represent field-attribute pairs
-**IObjectSet:** An interface for ObjectSets to communicate with Firebase databases
-**IRankedSet:** An interface for RankedSets to communicate with Firebase databases
+**MainActivity:** The first screen the user sees. Shows a list of saved ranked and unranked data sets  
+**SetCreationActivity:** The screen to create/modify a set  
+**SetRankActivity:** The screen to rank a set  
+**ObjectSet:** A set of similar objects that can be ranked  
+**RankedSet:** A set that's ranked or is in the process of being ranked  
+**Element:** An object in the ObjectSet that can be ranked  
+**Field:** An object that constrain element attributes  
+**Data:** Objects that represent field-attribute pairs  
+**IObjectSet:** An interface for ObjectSets to communicate with Firebase databases  
+**IRankedSet:** An interface for RankedSets to communicate with Firebase databases  
 ## Scrum Roles  
 - DevOps/Product Owner/Scrum Master: Colin McQueen  
 - Frontend Developer: Eric Davin  
