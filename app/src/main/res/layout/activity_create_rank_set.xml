@@ -5,10 +5,24 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black_gray"
     tools:context=".CreateRankSet" >
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="114dp"
+        android:layout_height="108dp"
+        app:srcCompat="@drawable/ic_plus_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/ic_border"
+        android:clickable="true" />
+
+
+
 
 </RelativeLayout>

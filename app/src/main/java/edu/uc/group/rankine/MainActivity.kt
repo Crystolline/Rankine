@@ -11,7 +11,6 @@ import android.widget.Toast
 import edu.uc.group.rankine.ui.main.MainFragment
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import edu.uc.group.rankine.CreateRankSet
 
 class MainActivity : AppCompatActivity() {
 

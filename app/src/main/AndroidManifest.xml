@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Rankine">
         <activity
             android:name=".CreateRankSet"
-            android:label="@string/title_activity_create_rank_set">
+            android:label="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
