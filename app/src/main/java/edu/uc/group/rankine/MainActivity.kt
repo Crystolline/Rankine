@@ -1,12 +1,12 @@
 package edu.uc.group.rankine
 
+import android.app.SearchManager
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import edu.uc.group.rankine.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -25,21 +25,24 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return true
+        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu?.findItem(R.id.search_icon)
+        val searchView = searchItem?.actionView as androidx.appcompat.widget.SearchView
+
+
+        return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.search_icon) {
-            Toast.makeText( applicationContext, "Message", Toast.LENGTH_SHORT).show()
-            return true
-        }
 
-        else if(item.itemId == R.id.search_menu_item01) {
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if(item.itemId == R.id.search_menu_item01) {
             Toast.makeText( applicationContext, "Menu", Toast.LENGTH_SHORT).show()
             return true
         }else{ return super.onOptionsItemSelected(item) }
     }
 
 
-    
+
 }

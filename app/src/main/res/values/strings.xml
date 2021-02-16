@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Rankine</string>
+    <string name="search_hint">Search rank sets</string>
 </resources>
