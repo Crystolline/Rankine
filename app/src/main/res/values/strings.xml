@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Rankine</string>
     <string name="search_hint">Search rank sets</string>
+    <string name="title_activity_create_rank_set">CreateRankSet</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>

@@ -2,6 +2,7 @@ package edu.uc.group.rankine
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -9,6 +10,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import edu.uc.group.rankine.ui.main.MainFragment
 import androidx.appcompat.widget.SearchView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import edu.uc.group.rankine.CreateRankSet
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +25,12 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.container, MainFragment.newInstance())
                     .commitNow()
         }
+
+        val btnOpenActivity : FloatingActionButton = findViewById(R.id.createRankBtn)
+            btnOpenActivity.setOnClickListener{
+                val intent = Intent(this, CreateRankSet::class.java)
+                startActivity(intent)
+            }
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
