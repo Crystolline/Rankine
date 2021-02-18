@@ -1,5 +1,6 @@
 package edu.uc.group.rankine
 
+import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
 import org.junit.Test
 
@@ -50,54 +51,83 @@ class ObjectSetCreationTest
     }
 
     private fun whenAddRankineElement() {
-
+        workingObjectSet.addElement(ElementObject("Rankine"))
     }
 
     private fun thenContainsRankine() {
-        assert(false)
+        var containsRankine = false
+        workingObjectSet.elements.forEach {
+            if(it.name == "Rankine") {
+                containsRankine = true
+            }
+        }
+        assert(containsRankine)
     }
 
     private fun thenNotRankable() {
-        assert(false)
+        assert(!workingObjectSet.canBeRanked())
     }
 
     private fun whenAddRankineAndKelvinElements() {
-
+        workingObjectSet.addElement(ElementObject("Rankine"))
+        workingObjectSet.addElement(ElementObject("Kelvin"))
     }
 
     private fun thenContainsRankineAndKelvin() {
-        assert(false)
+        var containsRankine = false
+        var containsKelvin = false
+        workingObjectSet.elements.forEach {
+            if(it.name == "Rankine") {
+                containsRankine = true
+            }
+            if(it.name == "Kelvin") {
+                containsKelvin = true
+            }
+        }
+        assert(containsRankine && containsKelvin)
     }
 
     private fun thenIsRankable(){
-        assert(false)
+        assert(workingObjectSet.canBeRanked())
     }
 
     private fun givenRankineAndKelvinInUnrankedSet() {
-
+        workingObjectSet = ObjectSet(arrayListOf(ElementObject("Rankine"), ElementObject("Kelvin")))
     }
 
     private fun whenAddFahrenheitElement() {
-
+        workingObjectSet.addElement(ElementObject("Fahrenheit"))
     }
 
     private fun thenContainsFahrenheit() {
-        assert(false)
+        var containsFahrenheit = false
+        workingObjectSet.elements.forEach {
+            if(it.name == "Fahrenheit") {
+                containsFahrenheit = true
+            }
+        }
+        assert(containsFahrenheit)
     }
 
     private fun givenRankineKelvinAndFahrenheitInRankedSet() {
-
+        workingObjectSet = ObjectSet(arrayListOf(ElementObject("Rankine"), ElementObject("Kelvin"), ElementObject("Fahrenheit")), ranked = true)
     }
 
     private fun whenAddCelsiusElement() {
-
+        workingObjectSet.addElement(ElementObject("Celsius"))
     }
 
     private fun thenContainsCelsius() {
-        assert(false)
+        var containsCelsius = false
+        workingObjectSet.elements.forEach {
+            if(it.name == "Celsius") {
+                containsCelsius = true
+            }
+        }
+        assert(containsCelsius)
     }
 
     private fun thenRankingInProgress() {
-        assert(false)
+        assert(workingObjectSet.isBeingRanked())
     }
 }

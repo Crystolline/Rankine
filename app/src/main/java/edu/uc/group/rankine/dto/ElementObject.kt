@@ -1,6 +1,6 @@
 package edu.uc.group.rankine.dto
 
-class ElementObject
+data class ElementObject(var name: String)
 {
 
 }
