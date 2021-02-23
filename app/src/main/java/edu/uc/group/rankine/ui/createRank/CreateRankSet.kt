@@ -9,24 +9,26 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import edu.uc.group.rankine.R
+import org.json.JSONObject
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
 
 class CreateRankSet : AppCompatActivity() {
 
 
 
     private var scrollContainer : LinearLayout? = null
-    private var testContainer : LinearLayout? = null
-    private var dynamicList: ArrayList<EditText> = ArrayList<EditText>()
-    private var i: Int = 0
+    private var dynamicList: MutableList<String> = ArrayList()
+    private var jsonObject: JSONObject = JSONObject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_rank_set)
         setSupportActionBar(findViewById(R.id.toolbar)) // set toolbar
-        val createFieldBtn:androidx.appcompat.widget.AppCompatButton = findViewById(R.id.add_new_field_btn)
         scrollContainer = findViewById(R.id.scroll_Container)
-        testContainer = findViewById(R.id.test_Container)
         assert(supportActionBar != null) //implement back button
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
     }
 
     override fun onSupportNavigateUp(): Boolean { // back btn functionality
@@ -45,8 +47,11 @@ class CreateRankSet : AppCompatActivity() {
     }
 
     fun onCreate(view: View) {
-
+        val nameEditText = findViewById<EditText>(R.id.name_edit_view)
+        val storeNameText = nameEditText.text.toString()
+        jsonObject.put("Name",storeNameText)
         scrollContainer = findViewById(R.id.scroll_Container)
+
 
         val allViews: ArrayList<View> = getAllChildren(scrollContainer!!)
         for (child: View in allViews){
@@ -54,6 +59,7 @@ class CreateRankSet : AppCompatActivity() {
                 run {
                     var childEditViews = child as EditText
                     var storeText = childEditViews.text.toString()
+                    handleJsonObj(storeText)
                 }
             }
         }
@@ -74,6 +80,15 @@ class CreateRankSet : AppCompatActivity() {
             result.addAll(viewArrayList)
         }
         return result
+    }
+
+    private fun handleJsonObj(string: String){
+        jsonObject.put(string, null)
+        var file:File = File(applicationContext.filesDir, "rankine_data")
+        var fileWriter:FileWriter = FileWriter(file)
+        var bufferedWriter:BufferedWriter = BufferedWriter(fileWriter)
+        bufferedWriter.write(string)
+        bufferedWriter.close()
     }
 
 
