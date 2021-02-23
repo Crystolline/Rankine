@@ -14,13 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rankine">
         <activity
-            android:name=".CreateRankSet"
-            android:label="">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
+            android:name=".ui.createRank.CreateRankSet"
+            android:label="Rankine">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />

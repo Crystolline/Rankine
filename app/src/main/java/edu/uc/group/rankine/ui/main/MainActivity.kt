@@ -1,4 +1,4 @@
-package edu.uc.group.rankine
+package edu.uc.group.rankine.ui.main
 
 import android.app.SearchManager
 import android.content.Context
@@ -8,9 +8,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import edu.uc.group.rankine.ui.main.MainFragment
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import edu.uc.group.rankine.R
+import edu.uc.group.rankine.ui.createRank.CreateRankSet
 
 class MainActivity : AppCompatActivity() {
 
