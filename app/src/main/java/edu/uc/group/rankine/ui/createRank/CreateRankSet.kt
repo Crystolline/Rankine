@@ -84,7 +84,7 @@ class CreateRankSet : AppCompatActivity() {
 
     private fun handleJsonObj(string: String){
         jsonObject.put(string, null)
-        var file:File = File(applicationContext.filesDir, "rankine_data")
+        var file:File = File(applicationContext.filesDir, "rankine_data.json")
         var fileWriter:FileWriter = FileWriter(file)
         var bufferedWriter:BufferedWriter = BufferedWriter(fileWriter)
         bufferedWriter.write(string)
