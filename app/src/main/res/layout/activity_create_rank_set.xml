@@ -36,7 +36,8 @@
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
             android:shadowColor="@color/black"
-            android:text="Create"/>
+            android:text="Create"
+            android:onClick="onCreate"/>
     </LinearLayout>
 
 
