@@ -2,6 +2,7 @@ package edu.uc.group.rankine.dto
 
 data class ObjectSet(var elements:ArrayList<ElementObject> = ArrayList<ElementObject>(), var fields:ArrayList<FieldObject> = ArrayList<FieldObject>(), var rankingInProgress:Boolean = false, var ranked:Boolean = false) {
 
+
     fun addElement(e: ElementObject) {
         if (!elements.add(e)) {
             //Logic for if item already exists within this set
@@ -30,6 +31,7 @@ data class ObjectSet(var elements:ArrayList<ElementObject> = ArrayList<ElementOb
         return elements.size >= 2
     }
 
+    //It isn't necessary to keep track of if a set is being ranked, as a rankedSet is its own independent dto and has a one-to-many relationship with an objectSet
     fun isBeingRanked(): Boolean {
         return rankingInProgress
     }
