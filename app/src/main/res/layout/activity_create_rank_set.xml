@@ -28,7 +28,7 @@
             android:backgroundTint="@color/light_green"
             android:shadowColor="@color/black"
             android:text="Add Field"
-            android:onClick="onAdd"/>
+            android:onClick="onAddElements"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="0dp"

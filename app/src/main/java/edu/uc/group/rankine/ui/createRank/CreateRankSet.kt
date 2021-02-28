@@ -40,16 +40,28 @@ class CreateRankSet : AppCompatActivity() {
         return true
     }
 
-    fun onDelete(view: View){
+    fun onDeleteElements(view: View){
         viewModel.removeElements(view)
 
     }
 
-    fun onAdd(view: View){
+    fun onDeleteFields(view: View){
+        view.id = View.generateViewId()
+        var v = view.id
+        viewModel.removeFields(view, v)
+    }
+
+    fun onAddElements(view: View){
         viewModel.addElements()
     }
 
     fun onCreate(view: View) {
         viewModel.create()
+    }
+
+    fun onAddFields(view: View){
+        view.id = View.generateViewId()
+        var v = view.id
+        viewModel.addFields(v)
     }
 }
