@@ -1,36 +1,43 @@
 package edu.uc.group.rankine.dto
 
-data class ObjectSet(var elements:ArrayList<ElementObject> = ArrayList<ElementObject>(), var fields:ArrayList<FieldObject> = ArrayList<FieldObject>(), var rankingInProgress:Boolean = false, var ranked:Boolean = false) {
+data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var fields: ArrayList<FieldObject> = ArrayList())
+{
 
-    fun addElement(e: ElementObject) {
-        if (!elements.add(e)) {
-            //Logic for if item already exists within this set
-        } else {
-        }
+    fun addElement(e: ElementObject)
+    {
+        elements.add(e)
+
     }
 
-    fun addField(f: FieldObject) {
-        if (!fields.add(f)) {
-            //Logic for if item already exists within this set
-        } else {
-        }
+
+    fun addField(f: FieldObject)
+    {
+        fields.add(f)
     }
 
-    fun modifyElements(elements: Set<*>?) {
-        //Bring up a list of each element
-        //Select whether the user would like to delete or edit the elements in a set
-    }
 
-    fun modifyFields(fields: Set<*>?) {
-        //Bring up a list of each field
+
+    fun modifyElements(inputObject: ElementObject, newObject : ElementObject)
+    {
+        //Eventually should bring up a list of each field
         //Select whether the user would like to delete or edit the fields in a set
+        elements.remove(inputObject)
+        addElement(newObject)
+
+
+
+
+
     }
 
-    fun canBeRanked(): Boolean {
-        return elements.size >= 2
+    fun modifyFields(inputObject: FieldObject, newObject : FieldObject)
+    {
+        //Eventually should bring up a list of each field
+        //Select whether the user would like to delete or edit the fields in a set
+        fields.remove(inputObject)
+        addField(newObject)
     }
 
-    fun isBeingRanked(): Boolean {
-        return rankingInProgress
-    }
 }
+
+
