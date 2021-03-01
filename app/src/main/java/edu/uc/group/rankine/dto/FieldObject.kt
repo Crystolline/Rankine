@@ -1,8 +1,8 @@
 package edu.uc.group.rankine.dto
 
-class FieldObject(var name: String, var dataType: String)
+data class FieldObject(var name: String, var dataType: String)
 {
-
+    //Not yet fully implemented
 
 
 }

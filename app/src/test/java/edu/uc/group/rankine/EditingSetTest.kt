@@ -3,20 +3,40 @@ package edu.uc.group.rankine
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.FieldObject
 import edu.uc.group.rankine.dto.ObjectSet
+import org.junit.Test
 
 class EditingSetTest
 {
     lateinit var workingObjectSet: ObjectSet
 
+    @Test
+    fun editElement_containsNewElement()
+    {
+        givenSet()
+        whenEditElement()
+        thenContainsNewElement()
+    }
 
+    private fun thenContainsNewElement()
+    {
+        var containsMewtwo = false
+        if(workingObjectSet.elements?.contains(ElementObject("Mewtwo"))!!)
+        {
+            containsMewtwo = true
+        }
+        assert(containsMewtwo)
+
+    }
+
+    private fun whenEditElement()
+    {
+        workingObjectSet.modifyElements(ElementObject("Meowth"), ElementObject("Mewtwo"))
+        assert(!workingObjectSet.elements.contains(ElementObject("Meowth")))
+    }
 
 
     private fun givenSet()
     {
-
-        //We still need to implement a map of elements to fields
-        //For example, the element Pikachu has attributes of type, best ability, and weight that define it
-        //When a user is creating a set, the number and type of fields should change how the elements are declared
 
         workingObjectSet = ObjectSet()
         with(workingObjectSet)
