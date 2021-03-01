@@ -25,7 +25,6 @@ import org.json.JSONObject
  * Utility that adds and removes fields dynamically and saves data from editTextViews to a sharedPreference
  */
 class DynamicFieldUtil(activity: Activity) : Application() {
-    //private val IMAGE_GALLERY_REQUESTCODE: Int = 2001
     private var _activity = activity
     val sharedPreferences = _activity.getSharedPreferences("onCreatePreferences", Context.MODE_PRIVATE)
     private val sharedEditor = sharedPreferences.edit()
@@ -109,16 +108,7 @@ class DynamicFieldUtil(activity: Activity) : Application() {
             }
         }
         sharedEditor.putString("values", jsonObject.toString()).apply()
+        sharedEditor.putString("name", storeNameText).apply()
         val intent = Intent(_activity, MainFragment::class.java)
-    }
-
-    /**
-     * unimplemented function
-     */
-    fun addImage() {
-        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-            type = "image/*"
-            //startActivity(this, IMAGE_GALLERY_REQUESTCODE)
-        }
     }
 }

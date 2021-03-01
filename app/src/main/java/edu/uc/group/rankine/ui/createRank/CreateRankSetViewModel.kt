@@ -46,14 +46,6 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
      *  calls create function from DynamicFieldUtil
      */
     fun create(view: View) {
-
         dynamicFieldService.create(view)
-    }
-
-    /**
-     *  calls addImage function from DynamicFieldUtil
-     */
-    fun addImage() {
-        dynamicFieldService.addImage()
     }
 }

@@ -1,8 +1,14 @@
 package edu.uc.group.rankine.ui.createRank
 
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +18,9 @@ class CreateRankSet : AppCompatActivity() {
 
     private lateinit var viewModelCreateRank: CreateRankSetViewModel
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
+    private val imageCode: Int = 204
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_rank_set)
@@ -22,6 +31,16 @@ class CreateRankSet : AppCompatActivity() {
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
                 .get(CreateRankSetViewModel::class.java)
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == imageCode) run {
+            var imageView: ImageView = findViewById(R.id.set_image)
+            var imageUri: Uri? = data?.data
+            imageView.setImageURI(imageUri)
+
+        }
     }
 
     /**
@@ -77,6 +96,9 @@ class CreateRankSet : AppCompatActivity() {
      *  calls addImage function from the view model on button click
      */
     fun onImageAdd(view: View) {
-        viewModelCreateRank.addImage()
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(intent, imageCode)
     }
+
+
 }
