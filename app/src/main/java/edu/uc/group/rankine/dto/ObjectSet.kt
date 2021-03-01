@@ -1,18 +1,18 @@
 package edu.uc.group.rankine.dto
 
-data class ObjectSet(var elements: MutableSet<ElementObject>? = null, var fields:  MutableSet<FieldObject>? = null)
+data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var fields: ArrayList<FieldObject> = ArrayList())
 {
 
     fun addElement(e: ElementObject)
     {
-        elements?.add(e)
+        elements.add(e)
 
     }
 
 
     fun addField(f: FieldObject)
     {
-        fields?.add(f)
+        fields.add(f)
     }
 
 
@@ -21,7 +21,7 @@ data class ObjectSet(var elements: MutableSet<ElementObject>? = null, var fields
     {
         //Eventually should bring up a list of each field
         //Select whether the user would like to delete or edit the fields in a set
-        elements?.remove(inputObject)
+        elements.remove(inputObject)
         addElement(newObject)
 
 
@@ -34,7 +34,7 @@ data class ObjectSet(var elements: MutableSet<ElementObject>? = null, var fields
     {
         //Eventually should bring up a list of each field
         //Select whether the user would like to delete or edit the fields in a set
-        fields?.remove(inputObject)
+        fields.remove(inputObject)
         addField(newObject)
     }
 

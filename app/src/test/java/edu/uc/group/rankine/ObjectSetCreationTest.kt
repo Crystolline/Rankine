@@ -34,6 +34,7 @@ class ObjectSetCreationTest
 
     }
 
+    @Test
     fun addCelsiusElementToRankedSet_containsCelsiusElement()
     {
         givenRankineKelvinAndFahrenheitInRankedSet()
@@ -51,7 +52,7 @@ class ObjectSetCreationTest
 
     private fun thenContainsRankine() {
         var containsRankine = false
-        if(workingObjectSet.elements?.contains(ElementObject("Rankine"))!!)
+        if(workingObjectSet.elements.contains(ElementObject("Rankine")))
         {
             containsRankine = true
         }
@@ -68,11 +69,11 @@ class ObjectSetCreationTest
         var containsRankine = false
         var containsKelvin = false
 
-        if(workingObjectSet.elements?.contains(ElementObject("Rankine"))!!)
+        if(workingObjectSet.elements.contains(ElementObject("Rankine")))
         {
             containsRankine = true
         }
-        if(workingObjectSet.elements?.contains(ElementObject("Kelvin"))!!)
+        if(workingObjectSet.elements.contains(ElementObject("Kelvin")))
         {
             containsKelvin = true
         }
@@ -81,7 +82,7 @@ class ObjectSetCreationTest
 
 
     private fun givenRankineAndKelvinInUnrankedSet() {
-        workingObjectSet = ObjectSet(mutableSetOf(ElementObject("Rankine"), ElementObject("Kelvin")))
+        workingObjectSet = ObjectSet(arrayListOf<ElementObject>(ElementObject("Rankine"), ElementObject("Kelvin")))
     }
 
     private fun whenAddFahrenheitElement() {
@@ -91,7 +92,7 @@ class ObjectSetCreationTest
     private fun thenContainsFahrenheit() {
         var containsFahrenheit = false
 
-        if(workingObjectSet.elements?.contains(ElementObject("Fahrenheit"))!!)
+        if(workingObjectSet.elements.contains(ElementObject("Fahrenheit")))
         {
             containsFahrenheit = true
         }
@@ -99,7 +100,7 @@ class ObjectSetCreationTest
     }
 
     private fun givenRankineKelvinAndFahrenheitInRankedSet() {
-        workingObjectSet = ObjectSet(mutableSetOf(ElementObject("Rankine"), ElementObject("Kelvin"), ElementObject("Fahrenheit")))
+        workingObjectSet = ObjectSet(arrayListOf(ElementObject("Rankine"), ElementObject("Kelvin"), ElementObject("Fahrenheit")))
     }
 
     private fun whenAddCelsiusElement() {
@@ -109,7 +110,7 @@ class ObjectSetCreationTest
     private fun thenContainsCelsius() {
         var containsCelsius = false
 
-        if(workingObjectSet.elements?.contains(ElementObject("Celsius"))!!)
+        if(workingObjectSet.elements.contains(ElementObject("Celsius")))
         {
             containsCelsius = true
         }

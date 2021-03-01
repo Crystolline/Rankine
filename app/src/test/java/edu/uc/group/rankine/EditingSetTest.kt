@@ -20,7 +20,7 @@ class EditingSetTest
     private fun thenContainsNewElement()
     {
         var containsMewtwo = false
-        if(workingObjectSet.elements?.contains(ElementObject("Mewtwo"))!!)
+        if(workingObjectSet.elements.contains(ElementObject("Mewtwo")))
         {
             containsMewtwo = true
         }
