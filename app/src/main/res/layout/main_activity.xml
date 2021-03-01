@@ -20,10 +20,8 @@
         app:srcCompat="@drawable/ic_plus_icon"
         android:backgroundTint="@color/light_green"/>
 
-
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
-
 
 </RelativeLayout>

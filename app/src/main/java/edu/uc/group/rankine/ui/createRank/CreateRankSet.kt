@@ -1,67 +1,82 @@
 package edu.uc.group.rankine.ui.createRank
 
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
-import edu.uc.group.rankine.ui.main.SetCreationViewModel
-import edu.uc.group.rankine.ui.main.SetCreationViewModelFactory
-import org.json.JSONObject
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
 
 class CreateRankSet : AppCompatActivity() {
 
-
-
-    private var scrollContainer : LinearLayout? = null
-    private lateinit var viewModel: SetCreationViewModel
-    private lateinit var viewModelFactory: SetCreationViewModelFactory
+    private lateinit var viewModelCreateRank: CreateRankSetViewModel
+    private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_rank_set)
         setSupportActionBar(findViewById(R.id.toolbar)) // set toolbar
-        scrollContainer = findViewById(R.id.scroll_Container)
         assert(supportActionBar != null) //implement back button
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        viewModelFactory = SetCreationViewModelFactory(this)
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(SetCreationViewModel::class.java)
+        viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
+        viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
+                .get(CreateRankSetViewModel::class.java)
 
     }
 
+    /**
+     * Adds back button in toolbar functionallity
+     */
     override fun onSupportNavigateUp(): Boolean { // back btn functionality
         finish()
         return true
     }
 
-    fun onDeleteElements(view: View){
-        viewModel.removeElements(view)
+    /**
+     * calls removeElements function from the view model on button click
+     */
+    fun onDeleteElements(view: View) {
+        viewModelCreateRank.removeElements(view)
 
     }
 
-    fun onDeleteFields(view: View){
+    /**
+     *  calls removeFields function from the view model on button click
+     */
+    fun onDeleteFields(view: View) {
         view.id = View.generateViewId()
         var v = view.id
-        viewModel.removeFields(view, v)
+        viewModelCreateRank.removeFields(view, v)
     }
 
-    fun onAddElements(view: View){
-        viewModel.addElements()
+    /**
+     *  calls addElements function from the view model on button click
+     */
+    fun onAddElements(view: View) {
+        viewModelCreateRank.addElements(view)
     }
 
+    /**
+     *  calls create function from the view model on button click
+     */
     fun onCreate(view: View) {
-        viewModel.create()
+        viewModelCreateRank.create(view)
+        finish()
     }
 
-    fun onAddFields(view: View){
+    /**
+     *   calls addFields function from the view model on button click
+     */
+    fun onAddFields(view: View) {
         view.id = View.generateViewId()
         var v = view.id
-        viewModel.addFields(v)
+        viewModelCreateRank.addFields(v, view)
+    }
+
+    /**
+     *  calls addImage function from the view model on button click
+     */
+    fun onImageAdd(view: View) {
+        viewModelCreateRank.addImage()
     }
 }

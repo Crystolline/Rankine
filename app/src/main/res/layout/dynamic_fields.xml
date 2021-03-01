@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-
     <EditText
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -26,6 +25,5 @@
         android:background="@drawable/ic_delete"
         android:onClick="onDeleteFields"
         android:backgroundTint="@color/light_green"/>
-
 
 </LinearLayout>
