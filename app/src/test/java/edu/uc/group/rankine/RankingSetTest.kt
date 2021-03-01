@@ -10,7 +10,6 @@ class RankingSetTest
 
     //Not done with this
 
-    @Test
     fun rankSet()
     {
         givenSet()
