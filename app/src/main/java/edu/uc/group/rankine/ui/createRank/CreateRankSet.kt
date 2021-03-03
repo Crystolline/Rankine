@@ -2,7 +2,9 @@ package edu.uc.group.rankine.ui.createRank
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,12 +15,14 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
+import edu.uc.group.rankine.utilities.PrefUtil
 
 class CreateRankSet : AppCompatActivity() {
 
     private lateinit var viewModelCreateRank: CreateRankSetViewModel
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
     private val imageCode: Int = 204
+    private val imageUri = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +41,10 @@ class CreateRankSet : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == imageCode) run {
             var imageView: ImageView = findViewById(R.id.set_image)
+            imageView.clipToOutline = true
             var imageUri: Uri? = data?.data
+            var test = imageUri.toString()
             imageView.setImageURI(imageUri)
-
         }
     }
 
@@ -99,6 +104,8 @@ class CreateRankSet : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(intent, imageCode)
     }
+
+
 
 
 }

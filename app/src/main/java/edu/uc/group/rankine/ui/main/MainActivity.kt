@@ -3,28 +3,30 @@ package edu.uc.group.rankine.ui.main
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.createRank.CreateRankSet
+import edu.uc.group.rankine.utilities.GetAllViewChildren
+import edu.uc.group.rankine.utilities.LoadDynamicNameFromPref
+import edu.uc.group.rankine.utilities.PrefUtil
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow()
-        }
 
         /**
          * on floating action click open CreateRankSet
@@ -33,6 +35,15 @@ class MainActivity : AppCompatActivity() {
         btnOpenActivity.setOnClickListener {
             val intent = Intent(this, CreateRankSet::class.java)
             startActivity(intent)
+        }
+
+
+        var test = PrefUtil.loadTotalPref(this)
+        if (test == 0) {
+
+        } else {
+            var counter = PrefUtil.loadTotalPref(this)
+
 
         }
     }
@@ -74,6 +85,69 @@ class MainActivity : AppCompatActivity() {
             return true
         } else {
             return super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+
+        addView()
+        loadView()
+
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val removeLayout = this.findViewById<LinearLayout>(R.id.data_container)
+        removeLayout.removeAllViews()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        PrefUtil.registerPref(this, this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PrefUtil.unregister(this, this)
+    }
+
+    fun loadView() {
+
+        var counter = PrefUtil.loadTotalPref(this)
+        var loop = 0
+        for (i in 0 until counter) {
+
+            val container = findViewById<LinearLayout>(loop + 500)
+            val getAllViewChildren = GetAllViewChildren()
+            val allView = getAllViewChildren.getAllChildren(container)
+            for (child in allView)
+                if (child is TextView) {
+                    var name = PrefUtil.loadNamePref(this)
+                    child.text = name
+                }
+            loop++
+        }
+    }
+
+    fun addView() {
+        val counter = PrefUtil.loadTotalPref(this)
+
+        var loop = 0
+        for (i in 0 until counter) {
+
+            val parent = findViewById<LinearLayout>(R.id.data_container)
+            val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val row: View = inflater.inflate(R.layout.dynamic_main_view, null)
+            row.id = loop + 500
+            parent!!.addView(row)
+            loop++
         }
     }
 

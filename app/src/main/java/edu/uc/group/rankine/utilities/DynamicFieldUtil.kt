@@ -17,7 +17,6 @@ import androidx.core.view.iterator
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.createRank.CreateRankSet
 import edu.uc.group.rankine.ui.main.MainActivity
-import edu.uc.group.rankine.ui.main.MainFragment
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -107,8 +106,13 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                 }
             }
         }
-        sharedEditor.putString("values", jsonObject.toString()).apply()
-        sharedEditor.putString("name", storeNameText).apply()
-        val intent = Intent(_activity, MainFragment::class.java)
+        var send = jsonObject.toString()
+        var counter = PrefUtil.loadTotalPref(_activity)
+        counter += 1
+        PrefUtil.saveTotalPref(_activity, counter)
+        PrefUtil.saveRankNamePref(_activity, storeNameText)
+        PrefUtil.saveRankPref(_activity, send)
+
+
     }
 }
