@@ -5,7 +5,7 @@ package edu.uc.group.rankine.dto
  */
 data class ElementObject(var name: String)
 {
-
-
-
+    override fun toString(): String {
+        return name
+    }
 }

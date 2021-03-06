@@ -32,11 +32,6 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var f
         //Select whether the user would like to delete or edit the fields in a set
         elements.remove(inputObject)
         addElement(newObject)
-
-
-
-
-
     }
 
     /**
