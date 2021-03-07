@@ -5,14 +5,10 @@ import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.FieldObject
 import edu.uc.group.rankine.dto.ObjectSet
 import junit.framework.Assert.assertTrue
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
+
 
 class EditingSetTest {
-    @get: Rule
-    var rule: TestRule = InstantTaskExecutorRule()
-
     lateinit var workingObjectSet: ObjectSet
 
     @Test

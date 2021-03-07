@@ -12,9 +12,6 @@ import org.junit.rules.TestRule
 
 class ObjectSetCreationTest
 {
-    @get: Rule
-    var rule: TestRule = InstantTaskExecutorRule()
-
     lateinit var workingObjectSet: ObjectSet
 
     @Test
