@@ -9,10 +9,14 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var f
     /**
      * Add element <e> to the ObjectSet's element list
      */
-    fun addElement(e: ElementObject)
+    fun addElement(e: ElementObject, index: Int = -1)
     {
-        elements.add(e)
-
+        if(index >= 0)
+        {
+            elements.add(index, e)
+        } else {
+            elements.add(e)
+        }
     }
 
     /**
@@ -24,19 +28,14 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var f
     }
 
     /**
-     * Modify an element <inputObject> in the ObjectSet with the name and attributes of element <newObject>
+     * Modify an element <inputObject> in the ObjectSet with the name and attributes of element <newObject> at its original index
      */
-    fun modifyElements(inputObject: ElementObject, newObject : ElementObject)
-    {
+    fun modifyElements(inputObject: ElementObject, newObject: ElementObject) {
         //Eventually should bring up a list of each field
         //Select whether the user would like to delete or edit the fields in a set
+        var originalIndex = elements.indexOf(inputObject)
         elements.remove(inputObject)
-        addElement(newObject)
-
-
-
-
-
+        addElement(newObject, originalIndex)
     }
 
     /**
