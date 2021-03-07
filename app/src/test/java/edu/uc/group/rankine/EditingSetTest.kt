@@ -7,7 +7,6 @@ import edu.uc.group.rankine.dto.ObjectSet
 import junit.framework.Assert.assertTrue
 import org.junit.Test
 
-
 class EditingSetTest {
     lateinit var workingObjectSet: ObjectSet
 
