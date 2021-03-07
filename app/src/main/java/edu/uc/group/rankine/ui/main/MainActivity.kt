@@ -1,9 +1,9 @@
 package edu.uc.group.rankine.ui.main
 
-import android.app.SearchManager
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,7 +14,6 @@ import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.createRank.CreateRankSet
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -33,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         btnOpenActivity.setOnClickListener {
             val intent = Intent(this, CreateRankSet::class.java)
             startActivity(intent)
-
         }
     }
 
@@ -63,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         })
         return true
     }
-
     /**
      * Logic if option is selected within the toolbar
      */
@@ -76,6 +73,4 @@ class MainActivity : AppCompatActivity() {
             return super.onOptionsItemSelected(item)
         }
     }
-
-
 }

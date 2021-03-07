@@ -2,12 +2,19 @@ package edu.uc.group.rankine
 
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import org.junit.Test
-
 
 class ObjectSetCreationTest
 {
-    lateinit var workingObjectSet:ObjectSet
+    lateinit var workingObjectSet: ObjectSet
+
+    @Test
+    fun confirmKelvin_outputsKelvin(){
+        var element: ElementObject = ElementObject("Kelvin")
+        assertTrue(element.name.equals("Kelvin"))
+    }
 
     @Test
     fun addRankineElement_containsRankineElement()
@@ -16,7 +23,6 @@ class ObjectSetCreationTest
         whenAddRankineElement()
         thenContainsRankine()
     }
-
     @Test
     fun addRankineAndKelvinElements_containsRankineAndKelvinElements()
     {
@@ -31,7 +37,6 @@ class ObjectSetCreationTest
         givenRankineAndKelvinInUnrankedSet()
         whenAddFahrenheitElement()
         thenContainsFahrenheit()
-
     }
 
     @Test
@@ -69,17 +74,16 @@ class ObjectSetCreationTest
         var containsRankine = false
         var containsKelvin = false
 
-        if(workingObjectSet.elements.contains(ElementObject("Rankine")))
+        if (workingObjectSet.elements.contains(ElementObject("Rankine")))
         {
             containsRankine = true
         }
-        if(workingObjectSet.elements.contains(ElementObject("Kelvin")))
+        if (workingObjectSet.elements.contains(ElementObject("Kelvin")))
         {
             containsKelvin = true
         }
         assert(containsRankine && containsKelvin)
     }
-
 
     private fun givenRankineAndKelvinInUnrankedSet() {
         workingObjectSet = ObjectSet(arrayListOf<ElementObject>(ElementObject("Rankine"), ElementObject("Kelvin")))
@@ -110,12 +114,9 @@ class ObjectSetCreationTest
     private fun thenContainsCelsius() {
         var containsCelsius = false
 
-        if(workingObjectSet.elements.contains(ElementObject("Celsius")))
-        {
+        if (workingObjectSet.elements.contains(ElementObject("Celsius"))) {
             containsCelsius = true
         }
         assert(containsCelsius)
     }
-
-
 }
