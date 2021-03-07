@@ -3,8 +3,7 @@ package edu.uc.group.rankine
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
 
-class RankingSetTest
-{
+class RankingSetTest {
     lateinit var workingObjectSet: ObjectSet
 
     // Not done with this

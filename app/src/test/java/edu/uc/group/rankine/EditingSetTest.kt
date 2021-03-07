@@ -1,12 +1,25 @@
 package edu.uc.group.rankine
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.FieldObject
 import edu.uc.group.rankine.dto.ObjectSet
+import junit.framework.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 
 class EditingSetTest {
+    @get: Rule
+    var rule: TestRule = InstantTaskExecutorRule()
+
     lateinit var workingObjectSet: ObjectSet
+
+    @Test
+    fun ConfirmCelcius_outputsCelcius(){
+        var element: ElementObject = ElementObject("Celcius")
+        assertTrue(element.name.equals("Celcius"))
+    }
 
     @Test
     fun editElement_containsNewElement()

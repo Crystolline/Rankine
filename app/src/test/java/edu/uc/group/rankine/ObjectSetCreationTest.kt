@@ -1,13 +1,27 @@
 package edu.uc.group.rankine
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 
 
 class ObjectSetCreationTest
 {
+    @get: Rule
+    var rule: TestRule = InstantTaskExecutorRule()
+
     lateinit var workingObjectSet: ObjectSet
+
+    @Test
+    fun confirmKelvin_outputsKelvin(){
+        var element: ElementObject = ElementObject("Kelvin")
+        assertTrue(element.name.equals("Kelvin"))
+    }
 
     @Test
     fun addRankineElement_containsRankineElement()
