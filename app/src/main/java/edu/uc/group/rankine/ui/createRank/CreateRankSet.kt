@@ -1,15 +1,12 @@
 package edu.uc.group.rankine.ui.createRank
 
-
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
@@ -20,7 +17,6 @@ class CreateRankSet : AppCompatActivity() {
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
     private val imageCode: Int = 204
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_rank_set)
@@ -30,7 +26,6 @@ class CreateRankSet : AppCompatActivity() {
         viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
                 .get(CreateRankSetViewModel::class.java)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -39,7 +34,6 @@ class CreateRankSet : AppCompatActivity() {
             var imageView: ImageView = findViewById(R.id.set_image)
             var imageUri: Uri? = data?.data
             imageView.setImageURI(imageUri)
-
         }
     }
 
@@ -56,7 +50,6 @@ class CreateRankSet : AppCompatActivity() {
      */
     fun onDeleteElements(view: View) {
         viewModelCreateRank.removeElements(view)
-
     }
 
     /**
@@ -99,6 +92,4 @@ class CreateRankSet : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(intent, imageCode)
     }
-
-
 }

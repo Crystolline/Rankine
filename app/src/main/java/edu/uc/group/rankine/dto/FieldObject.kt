@@ -7,5 +7,4 @@ data class FieldObject(var name: String, var dataType: String)
 {
     //Not yet fully implemented
 
-
 }

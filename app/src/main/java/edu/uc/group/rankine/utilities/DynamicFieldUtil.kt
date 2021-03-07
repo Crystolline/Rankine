@@ -4,23 +4,17 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import androidx.annotation.Nullable
-import androidx.core.view.children
 import androidx.core.view.iterator
 import edu.uc.group.rankine.R
-import edu.uc.group.rankine.ui.createRank.CreateRankSet
-import edu.uc.group.rankine.ui.main.MainActivity
 import edu.uc.group.rankine.ui.main.MainFragment
 import org.json.JSONArray
 import org.json.JSONObject
-
 /**
  * Utility that adds and removes fields dynamically and saves data from editTextViews to a sharedPreference
  */

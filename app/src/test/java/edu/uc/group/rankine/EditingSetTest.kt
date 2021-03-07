@@ -5,8 +5,7 @@ import edu.uc.group.rankine.dto.FieldObject
 import edu.uc.group.rankine.dto.ObjectSet
 import org.junit.Test
 
-class EditingSetTest
-{
+class EditingSetTest {
     lateinit var workingObjectSet: ObjectSet
 
     @Test
@@ -20,6 +19,7 @@ class EditingSetTest
     private fun thenContainsNewElement()
     {
         var containsMewtwo = false
+
         if(workingObjectSet.elements.contains(ElementObject("Mewtwo")))
         {
             containsMewtwo = true
@@ -34,7 +34,6 @@ class EditingSetTest
         assert(!workingObjectSet.elements.contains(ElementObject("Meowth")))
     }
 
-
     private fun givenSet()
     {
 
@@ -46,13 +45,9 @@ class EditingSetTest
             addElement(ElementObject("Bulbasaur"))
             addElement(ElementObject("Squirtle"))
             addElement(ElementObject("Meowth"))
-
-
-            addField(FieldObject("Type","String"))
+            addField(FieldObject("Type", "String"))
             addField(FieldObject("Best Ability","String"))
-            addField(FieldObject("Weight","Double"))
-
+            addField(FieldObject("Weight", "Double"))
         }
     }
-
 }
