@@ -1,6 +1,15 @@
 package edu.uc.group.rankine.dto
 
-data class ObjectSet(var elements:ArrayList<ElementObject> = ArrayList<ElementObject>(), var fields:ArrayList<FieldObject> = ArrayList<FieldObject>(), var rankingInProgress:Boolean = false, var ranked:Boolean = false) {
+import android.net.Uri
+import edu.uc.group.rankine.ui.createRank.CreateRankSetViewModel
+import edu.uc.group.rankine.utilities.DynamicFieldUtil
+import org.json.JSONObject
+
+data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList<ElementObject>(), var fields: ArrayList<FieldObject> = ArrayList<FieldObject>(), var rankingInProgress: Boolean = false, var ranked: Boolean = false) {
+
+
+    private var jsonData = JSONObject()
+    private var uriString: String = ""
 
     fun addElement(e: ElementObject) {
         if (!elements.add(e)) {
@@ -32,5 +41,15 @@ data class ObjectSet(var elements:ArrayList<ElementObject> = ArrayList<ElementOb
 
     fun isBeingRanked(): Boolean {
         return rankingInProgress
+    }
+
+    fun getUserJSONData(data: JSONObject) {
+        jsonData = data
+    }
+
+    fun getUserJSONData(data: JSONObject, uri: String) {
+        jsonData = data
+        uriString = uri
+
     }
 }

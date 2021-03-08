@@ -22,7 +22,7 @@ class CreateRankSet : AppCompatActivity() {
     private lateinit var viewModelCreateRank: CreateRankSetViewModel
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
     private val imageCode: Int = 204
-    private val imageUri = ""
+    private var imageUri: Uri? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +42,9 @@ class CreateRankSet : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == imageCode) run {
             var imageView: ImageView = findViewById(R.id.set_image)
             imageView.clipToOutline = true
-            var imageUri: Uri? = data?.data
-            var test = imageUri.toString()
+            imageUri = data?.data
+            val uriString = imageUri.toString()
+            viewModelCreateRank.getImageUriString(uriString)
             imageView.setImageURI(imageUri)
         }
     }
@@ -104,8 +105,6 @@ class CreateRankSet : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(intent, imageCode)
     }
-
-
 
 
 }

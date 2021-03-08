@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.View
 
 import androidx.lifecycle.ViewModel
+import edu.uc.group.rankine.dto.ObjectSet
 import edu.uc.group.rankine.utilities.DynamicFieldUtil
 
 /**
@@ -12,6 +13,9 @@ import edu.uc.group.rankine.utilities.DynamicFieldUtil
 class CreateRankSetViewModel(activity: Activity) : ViewModel() {
     var ctx = activity
     var dynamicFieldService = DynamicFieldUtil(ctx)
+    var objectSet = ObjectSet()
+    private val createRankSet = CreateRankSet()
+    private var imageUriString = ""
 
 
     /**
@@ -47,5 +51,15 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
      */
     fun create(view: View) {
         dynamicFieldService.create(view)
+        var data = dynamicFieldService.jsonObject
+        if (imageUriString == "") {
+            objectSet.getUserJSONData(data)
+        } else {
+            objectSet.getUserJSONData(data, imageUriString)
+        }
+    }
+
+    fun getImageUriString(imageUri: String) {
+        imageUriString = imageUri
     }
 }

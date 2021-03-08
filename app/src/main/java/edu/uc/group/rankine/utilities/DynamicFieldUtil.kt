@@ -15,6 +15,7 @@ import androidx.annotation.Nullable
 import androidx.core.view.children
 import androidx.core.view.iterator
 import edu.uc.group.rankine.R
+import edu.uc.group.rankine.dto.ObjectSet
 import edu.uc.group.rankine.ui.createRank.CreateRankSet
 import edu.uc.group.rankine.ui.main.MainActivity
 import org.json.JSONArray
@@ -25,13 +26,12 @@ import org.json.JSONObject
  */
 class DynamicFieldUtil(activity: Activity) : Application() {
     private var _activity = activity
-    val sharedPreferences = _activity.getSharedPreferences("onCreatePreferences", Context.MODE_PRIVATE)
-    private val sharedEditor = sharedPreferences.edit()
     private val getAllViewChildren = GetAllViewChildren()
     private val nameEditText = _activity.findViewById<EditText>(R.id.name_edit_view)
     private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
     private var attribute = ""
-    private var jsonObject: JSONObject = JSONObject()
+    var jsonObject: JSONObject = JSONObject()
+
 
     /**
      * adds the layout dynamic_elements to the scrollContainer dynamically
@@ -101,18 +101,16 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                             }
                         }
                     }
-                    jsonObject.put(attribute, jsonArray)
-                    jsonArray = JSONArray(ArrayList<String>())
                 }
             }
         }
-        var send = jsonObject.toString()
-        var counter = PrefUtil.loadTotalPref(_activity)
-        counter += 1
-        PrefUtil.saveTotalPref(_activity, counter)
-        PrefUtil.saveRankNamePref(_activity, storeNameText)
-        PrefUtil.saveRankPref(_activity, send)
-
+        val toString = jsonObject.put(attribute, jsonArray).toString()
+        jsonArray = JSONArray()
+        jsonObject = JSONObject()
+        val putArray = jsonArray.put(toString)
+        jsonObject.put(storeNameText, putArray)
 
     }
+
+
 }
