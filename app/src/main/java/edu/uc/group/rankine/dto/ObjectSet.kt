@@ -5,16 +5,22 @@ import org.json.JSONObject
 /**
  * An unranked set of <elements> alongside a list of <fields> to define attributes for individual elements
  */
-data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var fields: ArrayList<FieldObject> = ArrayList()) {
+data class ObjectSet(
+    var elements: ArrayList<ElementObject> = ArrayList(),
+    var fields: ArrayList<FieldObject> = ArrayList()
+) {
+    private var jsonObject = JSONObject()
+    private var imageUriString = ""
 
     /**
      * Add element <e> to the ObjectSet's element list
      */
     fun addElement(e: ElementObject) {
-        data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var fields: ArrayList<FieldObject> = ArrayList()) {
+        data class ObjectSet(
+            var elements: ArrayList<ElementObject> = ArrayList(),
+            var fields: ArrayList<FieldObject> = ArrayList()
+        ) {
 
-            private var jsonObject = JSONObject()
-            private var imageUriString = ""
             fun addElement(e: ElementObject) {
                 elements.add(e)
 
@@ -48,18 +54,16 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var f
                 fields.remove(inputObject)
                 addField(newObject)
             }
-
-            fun getUserJSONData(data: JSONObject) {
-                jsonObject = data
-            }
-
-            fun getUserJSONData(data: JSONObject, uri: String) {
-                jsonObject = data
-                imageUriString = uri
-            }
-
-
         }
+    }
+
+    fun getUserJSONData(data: JSONObject) {
+        jsonObject = data
+    }
+
+    fun getUserJSONData(data: JSONObject, uri: String) {
+        jsonObject = data
+        imageUriString = uri
     }
 }
 
