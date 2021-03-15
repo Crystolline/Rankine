@@ -2,20 +2,15 @@ package edu.uc.group.rankine.ui.createRank
 
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
-import edu.uc.group.rankine.utilities.PrefUtil
 
 class CreateRankSet : AppCompatActivity() {
 
@@ -33,7 +28,7 @@ class CreateRankSet : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
-                .get(CreateRankSetViewModel::class.java)
+            .get(CreateRankSetViewModel::class.java)
 
     }
 
@@ -78,7 +73,7 @@ class CreateRankSet : AppCompatActivity() {
      *  calls addElements function from the view model on button click
      */
     fun onAddElements(view: View) {
-        viewModelCreateRank.addElements(view)
+        viewModelCreateRank.addElements()
     }
 
     /**
@@ -101,7 +96,7 @@ class CreateRankSet : AppCompatActivity() {
     /**
      *  calls addImage function from the view model on button click
      */
-    fun onImageAdd(view: View) {
+    fun onImageAdd() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(intent, imageCode)
     }

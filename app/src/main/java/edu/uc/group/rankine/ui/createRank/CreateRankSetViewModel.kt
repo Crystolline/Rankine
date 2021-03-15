@@ -21,8 +21,8 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
     /**
      *  calls addElements function from DynamicFieldUtil
      */
-    fun addElements(view: View) {
-        dynamicFieldService.addElements(view)
+    fun addElements() {
+        dynamicFieldService.addElements()
     }
 
     /**
