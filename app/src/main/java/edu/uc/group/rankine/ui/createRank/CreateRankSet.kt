@@ -96,7 +96,7 @@ class CreateRankSet : AppCompatActivity() {
     /**
      *  calls addImage function from the view model on button click
      */
-    fun onImageAdd() {
+    fun onImageAdd(view: View) {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(intent, imageCode)
     }
