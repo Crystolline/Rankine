@@ -24,6 +24,7 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
     private var attribute = ""
     var jsonObject: JSONObject = JSONObject()
+    var jsonArray: JSONArray = JSONArray()
 
 
     /**
@@ -74,7 +75,7 @@ class DynamicFieldUtil(activity: Activity) : Application() {
      * filters input from the editText views and saves it into an JSONObject
      * the JSONObject is then passed to the sharedPreference
      */
-    fun create(view: View) {
+    fun create(view: View): JSONObject {
         var jsonArray = JSONArray()
         val storeNameText = nameEditText.text.toString()
         val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
@@ -89,19 +90,26 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                     for (variable in allLayoutChildren) {
                         if (variable is EditText) {
                             if (variable.tag == null) {
-                                var childEditViews = variable.text.toString()
-                                jsonArray.put(childEditViews)
+                                val elements = variable.text.toString()
+                                jsonArray.put(elements)
                             }
                         }
                     }
+                    if (attribute == null) {
+
+                    } else if (!attribute.contentEquals("")) {
+                        jsonObject.put(attribute, jsonArray)
+
+                    }
+                    jsonArray = JSONArray()
                 }
+
             }
         }
-        val toString = jsonObject.put(attribute, jsonArray).toString()
-        jsonArray = JSONArray()
+        val test = jsonObject
+        jsonArray = jsonArray.put(jsonObject)
         jsonObject = JSONObject()
-        val putArray = jsonArray.put(toString)
-        jsonObject.put(storeNameText, putArray)
+        return jsonObject.put(storeNameText, jsonArray)
 
     }
 

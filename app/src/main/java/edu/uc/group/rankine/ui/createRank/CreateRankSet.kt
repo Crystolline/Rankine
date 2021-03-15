@@ -65,7 +65,7 @@ class CreateRankSet : AppCompatActivity() {
      */
     fun onDeleteFields(view: View) {
         view.id = View.generateViewId()
-        var v = view.id
+        val v = view.id
         viewModelCreateRank.removeFields(view, v)
     }
 
@@ -89,7 +89,7 @@ class CreateRankSet : AppCompatActivity() {
      */
     fun onAddFields(view: View) {
         view.id = View.generateViewId()
-        var v = view.id
+        val v = view.id
         viewModelCreateRank.addFields(v, view)
     }
 

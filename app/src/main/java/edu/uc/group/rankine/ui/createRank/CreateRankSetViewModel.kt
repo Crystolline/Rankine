@@ -50,8 +50,8 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
      *  calls create function from DynamicFieldUtil
      */
     fun create(view: View) {
-        dynamicFieldService.create(view)
-        var data = dynamicFieldService.jsonObject
+
+        var data = dynamicFieldService.create(view)
         if (imageUriString == "") {
             objectSet.getUserJSONData(data)
         } else {
