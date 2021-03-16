@@ -28,7 +28,7 @@ class CreateRankSet : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
-            .get(CreateRankSetViewModel::class.java)
+                .get(CreateRankSetViewModel::class.java)
 
     }
 
@@ -80,7 +80,7 @@ class CreateRankSet : AppCompatActivity() {
      *  calls create function from the view model on button click
      */
     fun onCreate(view: View) {
-        viewModelCreateRank.create(view)
+        viewModelCreateRank.create()
         finish()
     }
 

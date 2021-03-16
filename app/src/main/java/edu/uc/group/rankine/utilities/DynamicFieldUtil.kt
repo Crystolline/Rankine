@@ -55,15 +55,14 @@ class DynamicFieldUtil(activity: Activity) : Application() {
         val row: View = inflater.inflate(R.layout.dynamic_fields, null)
         parent.addView(row)
 
-        val test = view.parent as ViewGroup
-        for (i: View in test) {
-            i.tag = "1"
-            var id = i.tag
+        val giveTag = view.parent as ViewGroup
+        for (i: View in giveTag) {
+            i.tag = "string"
         }
     }
 
     /**
-     * removes the layout dynamic_fields from the linearLayout within the layout dynmic_elements
+     * removes the layout dynamic_fields from the linearLayout within the layout dynamic_elements
      */
     fun removeFields(view: View, id: Int) {
         val btn: ImageButton = _activity.findViewById(id)
@@ -75,17 +74,15 @@ class DynamicFieldUtil(activity: Activity) : Application() {
      * filters input from the editText views and saves it into an JSONObject
      * the JSONObject is then passed to the sharedPreference
      */
-    fun create(view: View): JSONObject {
+    fun create(): JSONObject {
         var jsonArray = JSONArray()
         val storeNameText = nameEditText.text.toString()
         val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
         for (child: View in allViews) {
             if (child is EditText) run {
                 if (child.tag is String) run {
-                    val childEditViews = child as EditText
-                    attribute = childEditViews.text.toString()
-                    val help = child
-                    val test = help.parent.parent as View
+                    attribute = child.text.toString()
+                    val test = child.parent.parent as View
                     val allLayoutChildren = getAllViewChildren.getAllChildren(test)
                     for (variable in allLayoutChildren) {
                         if (variable is EditText) {
@@ -95,22 +92,17 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                             }
                         }
                     }
-                    if (attribute == null) {
-
-                    } else if (!attribute.contentEquals("")) {
+                    if (!attribute.contentEquals("")) {
                         jsonObject.put(attribute, jsonArray)
-
                     }
                     jsonArray = JSONArray()
                 }
 
             }
         }
-        val test = jsonObject
         jsonArray = jsonArray.put(jsonObject)
         jsonObject = JSONObject()
         return jsonObject.put(storeNameText, jsonArray)
-
     }
 
 

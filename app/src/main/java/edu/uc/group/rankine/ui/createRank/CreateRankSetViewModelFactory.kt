@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 /**
  *  A view model factory that allows the context to be sent to the constructor of the CreateRankViewModel
  */
+@Suppress("UNCHECKED_CAST")
 class CreateRankSetViewModelFactory(private val activity: Activity): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom((CreateRankSetViewModel::class.java))) {
