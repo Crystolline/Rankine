@@ -21,7 +21,7 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList())
     /**
      * Get list of elements from ObjectSet
      */
-    fun getElements()
+    fun getElements() : ArrayList<ElementObject>
     {
         return elements
     }
