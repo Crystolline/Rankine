@@ -1,10 +1,11 @@
 package edu.uc.group.rankine.dto
 
 /**
- * An unranked set of <elements> alongside a list of <fields> to define attributes for individual elements
+ * An unranked set of <elements>
  */
-data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var fields: ArrayList<FieldObject> = ArrayList())
+data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList())
 {
+
 
     /**
      * Add element <e> to the ObjectSet's element list
@@ -13,14 +14,16 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var f
     {
         elements.add(e)
 
+
     }
 
+
     /**
-     * Add field <f> to the ObjectSet's fields list
+     * Get list of elements from ObjectSet
      */
-    fun addField(f: FieldObject)
+    fun getElements()
     {
-        fields.add(f)
+        return elements
     }
 
     /**
@@ -28,8 +31,6 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var f
      */
     fun modifyElements(inputObject: ElementObject, newObject : ElementObject)
     {
-        //Eventually should bring up a list of each field
-        //Select whether the user would like to delete or edit the fields in a set
         elements.remove(inputObject)
         addElement(newObject)
 
@@ -39,16 +40,8 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(), var f
 
     }
 
-    /**
-     * Modify a field <inputObject> in the ObjectSet with the name and datatype of field <newObject>
-     */
-    fun modifyFields(inputObject: FieldObject, newObject : FieldObject)
-    {
-        //Eventually should bring up a list of each field
-        //Select whether the user would like to delete or edit the fields in a set
-        fields.remove(inputObject)
-        addField(newObject)
-    }
+
+
 
 }
 

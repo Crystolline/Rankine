@@ -53,32 +53,6 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     }
 
     /**
-     * adds the layout dynamic_fields to LinearLayout within the layout dynamic_elements
-     */
-    fun addFields(id: Int, view: View) {
-        val inflater = _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val btn: ImageButton = _activity.findViewById(id)
-        val parent = btn.parent.parent as ViewGroup
-        val row: View = inflater.inflate(R.layout.dynamic_fields, null)
-        parent!!.addView(row)
-
-        val test = view.parent as ViewGroup
-        for (i: View in test) {
-            i.tag = "1"
-            var id = i.tag
-        }
-    }
-
-    /**
-     * removes the layout dynamic_fields from the linearLayout within the layout dynmic_elements
-     */
-    fun removeFields(view: View, id: Int) {
-        val btn: ImageButton = _activity.findViewById(id)
-        val parent = btn.parent.parent as ViewGroup
-        parent.removeView(view.parent as View)
-    }
-
-    /**
      * filters input from the editText views and saves it into an JSONObject
      * the JSONObject is then passed to the sharedPreference
      */

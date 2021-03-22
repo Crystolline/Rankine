@@ -29,20 +29,6 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
     }
 
     /**
-     *  calls addFields function from DynamicFieldUtil
-     */
-    fun addFields(id: Int, view: View) {
-        dynamicFieldService.addFields(id, view)
-    }
-
-    /**
-     *  calls removeFields function from DynamicFieldUtil
-     */
-    fun removeFields(view: View, id: Int) {
-        dynamicFieldService.removeFields(view, id)
-    }
-
-    /**
      *  calls create function from DynamicFieldUtil
      */
     fun create(view: View) {

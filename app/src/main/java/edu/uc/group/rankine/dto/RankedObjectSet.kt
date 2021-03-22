@@ -5,15 +5,13 @@ package edu.uc.group.rankine.dto
  */
 class RankedObjectSet(var set : ObjectSet)
 {
-    //Not done with this
+
 
     /**
      * Rank the objectSet
      */
     fun rankSet()
     {
-        var numElements = set.elements.size
-
 
 
 

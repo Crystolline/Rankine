@@ -59,14 +59,6 @@ class CreateRankSet : AppCompatActivity() {
 
     }
 
-    /**
-     *  calls removeFields function from the view model on button click
-     */
-    fun onDeleteFields(view: View) {
-        view.id = View.generateViewId()
-        var v = view.id
-        viewModelCreateRank.removeFields(view, v)
-    }
 
     /**
      *  calls addElements function from the view model on button click
@@ -83,14 +75,6 @@ class CreateRankSet : AppCompatActivity() {
         finish()
     }
 
-    /**
-     *   calls addFields function from the view model on button click
-     */
-    fun onAddFields(view: View) {
-        view.id = View.generateViewId()
-        var v = view.id
-        viewModelCreateRank.addFields(v, view)
-    }
 
     /**
      *  calls addImage function from the view model on button click
