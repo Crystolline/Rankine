@@ -45,12 +45,11 @@
         android:id="@+id/set_image"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginRight="120dp"
         android:layout_marginLeft="120dp"
         android:layout_marginTop="5dp"
-        android:onClick="onImageAdd"
+        android:layout_marginRight="120dp"
         android:background="@drawable/ic_plus_icon"
-        >
+        android:onClick="onImageAdd">
 
     </ImageView>
 
