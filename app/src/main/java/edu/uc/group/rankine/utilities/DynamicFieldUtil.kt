@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.view.iterator
 import edu.uc.group.rankine.R
 import org.json.JSONArray
@@ -75,9 +76,9 @@ class DynamicFieldUtil(activity: Activity) : Application() {
      * the JSONObject is then passed to the sharedPreference
      */
     fun create(): JSONObject {
+        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
         var jsonArray = JSONArray()
         val storeNameText = nameEditText.text.toString()
-        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
         for (child: View in allViews) {
             if (child is EditText) run {
                 if (child.tag is String) run {
@@ -97,12 +98,24 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                     }
                     jsonArray = JSONArray()
                 }
-
             }
         }
         jsonArray = jsonArray.put(jsonObject)
         jsonObject = JSONObject()
         return jsonObject.put(storeNameText, jsonArray)
+
+    }
+
+    fun userFilter(view: ArrayList<View>): Boolean {
+        val storeNameText = nameEditText.text
+        for (child: View in view) {
+            if (child is EditText) {
+                if (child.text.toString() == "" || storeNameText.toString() == "") {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
 

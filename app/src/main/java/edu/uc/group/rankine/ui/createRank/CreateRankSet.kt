@@ -8,9 +8,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
+import edu.uc.group.rankine.utilities.DynamicFieldUtil
+import edu.uc.group.rankine.utilities.GetAllViewChildren
 
 class CreateRankSet : AppCompatActivity() {
 
@@ -18,6 +22,7 @@ class CreateRankSet : AppCompatActivity() {
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
     private val imageCode: Int = 204
     private var imageUri: Uri? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,8 +85,17 @@ class CreateRankSet : AppCompatActivity() {
      *  calls create function from the view model on button click
      */
     fun onCreate(view: View) {
-        viewModelCreateRank.create()
-        finish()
+        val dynamicFieldUtil = DynamicFieldUtil(this)
+        val getAllViewChildren = GetAllViewChildren()
+        val scrollContainer = findViewById<LinearLayout>(R.id.scroll_Container)
+        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
+        if (dynamicFieldUtil.userFilter(allViews)) {
+            viewModelCreateRank.create()
+            finish()
+        } else {
+            Toast.makeText(this, "Fill Out All Fields", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     /**
