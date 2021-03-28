@@ -10,7 +10,6 @@ class RankedObjectSet(var set: ObjectSet) {
      * Rank the objectSet
      */
     fun rankSet() {
-        var numElements = set.elements.size
     }
 
     /**

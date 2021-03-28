@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "658113963455",
+    "project_id": "rankine-6a78e",
+    "storage_bucket": "rankine-6a78e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658113963455:android:4e27eb17657a8920eced0a",
+        "android_client_info": {
+          "package_name": "edu.uc.group.rankine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658113963455-mi7pogjcorho2jm4do6aql4r0rhs5tf4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqOz3zSkoUQ5-UmZ8zYhRJL9j1NaFYITs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658113963455-mi7pogjcorho2jm4do6aql4r0rhs5tf4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

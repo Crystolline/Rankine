@@ -7,10 +7,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.utilities.DynamicFieldUtil
@@ -24,7 +26,6 @@ class CreateRankSet : AppCompatActivity() {
     private var imageUri: Uri? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_rank_set)
@@ -35,12 +36,13 @@ class CreateRankSet : AppCompatActivity() {
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
                 .get(CreateRankSetViewModel::class.java)
 
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == imageCode) run {
-            var imageView: ImageView = findViewById(R.id.set_image)
+            val imageView: ImageView = findViewById(R.id.set_image)
             imageView.clipToOutline = true
             imageUri = data?.data
             val uriString = imageUri.toString()
@@ -48,6 +50,7 @@ class CreateRankSet : AppCompatActivity() {
             imageView.setImageURI(imageUri)
         }
     }
+
 
     /**
      * Adds back button in toolbar functionallity

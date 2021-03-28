@@ -24,8 +24,11 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     private val nameEditText = _activity.findViewById<EditText>(R.id.name_edit_view)
     private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
     private var attribute = ""
+    private var counter = 0
     var jsonObject: JSONObject = JSONObject()
     var jsonArray: JSONArray = JSONArray()
+    var jsonArrayHolder = JSONArray()
+    var jsonObjectHolder = JSONObject()
 
 
     /**
@@ -75,7 +78,7 @@ class DynamicFieldUtil(activity: Activity) : Application() {
      * filters input from the editText views and saves it into an JSONObject
      * the JSONObject is then passed to the sharedPreference
      */
-    fun create(): JSONObject {
+    fun create(): String {
         val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
         var jsonArray = JSONArray()
         val storeNameText = nameEditText.text.toString()
@@ -89,20 +92,32 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                         if (variable is EditText) {
                             if (variable.tag == null) {
                                 val elements = variable.text.toString()
-                                jsonArray.put(elements)
+                                jsonObject = JSONObject()
+                                jsonObject.put("Element", elements)
+                                jsonArray.put(jsonObject)
                             }
                         }
                     }
                     if (!attribute.contentEquals("")) {
-                        jsonObject.put(attribute, jsonArray)
+
+                        jsonObject = JSONObject()
+                        val attributeJson = jsonObject.put("Attribute", attribute)
+                        jsonArray.put(attributeJson)
+                        jsonObjectHolder.put("ObjectSet$counter", jsonArray)
+                        counter++
                     }
                     jsonArray = JSONArray()
+
                 }
             }
         }
-        jsonArray = jsonArray.put(jsonObject)
         jsonObject = JSONObject()
-        return jsonObject.put(storeNameText, jsonArray)
+        jsonObject.put("Name", storeNameText)
+        jsonArray.put(jsonObject)
+        jsonArray.put(jsonObjectHolder)
+        jsonObject = JSONObject()
+        jsonObject.put("WholeSet", jsonArray)
+        return jsonObject.toString()
 
     }
 
