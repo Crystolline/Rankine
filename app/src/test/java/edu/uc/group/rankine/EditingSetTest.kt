@@ -40,12 +40,6 @@ class EditingSetTest {
             addElement(ElementObject("Bulbasaur"))
             addElement(ElementObject("Squirtle"))
             addElement(ElementObject("Meowth"))
-
-
-            addField(FieldObject("Type", "String"))
-            addField(FieldObject("Best Ability", "String"))
-            addField(FieldObject("Weight", "Double"))
-
         }
     }
 

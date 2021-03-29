@@ -6,7 +6,6 @@ import edu.uc.group.rankine.dto.ObjectSet
 class RankingSetTest {
     lateinit var workingObjectSet: ObjectSet
 
-    //Not done with this
 
     fun rankSet() {
         givenSet()
