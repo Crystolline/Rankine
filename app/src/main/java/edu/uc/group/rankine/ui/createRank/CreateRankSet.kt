@@ -7,18 +7,23 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageButton
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
+import edu.uc.group.rankine.utilities.DynamicFieldUtil
+import edu.uc.group.rankine.utilities.GetAllViewChildren
 
 class CreateRankSet : AppCompatActivity() {
 
     private lateinit var viewModelCreateRank: CreateRankSetViewModel
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
     private val imageCode: Int = 204
+    private var imageUri: Uri? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,17 +36,21 @@ class CreateRankSet : AppCompatActivity() {
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
                 .get(CreateRankSetViewModel::class.java)
 
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == imageCode) run {
-            var imageView: ImageView = findViewById(R.id.set_image)
-            var imageUri: Uri? = data?.data
+            val imageView: ImageView = findViewById(R.id.set_image)
+            imageView.clipToOutline = true
+            imageUri = data?.data
+            val uriString = imageUri.toString()
+            viewModelCreateRank.getImageUriString(uriString)
             imageView.setImageURI(imageUri)
-
         }
     }
+
 
     /**
      * Adds back button in toolbar functionallity
@@ -64,7 +73,7 @@ class CreateRankSet : AppCompatActivity() {
      */
     fun onDeleteFields(view: View) {
         view.id = View.generateViewId()
-        var v = view.id
+        val v = view.id
         viewModelCreateRank.removeFields(view, v)
     }
 
@@ -72,15 +81,24 @@ class CreateRankSet : AppCompatActivity() {
      *  calls addElements function from the view model on button click
      */
     fun onAddElements(view: View) {
-        viewModelCreateRank.addElements(view)
+        viewModelCreateRank.addElements()
     }
 
     /**
      *  calls create function from the view model on button click
      */
     fun onCreate(view: View) {
-        viewModelCreateRank.create(view)
-        finish()
+        val dynamicFieldUtil = DynamicFieldUtil(this)
+        val getAllViewChildren = GetAllViewChildren()
+        val scrollContainer = findViewById<LinearLayout>(R.id.scroll_Container)
+        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
+        if (dynamicFieldUtil.userFilter(allViews)) {
+            viewModelCreateRank.create()
+            finish()
+        } else {
+            Toast.makeText(this, "Fill Out All Fields", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     /**
@@ -88,7 +106,7 @@ class CreateRankSet : AppCompatActivity() {
      */
     fun onAddFields(view: View) {
         view.id = View.generateViewId()
-        var v = view.id
+        val v = view.id
         viewModelCreateRank.addFields(v, view)
     }
 
