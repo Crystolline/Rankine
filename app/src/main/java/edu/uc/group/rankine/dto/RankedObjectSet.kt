@@ -68,14 +68,13 @@ class RankedObjectSet(var set : ObjectSet)
      */
     fun promptUser(var firstElement : ElementObject, var secondElement : ElementObject) : ElementObject
     {
-
+        var winningElement = firstElement
 
 
 
 
         return winningElement
     }
-
 
 
 }

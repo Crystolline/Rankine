@@ -2,15 +2,12 @@ package edu.uc.group.rankine
 
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
-import org.junit.Test
 
-class RankingSetTest
-{
-    lateinit var workingObjectSet : ObjectSet
+class RankingSetTest {
+    lateinit var workingObjectSet: ObjectSet
 
 
-    fun rankSet()
-    {
+    fun rankSet() {
         givenSet()
         whenRankSet()
         thenSetRanked()
@@ -25,8 +22,7 @@ class RankingSetTest
     }
 
 
-    private fun givenSet()
-    {
+    private fun givenSet() {
 
         workingObjectSet = ObjectSet()
         with(workingObjectSet)
