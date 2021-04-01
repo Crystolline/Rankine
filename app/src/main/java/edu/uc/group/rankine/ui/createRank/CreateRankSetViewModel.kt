@@ -24,7 +24,7 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
     private var imageUriString = ""
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> =
-        MutableLiveData<ArrayList<ObjectSet>>()
+            MutableLiveData<ArrayList<ObjectSet>>()
 
 
     init {
@@ -87,12 +87,20 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
                 documents.forEach {
                     val objectSet = it.toObject(ObjectSet::class.java)
                     if (objectSet != null) {
-                        allObjectSets.add(objectSet!!)
+                        allObjectSets.add(objectSet)
                     }
                 }
                 _objectSets.value = allObjectSets
             }
         }
+    }
+
+    fun removeFields(view: View, v: Int) {
+
+    }
+
+    fun addFields(v: Int, view: View) {
+
     }
 
     internal var objectSetLiveData: MutableLiveData<ArrayList<ObjectSet>>
