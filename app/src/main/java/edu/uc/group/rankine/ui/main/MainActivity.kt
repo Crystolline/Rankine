@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
-                .get(CreateRankSetViewModel::class.java)
+            .get(CreateRankSetViewModel::class.java)
 
         viewModelCreateRank.objectSetLiveData.observe(this, Observer { objectSet ->
             var test = objectSet
@@ -114,9 +114,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * unimplemented
+     * implemented, works on load, duplicates several times after adding new item
      */
     private fun addView() {
+        val parent = findViewById<LinearLayout>(R.id.data_container)
         removeView()
         viewModelCreateRank.objectSetLiveData.observe(this, Observer { objectSet ->
             var counter = 0
@@ -125,11 +126,12 @@ class MainActivity : AppCompatActivity() {
             } else {
                 for (counter in 0 until objectSet.size) {
 
-                    val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val inflater =
+                        this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                     val row: View = inflater.inflate(R.layout.dynamic_main_view, null)
                     var id = row.id
                     id = View.generateViewId()
-                    val parent = findViewById<LinearLayout>(R.id.data_container)
+
                     parent.addView(row)
                     val currentObjectSet = objectSet[counter]
                     val parentAtZero = row as LinearLayout
@@ -137,8 +139,10 @@ class MainActivity : AppCompatActivity() {
                     val childAtZero = parentAtOne.getChildAt(1) as View
                     if (childAtZero is TextView) {
 
-                        val getName = JSONHandler.jsonNameHandler(currentObjectSet.objectSet)?.WholeSet
-                        val getObject = JSONHandler.jsonObjectSetHandler(currentObjectSet.objectSet)?.ObjectSets
+                        val getName =
+                            JSONHandler.jsonNameHandler(currentObjectSet.objectSet)?.WholeSet
+                        val getObject =
+                            JSONHandler.jsonObjectSetHandler(currentObjectSet.objectSet)?.ObjectSets
                         childAtZero.text = getName?.get(0)?.Name
                     }
                 }

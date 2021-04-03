@@ -83,10 +83,11 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
 
             if (snapshot != null) {
                 val allObjectSets = ArrayList<ObjectSet>()
-                val documents = snapshot.documents
+                val documents = snapshot.documents.toSet()
                 documents.forEach {
                     val objectSet = it.toObject(ObjectSet::class.java)
                     if (objectSet != null) {
+                        allObjectSets.distinct()
                         allObjectSets.add(objectSet)
                     }
                 }
