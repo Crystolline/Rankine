@@ -24,11 +24,9 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     private val nameEditText = _activity.findViewById<EditText>(R.id.name_edit_view)
     private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
     private var attribute = ""
-    private var counter = 0
     var jsonObject: JSONObject = JSONObject()
     var jsonArray: JSONArray = JSONArray()
     var jsonArrayHolder = JSONArray()
-    var jsonObjectHolder = JSONObject()
 
 
     /**
@@ -93,7 +91,7 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                             if (variable.tag == null) {
                                 val elements = variable.text.toString()
                                 jsonObject = JSONObject()
-                                jsonObject.put("Element", elements)
+                                jsonObject.put("element", elements)
                                 jsonArray.put(jsonObject)
                             }
                         }
@@ -101,10 +99,9 @@ class DynamicFieldUtil(activity: Activity) : Application() {
                     if (!attribute.contentEquals("")) {
 
                         jsonObject = JSONObject()
-                        val attributeJson = jsonObject.put("Attribute", attribute)
+                        val attributeJson = jsonObject.put("attribute", attribute)
                         jsonArray.put(attributeJson)
-                        jsonObjectHolder.put("ObjectSet$counter", jsonArray)
-                        counter++
+                        jsonArrayHolder.put(jsonArray)
                     }
                     jsonArray = JSONArray()
 
@@ -112,11 +109,11 @@ class DynamicFieldUtil(activity: Activity) : Application() {
             }
         }
         jsonObject = JSONObject()
-        jsonObject.put("Name", storeNameText)
+        jsonObject.put("name", storeNameText)
         jsonArray.put(jsonObject)
-        jsonArray.put(jsonObjectHolder)
+        jsonArray.put(jsonArrayHolder)
         jsonObject = JSONObject()
-        jsonObject.put("WholeSet", jsonArray)
+        jsonObject.put("wholeSet", jsonArray)
         return jsonObject.toString()
 
     }

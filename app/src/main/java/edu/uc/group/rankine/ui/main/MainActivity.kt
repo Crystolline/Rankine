@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModelCreateRank: CreateRankSetViewModel
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
+    var counter = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,17 +110,9 @@ class MainActivity : AppCompatActivity() {
     /**
      * unimplemented
      */
-    fun loadView() {
-
-    }
-
-    /**
-     * unimplemented
-     */
     private fun addView() {
         removeView()
         viewModelCreateRank.objectSetLiveData.observe(this, Observer { objectSet ->
-            var counter = 0
             if (viewModelCreateRank.objectSetLiveData == null) {
                 return@Observer
             } else {
@@ -137,9 +130,10 @@ class MainActivity : AppCompatActivity() {
                     val childAtZero = parentAtOne.getChildAt(1) as View
                     if (childAtZero is TextView) {
 
-                        val getName = JSONHandler.jsonNameHandler(currentObjectSet.objectSet)?.WholeSet
-                        val getObject = JSONHandler.jsonObjectSetHandler(currentObjectSet.objectSet)?.ObjectSets
-                        childAtZero.text = getName?.get(0)?.Name
+                        val getName = JSONHandler.pullData(currentObjectSet.objectSet)
+                        childAtZero.text = JSONHandler.Name
+                        val test = JSONHandler.ObjectSetsArrayList
+
                     }
                 }
             }
@@ -148,10 +142,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun removeView() {
-        val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val row: View = inflater.inflate(R.layout.dynamic_main_view, null)
-        val parent = row as LinearLayout
-        parent.removeView(parent)
+
     }
 
 

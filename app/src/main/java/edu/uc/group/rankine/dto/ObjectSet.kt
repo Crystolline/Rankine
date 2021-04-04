@@ -8,8 +8,8 @@ import org.json.JSONObject
 
 
 data class ObjectSet(
-    var objectSet: String = "",
-    var localUri: String = ""
+        var objectSet: String = "",
+        var localUri: String = ""
 ) {
 
 
