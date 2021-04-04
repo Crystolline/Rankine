@@ -6,6 +6,22 @@ package edu.uc.group.rankine.dto
  */
 class RankedObjectSet(var set: ObjectSet) {
     var rankedElements: ArrayList<ElementObject> = ArrayList()
+    var ranked = false
+
+    @JvmName("getRankedElements1")
+    fun getRankedElements(): ArrayList<ElementObject> {
+        rankedElements == mergeSort(set.getAllElements())
+        ranked = true
+        return rankedElements
+    }
+
+    fun getRankings(index: Int): ElementObject {
+        return rankedElements[index]
+    }
+
+    fun isRanked(): Boolean {
+        return ranked
+    }
 
     fun mergeSort(elementsToRank: ArrayList<ElementObject>): ArrayList<ElementObject> {
         if (elementsToRank.size <= 1) {
@@ -18,6 +34,8 @@ class RankedObjectSet(var set: ObjectSet) {
 
         return merge(mergeSort(left as ArrayList<ElementObject>), mergeSort(right as ArrayList<ElementObject>))
     }
+
+
 
     fun merge(left: ArrayList<ElementObject>, right: ArrayList<ElementObject>): ArrayList<ElementObject> {
         var indexLeft = 0

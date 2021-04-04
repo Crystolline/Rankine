@@ -18,6 +18,14 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(),
     }
 
     /**
+     * Get elements
+     */
+    fun getAllElements() : ArrayList<ElementObject>
+    {
+        return elements
+    }
+
+    /**
      * Modify an element <inputObject> in the ObjectSet with the name and attributes of element <newObject>
      */
     fun modifyElements(inputObject: ElementObject, newObject: ElementObject) {
