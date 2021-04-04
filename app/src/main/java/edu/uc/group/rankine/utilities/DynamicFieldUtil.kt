@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.view.iterator
 import edu.uc.group.rankine.R
 import org.json.JSONArray

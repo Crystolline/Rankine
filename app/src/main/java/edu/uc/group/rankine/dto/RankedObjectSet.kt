@@ -52,11 +52,8 @@ class RankedObjectSet(var set: ObjectSet) {
      */
     fun promptUser(firstElement: ElementObject, secondElement: ElementObject): ElementObject {
         var winningElement = firstElement
-
-
-
         return winningElement
-    }
 
+    }
 
 }
