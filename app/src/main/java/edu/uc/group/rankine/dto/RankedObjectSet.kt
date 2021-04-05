@@ -32,12 +32,17 @@ class RankedObjectSet(var set: ObjectSet) {
         val left = elementsToRank.subList(0, middle)
         val right = elementsToRank.subList(middle, elementsToRank.size)
 
-        return merge(mergeSort(left as ArrayList<ElementObject>), mergeSort(right as ArrayList<ElementObject>))
+        return merge(
+            mergeSort(left as ArrayList<ElementObject>),
+            mergeSort(right as ArrayList<ElementObject>)
+        )
     }
 
 
-
-    fun merge(left: ArrayList<ElementObject>, right: ArrayList<ElementObject>): ArrayList<ElementObject> {
+    private fun merge(
+        left: ArrayList<ElementObject>,
+        right: ArrayList<ElementObject>
+    ): ArrayList<ElementObject> {
         var indexLeft = 0
         var indexRight = 0
         val newList: ArrayList<ElementObject> = ArrayList()

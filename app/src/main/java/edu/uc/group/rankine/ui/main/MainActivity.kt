@@ -4,55 +4,52 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.view.*
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.children
-import androidx.core.view.iterator
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.createRank.CreateRankSet
+import edu.uc.group.rankine.ui.createRank.CreateRankSetFragment
 import edu.uc.group.rankine.ui.createRank.CreateRankSetViewModel
 import edu.uc.group.rankine.ui.createRank.CreateRankSetViewModelFactory
+import edu.uc.group.rankine.ui.ranking.RankSetFragment
 import edu.uc.group.rankine.utilities.JSONHandler
-import org.json.JSONArray
-import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModelCreateRank: CreateRankSetViewModel
     private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
+    private lateinit var mainFragment: MainFragment
+    private lateinit var rankSetFragment: RankSetFragment
+    private lateinit var createRankSetFragment: CreateRankSetFragment
+    private lateinit var activeFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         setSupportActionBar(findViewById(R.id.toolbar))
-
-
-        /**
-         * on floating action click open CreateRankSet
-         */
-        val btnOpenActivity: FloatingActionButton = findViewById(R.id.createRankBtn)
-        btnOpenActivity.setOnClickListener {
-            val intent = Intent(this, CreateRankSet::class.java)
-            startActivity(intent)
+        mainFragment = MainFragment.newInstance()
+        rankSetFragment = RankSetFragment.newInstance()
+        createRankSetFragment = CreateRankSetFragment.newInstance()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, mainFragment)
+                .commitNow()
+            activeFragment = mainFragment
         }
 
         viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
-                .get(CreateRankSetViewModel::class.java)
+            .get(CreateRankSetViewModel::class.java)
 
         viewModelCreateRank.objectSetLiveData.observe(this, Observer { objectSet ->
             var test = objectSet
@@ -154,5 +151,30 @@ class MainActivity : AppCompatActivity() {
         parent.removeView(parent)
     }
 
+    internal fun moveToMain() {
+        if (activeFragment != mainFragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, mainFragment)
+                .commitNow()
+            activeFragment = mainFragment
+        }
+    }
 
+    internal fun moveToRankSet() {
+        if (activeFragment != rankSetFragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, rankSetFragment)
+                .commitNow()
+            activeFragment = rankSetFragment
+        }
+    }
+
+    internal fun moveToCreateRankSet() {
+        if (activeFragment != createRankSetFragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, createRankSetFragment)
+                .commitNow()
+            activeFragment = createRankSetFragment
+        }
+    }
 }

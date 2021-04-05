@@ -34,7 +34,7 @@ class CreateRankSet : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
-                .get(CreateRankSetViewModel::class.java)
+            .get(CreateRankSetViewModel::class.java)
 
 
     }

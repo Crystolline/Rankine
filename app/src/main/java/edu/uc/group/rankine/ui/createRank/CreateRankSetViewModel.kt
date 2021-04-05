@@ -24,7 +24,7 @@ class CreateRankSetViewModel(activity: Activity) : ViewModel() {
     private var imageUriString = ""
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> =
-            MutableLiveData<ArrayList<ObjectSet>>()
+        MutableLiveData<ArrayList<ObjectSet>>()
 
 
     init {
