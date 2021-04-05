@@ -1,6 +1,5 @@
 package edu.uc.group.rankine.dto
 
-
 /**
  * A <set> of elements that is being ranked or is ranked
  */
@@ -35,8 +34,6 @@ class RankedObjectSet(var set: ObjectSet) {
         return merge(mergeSort(left as ArrayList<ElementObject>), mergeSort(right as ArrayList<ElementObject>))
     }
 
-
-
     fun merge(left: ArrayList<ElementObject>, right: ArrayList<ElementObject>): ArrayList<ElementObject> {
         var indexLeft = 0
         var indexRight = 0
@@ -70,11 +67,7 @@ class RankedObjectSet(var set: ObjectSet) {
      */
     fun promptUser(firstElement: ElementObject, secondElement: ElementObject): ElementObject {
         var winningElement = firstElement
-
-
-
         return winningElement
     }
-
 
 }

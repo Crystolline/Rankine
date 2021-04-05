@@ -34,7 +34,6 @@ class CreateRankSet : AppCompatActivity() {
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
                 .get(CreateRankSetViewModel::class.java)
 
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
