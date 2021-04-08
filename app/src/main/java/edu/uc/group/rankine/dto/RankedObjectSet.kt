@@ -5,76 +5,103 @@ package edu.uc.group.rankine.dto
  * A <set> of elements that is being ranked or is ranked
  */
 class RankedObjectSet(var set: ObjectSet) {
-    var rankedElements: ArrayList<ElementObject> = ArrayList()
-    var ranked = false
+    private var rankedElements: ArrayList<ElementObject>? = null
+    private lateinit var fullMergeList: ArrayList<ArrayList<ElementObject>>
+    private lateinit var arrayLeft: ArrayList<ElementObject>
+    private var indexLeft: Int = 0
+    lateinit var leftElement: ElementObject
+    private lateinit var arrayRight: ArrayList<ElementObject>
+    private var indexRight: Int = 0
+    lateinit var rightElement: ElementObject
+    private lateinit var arrayMerge: ArrayList<ElementObject>
+
+    fun startRanking() {
+        if (set.elements.size <= 1) {
+            rankedElements = set.elements
+        } else {
+            set.elements.forEach {
+                fullMergeList.add(arrayListOf(it))
+            }
+            arrayLeft = fullMergeList.removeAt(0)
+            indexLeft = 0
+            leftElement = arrayLeft[indexLeft]
+            arrayRight = fullMergeList.removeAt(0)
+            indexRight = 0
+            rightElement = arrayRight[indexRight]
+            arrayMerge = ArrayList()
+        }
+    }
 
     @JvmName("getRankedElements1")
     fun getRankedElements(): ArrayList<ElementObject> {
-        rankedElements == mergeSort(set.getAllElements())
-        ranked = true
-        return rankedElements
+        if (rankedElements != null) {
+            return rankedElements!!
+        }
+        return set.elements
     }
 
-    fun getRankings(index: Int): ElementObject {
-        return rankedElements[index]
+    fun getRankings(index: Int): ElementObject? {
+        if (rankedElements != null && index < rankedElements!!.count()) {
+            return rankedElements!![index]
+        }
+        return null
     }
 
     fun isRanked(): Boolean {
-        return ranked
+        return rankedElements != null
     }
 
-    fun mergeSort(elementsToRank: ArrayList<ElementObject>): ArrayList<ElementObject> {
-        if (elementsToRank.size <= 1) {
-            return elementsToRank
-        }
-
-        val middle = elementsToRank.size / 2
-        val left = elementsToRank.subList(0, middle)
-        val right = elementsToRank.subList(middle, elementsToRank.size)
-
-        return merge(mergeSort(left as ArrayList<ElementObject>), mergeSort(right as ArrayList<ElementObject>))
-    }
-
-
-
-    fun merge(left: ArrayList<ElementObject>, right: ArrayList<ElementObject>): ArrayList<ElementObject> {
-        var indexLeft = 0
-        var indexRight = 0
-        val newList: ArrayList<ElementObject> = ArrayList()
-
-        while (indexLeft < left.count() && indexRight < right.count()) {
-            //If it is already in the right order
-            if (promptUser(left[indexLeft], right[indexRight]) == left[indexRight]) {
-                newList.add(left[indexLeft])
-                indexLeft++
-            } else {
-                newList.add(right[indexRight])
-                indexRight++
-            }
-        }
-
-        while (indexLeft < left.size) {
-            newList.add(left[indexLeft])
-            indexLeft++
-        }
-
-        while (indexRight < right.size) {
-            newList.add(right[indexRight])
-            indexRight++
-        }
-        return newList
+    fun isRanking(): Boolean {
+        return fullMergeList.count() > 0 || arrayLeft.count() > 0 || arrayRight.count() > 0 || arrayMerge.count() > 0
     }
 
     /**
-     * Prompt the user to make a choice between two objects in the ObjectSet
+     * Retrieve the results of a comparison and perform MergeSort steps up until next comparison is needed
      */
-    fun promptUser(firstElement: ElementObject, secondElement: ElementObject): ElementObject {
-        var winningElement = firstElement
+    fun sortStep(side: Boolean) {
+        if(isRanking()) {
+            if (side) {
+                arrayMerge.add(arrayRight[indexRight])
+                indexRight++
+            } else {
+                arrayMerge.add(arrayLeft[indexLeft])
+                indexLeft++
+            }
 
+            if (indexRight < arrayRight.count() && indexLeft < arrayLeft.count()) {
+                leftElement = arrayLeft[indexLeft]
+                rightElement = arrayRight[indexRight]
+            } else {
+                while (indexLeft < arrayLeft.count()) {
+                    arrayMerge.add(arrayLeft[indexLeft])
+                    indexLeft++
+                }
+                while (indexRight < arrayRight.count()) {
+                    arrayMerge.add(arrayRight[indexRight])
+                    indexRight++
+                }
 
-
-        return winningElement
+                fullMergeList.add(arrayMerge)
+                if (fullMergeList.count() == 1) {
+                    rankedElements = fullMergeList[0]
+                    fullMergeList.clear()
+                    arrayLeft.clear()
+                    indexLeft = 0
+                    leftElement = ElementObject("Ranking")
+                    arrayRight.clear()
+                    indexRight = 0
+                    rightElement = ElementObject("Completed")
+                    arrayMerge.clear()
+                } else {
+                    arrayLeft = fullMergeList.removeAt(0)
+                    indexLeft = 0
+                    leftElement = arrayLeft[indexLeft]
+                    arrayRight = fullMergeList.removeAt(0)
+                    indexRight = 0
+                    rightElement = arrayRight[indexRight]
+                    arrayMerge.clear()
+                }
+            }
+        }
     }
-
-
 }
