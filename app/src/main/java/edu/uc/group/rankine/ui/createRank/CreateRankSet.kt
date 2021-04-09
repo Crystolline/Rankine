@@ -7,21 +7,21 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
+import edu.uc.group.rankine.ui.main.MainViewModel
+import edu.uc.group.rankine.ui.main.MainViewModelFactory
 import edu.uc.group.rankine.utilities.DynamicFieldUtil
 import edu.uc.group.rankine.utilities.GetAllViewChildren
 
 class CreateRankSet : AppCompatActivity() {
 
-    private lateinit var viewModelCreateRank: CreateRankSetViewModel
-    private lateinit var viewModelFactoryCreateRank: CreateRankSetViewModelFactory
+    private lateinit var viewModelCreateRank: MainViewModel
+    private lateinit var viewModelFactoryCreateRank: MainViewModelFactory
     private val imageCode: Int = 204
     private var imageUri: Uri? = null
 
@@ -32,9 +32,9 @@ class CreateRankSet : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar)) // set toolbar
         assert(supportActionBar != null) //implement back button
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        viewModelFactoryCreateRank = CreateRankSetViewModelFactory(this)
+        viewModelFactoryCreateRank = MainViewModelFactory(this)
         viewModelCreateRank = ViewModelProvider(this, viewModelFactoryCreateRank)
-            .get(CreateRankSetViewModel::class.java)
+            .get(MainViewModel::class.java)
 
 
     }
@@ -60,29 +60,6 @@ class CreateRankSet : AppCompatActivity() {
         return true
     }
 
-    /**
-     * calls removeElements function from the view model on button click
-     */
-    fun onDeleteElements(view: View) {
-        viewModelCreateRank.removeElements(view)
-
-    }
-
-    /**
-     *  calls removeFields function from the view model on button click
-     */
-    fun onDeleteFields(view: View) {
-        view.id = View.generateViewId()
-        val v = view.id
-        viewModelCreateRank.removeFields(view, v)
-    }
-
-    /**
-     *  calls addElements function from the view model on button click
-     */
-    fun onAddElements(view: View) {
-        viewModelCreateRank.addElements()
-    }
 
     /**
      *  calls create function from the view model on button click
@@ -101,14 +78,6 @@ class CreateRankSet : AppCompatActivity() {
 
     }
 
-    /**
-     *   calls addFields function from the view model on button click
-     */
-    fun onAddFields(view: View) {
-        view.id = View.generateViewId()
-        val v = view.id
-        viewModelCreateRank.addFields(v, view)
-    }
 
     /**
      *  calls addImage function from the view model on button click

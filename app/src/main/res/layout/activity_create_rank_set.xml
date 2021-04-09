@@ -27,17 +27,16 @@
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
             android:shadowColor="@color/black"
-            android:text="Add Field"
-            android:onClick="onAddElements"/>
+            android:text="Add Field"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/create_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
             android:shadowColor="@color/black"
-            android:text="Create"
-            android:onClick="onCreate"/>
+            android:text="Create"/>
 
     </LinearLayout>
 

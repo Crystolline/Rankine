@@ -46,32 +46,9 @@ class DynamicFieldUtil(activity: Activity) : Application() {
      * removes the layout dynamic_elements form the scrollContainer
      */
     fun removeElements(view: View) {
-        scrollContainer.removeView(view.parent.parent as View)
-    }
-
-    /**
-     * adds the layout dynamic_fields to LinearLayout within the layout dynamic_elements
-     */
-    fun addFields(id: Int, view: View) {
-        val inflater = _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val btn: ImageButton = _activity.findViewById(id)
-        val parent = btn.parent.parent as ViewGroup
-        val row: View = inflater.inflate(R.layout.dynamic_fields, null)
-        parent.addView(row)
-
-        val giveTag = view.parent as ViewGroup
-        for (i: View in giveTag) {
-            i.tag = "string"
-        }
-    }
-
-    /**
-     * removes the layout dynamic_fields from the linearLayout within the layout dynamic_elements
-     */
-    fun removeFields(view: View, id: Int) {
-        val btn: ImageButton = _activity.findViewById(id)
-        val parent = btn.parent.parent as ViewGroup
-        parent.removeView(view.parent as View)
+        val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
+        val test = view.parent.parent
+        scrollContainer.removeView(test as View)
     }
 
     /**
@@ -84,37 +61,18 @@ class DynamicFieldUtil(activity: Activity) : Application() {
         val storeNameText = nameEditText.text.toString()
         for (child: View in allViews) {
             if (child is EditText) run {
-                if (child.tag is String) run {
-                    attribute = child.text.toString()
-                    val test = child.parent.parent as View
-                    val allLayoutChildren = getAllViewChildren.getAllChildren(test)
-                    for (variable in allLayoutChildren) {
-                        if (variable is EditText) {
-                            if (variable.tag == null) {
-                                val elements = variable.text.toString()
-                                jsonObject = JSONObject()
-                                jsonObject.put("Element", elements)
-                                jsonArray.put(jsonObject)
-                            }
-                        }
-                    }
-                    if (!attribute.contentEquals("")) {
+                attribute = child.text.toString()
 
-                        jsonObject = JSONObject()
-                        val attributeJson = jsonObject.put("Attribute", attribute)
-                        jsonArray.put(attributeJson)
-                        jsonObjectHolder.put("ObjectSet$counter", jsonArray)
-                        counter++
-                    }
-                    jsonArray = JSONArray()
+                jsonObject = JSONObject()
+                val attributeJson = jsonObject.put("Attribute$counter", attribute)
+                jsonArray.put(attributeJson)
+                counter++
 
-                }
             }
         }
         jsonObject = JSONObject()
         jsonObject.put("Name", storeNameText)
         jsonArray.put(jsonObject)
-        jsonArray.put(jsonObjectHolder)
         jsonObject = JSONObject()
         jsonObject.put("WholeSet", jsonArray)
         return jsonObject.toString()
