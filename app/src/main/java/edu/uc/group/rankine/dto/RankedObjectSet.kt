@@ -1,5 +1,7 @@
 package edu.uc.group.rankine.dto
 
+import android.sax.Element
+
 
 /**
  * A <set> of elements that is being ranked or is ranked
@@ -19,6 +21,7 @@ class RankedObjectSet(var set: ObjectSet) {
         if (set.elements.size <= 1) {
             rankedElements = set.elements
         } else {
+            fullMergeList = arrayListOf()
             set.elements.forEach {
                 fullMergeList.add(arrayListOf(it))
             }
@@ -84,14 +87,14 @@ class RankedObjectSet(var set: ObjectSet) {
                 fullMergeList.add(arrayMerge)
                 if (fullMergeList.count() == 1) {
                     rankedElements = fullMergeList[0]
-                    fullMergeList.clear()
-                    arrayLeft.clear()
+                    fullMergeList = arrayListOf()
+                    arrayLeft = arrayListOf()
                     indexLeft = 0
                     leftElement = ElementObject("Ranking")
-                    arrayRight.clear()
+                    arrayRight = arrayListOf()
                     indexRight = 0
                     rightElement = ElementObject("Completed")
-                    arrayMerge.clear()
+                    arrayMerge = arrayListOf()
                 } else {
                     arrayLeft = fullMergeList.removeAt(0)
                     indexLeft = 0
@@ -99,7 +102,7 @@ class RankedObjectSet(var set: ObjectSet) {
                     arrayRight = fullMergeList.removeAt(0)
                     indexRight = 0
                     rightElement = arrayRight[indexRight]
-                    arrayMerge.clear()
+                    arrayMerge = arrayListOf()
                 }
             }
         }
