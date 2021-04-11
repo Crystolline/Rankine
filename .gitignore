@@ -1,3 +1,17 @@
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Gradle files
+.gradle/
+.build/
+
+# log
+*.log
+
+.idea/
+
 *.iml
 .gradle
 /local.properties

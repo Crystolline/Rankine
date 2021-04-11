@@ -4,29 +4,21 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.view.*
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.children
-import androidx.core.view.iterator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.createRank.CreateRankSet
 import edu.uc.group.rankine.ui.createRank.CreateRankSetViewModel
 import edu.uc.group.rankine.ui.createRank.CreateRankSetViewModelFactory
 import edu.uc.group.rankine.utilities.JSONHandler
-import org.json.JSONArray
-import org.json.JSONObject
+
 
 
 class MainActivity : AppCompatActivity() {
