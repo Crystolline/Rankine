@@ -120,6 +120,9 @@ class DynamicFieldUtil(activity: Activity) : Application() {
 
     }
 
+    /**
+     * filters based on the users preferences
+     */
     fun userFilter(view: ArrayList<View>): Boolean {
         val storeNameText = nameEditText.text
         for (child: View in view) {
