@@ -34,7 +34,7 @@ class CreateRankSetFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         vmFactory = activity?.let { MainViewModelFactory(it) }!!
         vm = ViewModelProvider(this, vmFactory).get(MainViewModel::class.java)
-        val addBtn = activity?.findViewById<AppCompatButton>(R.id.add_new_field_btn)
+        val addBtn = activity?.findViewById<AppCompatButton>(R.id.btnAddField)
         val createBtn = activity?.findViewById<AppCompatButton>(R.id.create_btn)
 
 
