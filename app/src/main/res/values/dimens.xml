@@ -6,7 +6,10 @@
     -->
     <dimen name="box_inset_layout_padding">0dp</dimen>
     <dimen name="floatingActionButton01" tools:override="true">36dp</dimen>
-
+    <dimen name="sm">5dp</dimen>
+    <dimen name="md">8dp</dimen>
+    <dimen name="lg">120dp</dimen>
+    <dimen name="xlg">136dp</dimen>
     <!--
     This padding applies to both square and round screens. The total padding between the buttons
     and the window insets is box_inset_layout_padding (above variable) on square screens and
