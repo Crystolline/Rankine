@@ -13,16 +13,6 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(),
      */
     fun addElement(e: ElementObject) {
         elements.add(e)
-
-
-    }
-
-    /**
-     * Get elements
-     */
-    fun getAllElements() : ArrayList<ElementObject>
-    {
-        return elements
     }
 
     /**
@@ -31,8 +21,6 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(),
     fun modifyElements(inputObject: ElementObject, newObject: ElementObject) {
         elements.remove(inputObject)
         addElement(newObject)
-
-
     }
 
     fun getUserJSONData(data: String, photo: String) {
