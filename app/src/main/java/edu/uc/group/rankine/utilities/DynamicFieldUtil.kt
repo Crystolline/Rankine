@@ -7,13 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.view.iterator
 import edu.uc.group.rankine.R
-import org.json.JSONArray
-import org.json.JSONObject
+import edu.uc.group.rankine.dto.ElementObject
 
 /**
  * Utility that adds and removes fields dynamically and saves data from editTextViews to a sharedPreference
@@ -24,11 +20,9 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     private val nameEditText = _activity.findViewById<EditText>(R.id.name_edit_view)
     private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
     private var attribute = ""
-    private var counter = 0
-    var jsonObject: JSONObject = JSONObject()
-    var jsonArray: JSONArray = JSONArray()
-    var jsonArrayHolder = JSONArray()
-    var jsonObjectHolder = JSONObject()
+    var name = ""
+    var elementArray = ArrayList<ElementObject>()
+
 
 
     /**
@@ -55,32 +49,24 @@ class DynamicFieldUtil(activity: Activity) : Application() {
      * filters input from the editText views and saves it into an JSONObject
      * the JSONObject is then passed to the sharedPreference
      */
-    fun create(): String {
+    fun create() {
+
         val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
-        var jsonArray = JSONArray()
-        val storeNameText = nameEditText.text.toString()
+        name = nameEditText.text.toString()
         for (child: View in allViews) {
             if (child is EditText) run {
                 attribute = child.text.toString()
-
-                jsonObject = JSONObject()
-                val attributeJson = jsonObject.put("Attribute$counter", attribute)
-                jsonArray.put(attributeJson)
-                counter++
-
+                val elementObject = ElementObject(attribute)
+                elementArray.add(elementObject)
             }
         }
-        jsonObject = JSONObject()
-        jsonObject.put("Name", storeNameText)
-        jsonArray.put(jsonObject)
-        jsonObject = JSONObject()
-        jsonObject.put("WholeSet", jsonArray)
-        return jsonObject.toString()
-
     }
 
     fun userFilter(view: ArrayList<View>): Boolean {
         val storeNameText = nameEditText.text
+        if (view.size == 0) {
+            return false
+        }
         for (child: View in view) {
             if (child is EditText) {
                 if (child.text.toString() == "" || storeNameText.toString() == "") {

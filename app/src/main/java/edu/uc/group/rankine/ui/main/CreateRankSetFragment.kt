@@ -1,26 +1,35 @@
 package edu.uc.group.rankine.ui.main
 
+import android.app.Activity
+import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import edu.uc.group.rankine.R
+import edu.uc.group.rankine.dto.ElementObject
+import edu.uc.group.rankine.dto.ObjectSet
 import edu.uc.group.rankine.utilities.DynamicFieldUtil
 import edu.uc.group.rankine.utilities.GetAllViewChildren
 
-class CreateRankSetFragment : Fragment() {
+open class CreateRankSetFragment : Fragment() {
     companion object {
         fun newInstance() = CreateRankSetFragment()
     }
 
     private lateinit var vm: MainViewModel
     private lateinit var vmFactory: MainViewModelFactory
-    private val ma: MainActivity = MainActivity()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -51,13 +60,15 @@ class CreateRankSetFragment : Fragment() {
             val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
             if (dynamicFieldUtil.userFilter(allViews)) {
                 vm.create()
-                ma.moveToMain()
+                (activity as MainActivity).moveToMain()
             } else {
-                Toast.makeText(activity, "Fill Out All Fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Fill Out All Fields", Toast.LENGTH_SHORT).show()
             }
 
         }
-        
+
 
     }
+
 }
+

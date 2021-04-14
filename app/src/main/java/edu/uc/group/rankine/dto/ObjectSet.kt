@@ -1,13 +1,27 @@
 package edu.uc.group.rankine.dto
 
+import android.graphics.Bitmap
+import com.google.firebase.firestore.Exclude
 import org.json.JSONObject
 
 /**
  * An unranked set of <elements>
  */
-data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(),
-                     var objectSet: String = "",
-                     var localUri: String = "") {
+data class ObjectSet(
+        var name: String = "",
+        var localUri: String = ""
+) {
+
+    private var _elements: ArrayList<ElementObject> = ArrayList<ElementObject>()
+
+    var elements: ArrayList<ElementObject>
+        @Exclude get() {
+            return _elements
+        }
+        set(value) {
+            _elements = value
+        }
+
     /**
      * Add element <e> to the ObjectSet's element list
      */
@@ -20,8 +34,7 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(),
     /**
      * Get elements
      */
-    fun getAllElements() : ArrayList<ElementObject>
-    {
+    fun getAllElements(): ArrayList<ElementObject> {
         return elements
     }
 
@@ -31,13 +44,7 @@ data class ObjectSet(var elements: ArrayList<ElementObject> = ArrayList(),
     fun modifyElements(inputObject: ElementObject, newObject: ElementObject) {
         elements.remove(inputObject)
         addElement(newObject)
-
-
     }
 
-    fun getUserJSONData(data: String, photo: String) {
-        objectSet = data
-        localUri = photo
-    }
 }
 

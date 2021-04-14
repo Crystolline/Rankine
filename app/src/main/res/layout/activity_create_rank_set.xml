@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_gray"
-    tools:context=".ui.createRank.CreateRankSet"
+    tools:context=".ui.main.MainActivity"
     android:orientation="vertical">
 
     <include
@@ -17,7 +17,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
-        android:layout_alignParentTop="true"
         android:layout_marginTop="5dp">
 
         <androidx.appcompat.widget.AppCompatButton

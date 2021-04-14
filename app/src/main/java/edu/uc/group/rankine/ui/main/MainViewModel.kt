@@ -2,15 +2,20 @@ package edu.uc.group.rankine.ui.main
 
 import android.app.Activity
 import android.content.ContentValues.TAG
+import android.graphics.Bitmap
+import android.graphics.ColorSpace
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import edu.uc.group.rankine.R
+import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
-import edu.uc.group.rankine.ui.createRank.CreateRankSet
 import edu.uc.group.rankine.utilities.DynamicFieldUtil
 
 /**
@@ -19,18 +24,23 @@ import edu.uc.group.rankine.utilities.DynamicFieldUtil
 class MainViewModel(activity: Activity) : ViewModel() {
     private var ctx = activity
     private var dynamicFieldService = DynamicFieldUtil(ctx)
-    private var objectSet = ObjectSet()
     var idList = ArrayList<String>()
-    private val createRankSet = CreateRankSet()
-    private var imageUriString = ""
+
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> =
-        MutableLiveData<ArrayList<ObjectSet>>()
+    private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
+    private var _objectSet = ObjectSet()
+    var allObjectSets = ArrayList<ObjectSet>()
+    val recycle = activity?.findViewById<RecyclerView>(R.id.recycle)
 
 
     init {
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
         firebaseDBListener()
+
+    }
+
+    companion object {
+        private var imageUriString = ""
     }
 
 
@@ -52,14 +62,31 @@ class MainViewModel(activity: Activity) : ViewModel() {
      *  calls create function from DynamicFieldUtil
      */
     fun create() {
-        val data = dynamicFieldService.create()
-        objectSet.getUserJSONData(data, imageUriString)
-        save(objectSet)
+
         objectSet = ObjectSet()
+        dynamicFieldService.create()
+        with(objectSet) {
+
+            name = dynamicFieldService.name
+            elements = dynamicFieldService.elementArray
+            localUri = MainViewModel.imageUriString
+
+        }
+
+        save(objectSet)
+        clearAll()
+    }
+
+    private fun clearAll() {
+        objectSet.elements = ArrayList<ElementObject>()
+        objectSet.localUri = ""
+        objectSet.name = ""
+
     }
 
     fun getImageUriString(imageUri: String) {
-        imageUriString = imageUri
+        MainViewModel.imageUriString = imageUri
+
     }
 
     private fun save(objectSet: ObjectSet) {
@@ -83,7 +110,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
             }
 
             if (snapshot != null) {
-                val allObjectSets = ArrayList<ObjectSet>()
+                allObjectSets = ArrayList<ObjectSet>()
                 val documents = snapshot.documents
                 documents.forEach {
                     val objectSet = it.toObject(ObjectSet::class.java)
@@ -96,12 +123,20 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
-
-    internal var objectSetLiveData: MutableLiveData<ArrayList<ObjectSet>>
+    internal var objectSets: MutableLiveData<ArrayList<ObjectSet>>
         get() {
             return _objectSets
         }
         set(value) {
             _objectSets = value
         }
+
+    internal var objectSet: ObjectSet
+        get() {
+            return _objectSet
+        }
+        set(value) {
+            _objectSet = value
+        }
 }
+
