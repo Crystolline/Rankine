@@ -4,13 +4,10 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -24,9 +21,8 @@ import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.ranking.RankSetFragment
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.nio.channels.FileChannel
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,14 +46,14 @@ class MainActivity : AppCompatActivity() {
         createRankSetFragment = CreateRankSetFragment.newInstance()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, mainFragment)
-                    .commitNow()
+                .replace(R.id.container, mainFragment)
+                .commitNow()
             activeFragment = mainFragment
         }
 
         vmFactory = MainViewModelFactory(this)
         vm = ViewModelProvider(this, vmFactory)
-                .get(MainViewModel::class.java)
+            .get(MainViewModel::class.java)
 
         vm.objectSets.observe(this, Observer { objectSet ->
             var observeThis = objectSet
@@ -70,25 +66,15 @@ class MainActivity : AppCompatActivity() {
             val imageView: ImageView = findViewById(R.id.set_image)
             imageView.clipToOutline = true
             imageUri = data?.data
-            val realUri = getRealPathFromUri(applicationContext, imageUri)
-            vm.getImageUriString(imageUri.toString())
-
-            imageView.setImageURI(imageUri)
-        }
-    }
-
-    fun getRealPathFromUri(context: Context, contentUri: Uri?): String? {
-        var cursor: Cursor? = null
-        return try {
-            val proj = arrayOf(MediaStore.Images.Media.DATA)
-            cursor = context.contentResolver.query(contentUri!!, proj, null, null, null)
-            val column_index: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            cursor.getString(column_index)
-        } finally {
-            if (cursor != null) {
-                cursor.close()
-            }
+            val uniqueString: String = UUID.randomUUID().toString()
+            val fileName = File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
+            fileName.createNewFile()
+            val outputStream = FileOutputStream(fileName)
+            vm.getImageUriString(fileName.absolutePath)
+            val source = ImageDecoder.createSource(contentResolver, imageUri!!)
+            val bitmap = ImageDecoder.decodeBitmap(source)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            imageView.setImageBitmap(bitmap)
         }
     }
 
@@ -132,16 +118,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     fun onDeleteElements(view: View) {
         vm.removeElements(view)
-
     }
 
     /**
-     *  calls addImage function from the view model on button click
+     *  Creates a new intent that allows the user to pick a image to represent a RankSet.
      */
     fun onImageAdd(view: View) {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.flags =
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION and Intent.FLAG_GRANT_READ_URI_PERMISSION and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        intent.type = "image/*"
         startActivityForResult(intent, imageCode)
     }
 
@@ -149,8 +139,8 @@ class MainActivity : AppCompatActivity() {
         mainFragment = MainFragment.newInstance()
         if (activeFragment != mainFragment) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, mainFragment)
-                    .commitNow()
+                .replace(R.id.container, mainFragment)
+                .commitNow()
             activeFragment = mainFragment
         }
     }
@@ -159,8 +149,8 @@ class MainActivity : AppCompatActivity() {
         rankSetFragment = RankSetFragment.newInstance()
         if (activeFragment != rankSetFragment) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, rankSetFragment)
-                    .commitNow()
+                .replace(R.id.container, rankSetFragment)
+                .commitNow()
             activeFragment = rankSetFragment
         }
     }
@@ -169,8 +159,8 @@ class MainActivity : AppCompatActivity() {
         createRankSetFragment = CreateRankSetFragment.newInstance()
         if (activeFragment != createRankSetFragment) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, createRankSetFragment)
-                    .commitNow()
+                .replace(R.id.container, createRankSetFragment)
+                .commitNow()
             activeFragment = createRankSetFragment
         }
     }

@@ -23,8 +23,6 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     var name = ""
     var elementArray = ArrayList<ElementObject>()
 
-
-
     /**
      * adds the layout dynamic_elements to the scrollContainer dynamically
      */
@@ -41,16 +39,15 @@ class DynamicFieldUtil(activity: Activity) : Application() {
      */
     fun removeElements(view: View) {
         val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
-        val test = view.parent.parent
-        scrollContainer.removeView(test as View)
+        val parent = view.parent.parent
+        scrollContainer.removeView(parent as View)
     }
 
     /**
-     * filters input from the editText views and saves it into an JSONObject
-     * the JSONObject is then passed to the sharedPreference
+     * Updates the ElementObject dto with the attribute data.
+     * Then stores a ElementObject object into an ArrayList
      */
     fun create() {
-
         val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
         name = nameEditText.text.toString()
         for (child: View in allViews) {
@@ -62,6 +59,10 @@ class DynamicFieldUtil(activity: Activity) : Application() {
         }
     }
 
+    /**
+     * returns true if name and all created elements are populated otherwise return false
+     * @param view an ArrayList of views to check
+     */
     fun userFilter(view: ArrayList<View>): Boolean {
         val storeNameText = nameEditText.text
         if (view.size == 0) {

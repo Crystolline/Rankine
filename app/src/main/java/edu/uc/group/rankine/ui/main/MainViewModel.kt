@@ -25,13 +25,10 @@ class MainViewModel(activity: Activity) : ViewModel() {
     private var ctx = activity
     private var dynamicFieldService = DynamicFieldUtil(ctx)
     var idList = ArrayList<String>()
-
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
     private var _objectSet = ObjectSet()
     var allObjectSets = ArrayList<ObjectSet>()
-    val recycle = activity?.findViewById<RecyclerView>(R.id.recycle)
-
 
     init {
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
@@ -59,36 +56,40 @@ class MainViewModel(activity: Activity) : ViewModel() {
     }
 
     /**
-     *  calls create function from DynamicFieldUtil
+     *  Populates the ObjectSet dto with data.
+     *  Calls the save function to save the dto in the database.
+     *  Calls the clearAll function to clear the data in the dto.
      */
     fun create() {
-
         objectSet = ObjectSet()
         dynamicFieldService.create()
-        with(objectSet) {
 
+        with(objectSet) {
             name = dynamicFieldService.name
             elements = dynamicFieldService.elementArray
             localUri = MainViewModel.imageUriString
-
         }
 
         save(objectSet)
         clearAll()
     }
 
+    /**
+     * Clears the data sent to the dto
+     */
     private fun clearAll() {
         objectSet.elements = ArrayList<ElementObject>()
         objectSet.localUri = ""
         objectSet.name = ""
-
     }
 
     fun getImageUriString(imageUri: String) {
         MainViewModel.imageUriString = imageUri
-
     }
 
+    /**
+     * Saves the data from the dto to the firebase
+     */
     private fun save(objectSet: ObjectSet) {
         val document = firestore.collection("rankData").document()
         val set = document.set(objectSet)
