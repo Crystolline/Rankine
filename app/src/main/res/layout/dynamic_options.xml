@@ -24,7 +24,7 @@
             android:backgroundTint="@color/light_green"
             android:text="Rank"
             android:padding="16dp"
-            android:drawableTop="@drawable/ic_delete"
+            android:drawableTop="@drawable/ic_rank_icon"
             android:textColor="@color/black"
 
             />
@@ -38,7 +38,7 @@
             android:backgroundTint="@color/light_green"
             android:text="Edit"
             android:padding="16dp"
-            android:drawableTop="@drawable/ic_delete"
+            android:drawableTop="@drawable/ic_edit_icon"
             android:textColor="@color/black"
             />
         <Button
