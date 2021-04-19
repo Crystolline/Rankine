@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
@@ -23,9 +24,9 @@ open class CreateRankSetFragment : Fragment() {
     private lateinit var vmFactory: MainViewModelFactory
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         return inflater.inflate(R.layout.create_rank_fragment, container, false)
@@ -39,21 +40,24 @@ open class CreateRankSetFragment : Fragment() {
         val createBtn = activity?.findViewById<AppCompatButton>(R.id.create_rank_fragment_createBtn)
         val parentView = activity?.findViewById<LinearLayout>(R.id.create_rank_fragment_scrollContainer) as ViewGroup
         val toolbar = view?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.create_rank_fragment_toolbar)
+        val name = activity?.findViewById<EditText>(R.id.create_rank_fragment_name)
+
+        //create toolbar
         toolbar?.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
         toolbar!!.setNavigationOnClickListener { (activity as MainActivity).moveToMain() }
 
+        //set listener for add element btn
         addBtn?.setOnClickListener {
             vm.addElements(parentView)
         }
 
+        //set listener for create btn
         createBtn?.setOnClickListener {
-            val dynamicFieldUtil = DynamicFieldUtil(requireActivity())
+            val dynamicFieldUtil = DynamicFieldUtil()
             val getAllViewChildren = GetAllViewChildren()
-            val scrollContainer =
-                    requireActivity().findViewById<LinearLayout>(R.id.create_rank_fragment_scrollContainer)
-            val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
-            if (dynamicFieldUtil.userFilter(allViews)) {
-                vm.create()
+            val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(parentView)
+            if (dynamicFieldUtil.userFilter(allViews, name!!)) {
+                vm.create(name, parentView as LinearLayout)
                 (activity as MainActivity).moveToMain()
             } else {
                 Toast.makeText(context, "Fill Out All Fields", Toast.LENGTH_SHORT).show()

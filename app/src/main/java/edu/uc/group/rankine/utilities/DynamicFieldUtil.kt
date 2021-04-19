@@ -9,13 +9,10 @@ import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.ElementObject
 
 /**
- * Utility that adds and removes fields dynamically and saves data from editTextViews to a sharedPreference
+ * Utility that gets the text from the ScrollContainer and filter that checks if all views have been filled.
  */
-class DynamicFieldUtil(activity: Activity) : Application() {
-    private var _activity = activity
+class DynamicFieldUtil {
     private val getAllViewChildren = GetAllViewChildren()
-    private val nameEditText = _activity.findViewById<EditText>(R.id.create_rank_fragment_name)
-    private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.create_rank_fragment_scrollContainer)
     private var attribute = ""
     var name = ""
     var elementArray = ArrayList<ElementObject>()
@@ -23,9 +20,11 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     /**
      * Updates the ElementObject dto with the attribute data.
      * Then stores a ElementObject object into an ArrayList
+     * @param nameEditText this is the name EditText view
+     * @param scrollContainer this is the Layout that holds the ScrollView
      */
-    fun create() {
-        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
+    fun create(nameEditText: EditText, scrollContainer: LinearLayout) {
+        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer)
         name = nameEditText.text.toString()
         for (child: View in allViews) {
             if (child is EditText) run {
@@ -39,8 +38,11 @@ class DynamicFieldUtil(activity: Activity) : Application() {
     /**
      * returns true if name and all created elements are populated otherwise return false
      * @param view an ArrayList of views to check
+     * @param nameEditText the name EditText to check
+     * @return true if all fields have been filled
+     * @return false if a field is blank
      */
-    fun userFilter(view: ArrayList<View>): Boolean {
+    fun userFilter(view: ArrayList<View>, nameEditText: EditText): Boolean {
         val storeNameText = nameEditText.text
         if (view.size == 0) {
             return false

@@ -7,10 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
@@ -23,11 +22,11 @@ import edu.uc.group.rankine.utilities.DynamicFieldUtil
 import edu.uc.group.rankine.utilities.GetAllViewChildren
 
 /**
- * CreateRankViewModel that takes CreateRanks Context as a constructor
+ * Shared ViewModel for all fragments
  */
 class MainViewModel(activity: Activity) : ViewModel() {
     private var ctx = activity
-    private var dynamicFieldService = DynamicFieldUtil(ctx)
+    private var dynamicFieldService = DynamicFieldUtil()
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
     private var _objectSet = ObjectSet()
@@ -39,21 +38,34 @@ class MainViewModel(activity: Activity) : ViewModel() {
 
     }
 
+    /**
+     * Holds an ObjectSet that is used as data for the EditRankFragment and RankSetFragment
+     * Holds a images Uri string that is used to populate localUri in the ObjectSet dto
+     */
     companion object {
-        var setData: ObjectSet? = null
-        private var imageUriString = ""
+        var getData: ObjectSet? = null
+        var getImageUriString = ""
 
-
-        fun getSetData(element: ObjectSet) {
-            setData = element
+        /**
+         * Sets the getData var to an individual ObjectSet
+         * This should be used to get the ObjectSet at a certain position in the MainFragment RecyclerView
+         */
+        fun setData(objectSet: ObjectSet) {
+            getData = objectSet
         }
 
-
+        /**
+         * Gets an imageUriString to be sent to the dto from an intent
+         */
+        fun setImageUriString(imageUri: String) {
+            getImageUriString = imageUri
+        }
     }
 
 
     /**
-     *  calls addElements function from DynamicFieldUtil
+     *  Dynamically adds the dynamic_elements layout to a specified ViewGroup
+     *  @param parent the parent view that will hold the dynamic_elements layout
      */
     fun addElements(parent: ViewGroup) {
         val getAllViewChildren = GetAllViewChildren()
@@ -72,30 +84,52 @@ class MainViewModel(activity: Activity) : ViewModel() {
     }
 
     /**
-     *  calls removeElements function from DynamicFieldUtil
+     *  Removes a specified views grandparent form the a specified ViewGroup
+     *  @param view the grandchild of the view that is deleted
+     *  @param viewGroup the container that holds the grandparent that is deleted
      */
-    fun removeElements(view: View, scrollContainer: ViewGroup) {
+    private fun removeElements(view: View, viewGroup: ViewGroup) {
         val parent = view.parent.parent
-        scrollContainer.removeView(parent as View)
+        viewGroup.removeView(parent as View)
     }
 
     /**
-     *  Populates the ObjectSet dto with data.
-     *  Calls the save function to save the dto in the database.
+     *  Populates the ObjectSet dto with data from CreateRankSetFragment.
+     *  Calls the saveDb function to save the dto in the database.
      *  Calls the clearAll function to clear the data in the dto.
      */
-    fun create() {
+    fun create(nameEditText: EditText, scrollContainer: LinearLayout) {
         objectSet = ObjectSet()
-        dynamicFieldService.create()
+        dynamicFieldService.create(nameEditText, scrollContainer)
 
         with(objectSet) {
             name = dynamicFieldService.name
             elements = dynamicFieldService.elementArray
-            localUri = imageUriString
+            localUri = getImageUriString
         }
 
-        save(objectSet)
-        objectSet.getAllElements()
+        saveDb(objectSet)
+        //objectSet.getAllElements()
+        clearAll()
+    }
+
+    /**
+     * Populates the ObjectSet dto with data from EditRankSetFragment.
+     *  Calls the editDb function to save the dto in the a specific collection in the database.
+     *  Calls the clearAll function to clear the data in the dto.
+     */
+    fun editSet(nameEditText: EditText, scrollContainer: LinearLayout) {
+        objectSet = ObjectSet()
+        dynamicFieldService.create(nameEditText, scrollContainer)
+
+        with(objectSet) {
+            name = dynamicFieldService.name
+            elements = dynamicFieldService.elementArray
+            localUri = getImageUriString
+            id = getData!!.id
+        }
+
+        editDb(objectSet)
         clearAll()
     }
 
@@ -109,14 +143,11 @@ class MainViewModel(activity: Activity) : ViewModel() {
         objectSet.element = ArrayList<String>()
     }
 
-    fun getImageUriString(imageUri: String) {
-        imageUriString = imageUri
-    }
-
     /**
      * Saves the data from the dto to the firebase
+     * @param objectSet specified ObjectSet to be saved
      */
-    private fun save(objectSet: ObjectSet) {
+    private fun saveDb(objectSet: ObjectSet) {
         val document = firestore.collection("rankData").document()
         val id = document.id
         objectSet.id = id
@@ -127,6 +158,24 @@ class MainViewModel(activity: Activity) : ViewModel() {
         set.addOnFailureListener {
             Log.d("Firebase", "Save Failed $it")
         }
+    }
+
+    /**
+     * Edits the data from a specified document
+     * @param objectSet specified ObjectSet to be edited
+     */
+    private fun editDb(objectSet: ObjectSet) {
+        val document = firestore.collection("rankData").document(objectSet.id)
+        document.set(objectSet)
+    }
+
+    /**
+     * deletes the specified document from the DB
+     * @param id the id of the document to be deleted
+     */
+    fun removeDbDoc(id: String) {
+        val document = firestore.collection("rankData").document(id)
+        document.delete()
     }
 
     private fun firebaseDBListener() {
@@ -148,15 +197,6 @@ class MainViewModel(activity: Activity) : ViewModel() {
                 _objectSets.value = allObjectSets
             }
         }
-    }
-
-    fun removeDbDoc(id: String) {
-        val document = firestore.collection("rankData").document(id)
-        document.delete()
-    }
-
-    fun editSet() {
-        TODO("Not yet implemented")
     }
 
     internal var objectSets: MutableLiveData<ArrayList<ObjectSet>>

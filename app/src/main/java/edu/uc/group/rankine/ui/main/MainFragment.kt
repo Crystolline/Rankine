@@ -33,9 +33,9 @@ open class MainFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
@@ -46,7 +46,7 @@ open class MainFragment : Fragment() {
         val recycle = activity?.findViewById<RecyclerView>(R.id.recycle)
         vmFactory = activity?.let { MainViewModelFactory(it) }!!
         vm = ViewModelProvider(this, vmFactory)
-                .get(MainViewModel::class.java)
+            .get(MainViewModel::class.java)
         btnOpenActivity?.setOnClickListener {
             (activity as MainActivity).moveToCreateRankSet()
         }
@@ -70,12 +70,15 @@ open class MainFragment : Fragment() {
      * Defines the adapter being used to bind the views to their data
      */
     open inner class MainViewAdaptor(
-            private val elements: ArrayList<ObjectSet>,
-            private val SHOW_MENU: Int = 1,
-            private val HIDE_MENU: Int = 2
+        private val elements: ArrayList<ObjectSet>,
+        private val SHOW_MENU: Int = 1,
+        private val HIDE_MENU: Int = 2
     ) :
-            RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+        /**
+         * determines if the type of view based on if the menu is shown
+         */
         override fun getItemViewType(position: Int): Int {
             return if (elements[position].isShowMenu()) {
                 SHOW_MENU
@@ -91,11 +94,11 @@ open class MainFragment : Fragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return if (viewType == SHOW_MENU) {
                 val view = LayoutInflater.from(parent.context)
-                        .inflate(R.layout.dynamic_options, parent, false)
+                    .inflate(R.layout.dynamic_options, parent, false)
                 MenuViewHolder(view)
             } else {
                 val view = LayoutInflater.from(parent.context)
-                        .inflate(R.layout.dynamic_main_view, parent, false)
+                    .inflate(R.layout.dynamic_main_view, parent, false)
                 MainViewHolder(view)
             }
 
@@ -126,6 +129,7 @@ open class MainFragment : Fragment() {
 
         /**
          * sets the dto menu var to true at the swiped specified position
+         * @param position the item position that is to be shown
          */
         fun showMenu(position: Int) {
             for (i in 0 until elements.size) {
@@ -135,6 +139,11 @@ open class MainFragment : Fragment() {
             notifyDataSetChanged()
         }
 
+        /**
+         * determines if the menu is currently being shown.
+         * @return true if menu is shown
+         * @return false if menu is not shown
+         */
         fun isMenuShown(): Boolean {
             for (i in 0 until elements.size) {
                 if (elements[i].isShowMenu()) {
@@ -144,6 +153,9 @@ open class MainFragment : Fragment() {
             return false
         }
 
+        /**
+         * closes the menu by setting the dto menu var to false
+         */
         fun closeMenu() {
             for (i in 0 until elements.size) {
                 elements[i].setShowMenu(false)
@@ -183,19 +195,24 @@ open class MainFragment : Fragment() {
             private var editBtn: Button = itemView.findViewById(R.id.dynamic_options_editBtn)
             private var deleteBtn: Button = itemView.findViewById(R.id.dynamic_options_deleteBtn)
             fun setClickListeners(
-                    adapterPosition: Int,
-                    element: ObjectSet
+                adapterPosition: Int,
+                element: ObjectSet
             ) {
                 rankBtn.setOnClickListener {
+                    MainViewModel.setData(element)
                     (activity as MainActivity).moveToRankSet()
                 }
 
                 editBtn.setOnClickListener {
-                    MainViewModel.getSetData(element)
+                    MainViewModel.setData(element)
                     (activity as MainActivity).moveToEditFragment()
                 }
 
                 deleteBtn.setOnClickListener {
+                    val file = File(element.localUri)
+                    if (file.exists()) {
+                        file.delete()
+                    }
                     vm.removeDbDoc(element.id)
                 }
             }
@@ -208,53 +225,64 @@ open class MainFragment : Fragment() {
      * Adds swipe support to RecyclerView
      */
     inner class ItemTouchCallback(adapter: MainViewAdaptor) :
-            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
         private val background: ColorDrawable? =
-                ColorDrawable(android.graphics.Color.rgb(1, 64, 23))
+            ColorDrawable(android.graphics.Color.rgb(1, 64, 23))
 
         override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
         ): Boolean {
             return false
         }
 
+        /**
+         * What happens when the view is completely swiped
+         */
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
-            adapter?.showMenu(position)
+            if (direction == ItemTouchHelper.RIGHT) {
+                adapter?.showMenu(position)
+            } else {
+                adapter?.closeMenu()
+            }
+
 
         }
 
+        /**
+         * What is to be drawn while the view is being swiped
+         */
         override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
         ) {
             super.onChildDraw(
-                    c,
-                    recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
+                c,
+                recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
             )
             val itemView = viewHolder.itemView
             when {
                 dX > 0 -> {
                     background!!.setBounds(
-                            itemView.left,
-                            itemView.top,
-                            itemView.left + dX.toInt(),
-                            itemView.bottom
+                        itemView.left,
+                        itemView.top,
+                        itemView.left + dX.toInt(),
+                        itemView.bottom
                     )
                 }
                 dX < 0 -> {
                     background!!.setBounds(
-                            itemView.right + dX.toInt(),
-                            itemView.top,
-                            itemView.right,
-                            itemView.bottom
+                        itemView.right + dX.toInt(),
+                        itemView.top,
+                        itemView.right,
+                        itemView.bottom
                     )
                 }
                 else -> {
