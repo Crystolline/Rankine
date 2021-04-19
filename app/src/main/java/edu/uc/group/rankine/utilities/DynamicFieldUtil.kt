@@ -2,10 +2,7 @@ package edu.uc.group.rankine.utilities
 
 import android.app.Activity
 import android.app.Application
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import edu.uc.group.rankine.R
@@ -17,31 +14,11 @@ import edu.uc.group.rankine.dto.ElementObject
 class DynamicFieldUtil(activity: Activity) : Application() {
     private var _activity = activity
     private val getAllViewChildren = GetAllViewChildren()
-    private val nameEditText = _activity.findViewById<EditText>(R.id.name_edit_view)
-    private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
+    private val nameEditText = _activity.findViewById<EditText>(R.id.create_rank_fragment_name)
+    private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.create_rank_fragment_scrollContainer)
     private var attribute = ""
     var name = ""
     var elementArray = ArrayList<ElementObject>()
-
-    /**
-     * adds the layout dynamic_elements to the scrollContainer dynamically
-     */
-    fun addElements() {
-        val inflater = _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val rowView: View = inflater.inflate(R.layout.dynamic_elements, null)
-        val parent: ViewGroup = scrollContainer as ViewGroup
-        rowView.id = View.generateViewId()
-        parent.addView(rowView)
-    }
-
-    /**
-     * removes the layout dynamic_elements form the scrollContainer
-     */
-    fun removeElements(view: View) {
-        val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
-        val parent = view.parent.parent
-        scrollContainer.removeView(parent as View)
-    }
 
     /**
      * Updates the ElementObject dto with the attribute data.

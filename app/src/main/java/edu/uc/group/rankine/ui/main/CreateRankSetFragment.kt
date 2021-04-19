@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
@@ -22,29 +23,34 @@ open class CreateRankSetFragment : Fragment() {
     private lateinit var vmFactory: MainViewModelFactory
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.activity_create_rank_set, container, false)
+
+        return inflater.inflate(R.layout.create_rank_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vmFactory = activity?.let { MainViewModelFactory(it) }!!
         vm = ViewModelProvider(this, vmFactory).get(MainViewModel::class.java)
-        val addBtn = activity?.findViewById<AppCompatButton>(R.id.add_new_field_btn)
-        val createBtn = activity?.findViewById<AppCompatButton>(R.id.create_btn)
+        val addBtn = activity?.findViewById<AppCompatButton>(R.id.create_rank_fragment_addBtn)
+        val createBtn = activity?.findViewById<AppCompatButton>(R.id.create_rank_fragment_createBtn)
+        val parentView = activity?.findViewById<LinearLayout>(R.id.create_rank_fragment_scrollContainer) as ViewGroup
+        val toolbar = view?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.create_rank_fragment_toolbar)
+        toolbar?.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
+        toolbar!!.setNavigationOnClickListener { (activity as MainActivity).moveToMain() }
 
         addBtn?.setOnClickListener {
-            vm.addElements()
+            vm.addElements(parentView)
         }
 
         createBtn?.setOnClickListener {
             val dynamicFieldUtil = DynamicFieldUtil(requireActivity())
             val getAllViewChildren = GetAllViewChildren()
             val scrollContainer =
-                requireActivity().findViewById<LinearLayout>(R.id.scroll_Container)
+                    requireActivity().findViewById<LinearLayout>(R.id.create_rank_fragment_scrollContainer)
             val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
             if (dynamicFieldUtil.userFilter(allViews)) {
                 vm.create()

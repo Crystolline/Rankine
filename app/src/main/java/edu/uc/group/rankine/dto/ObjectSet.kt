@@ -8,12 +8,14 @@ import org.json.JSONObject
  * An unranked set of <elements>
  */
 data class ObjectSet(
+    var id: String = "",
     var name: String = "",
     var localUri: String = "",
     var menu: Boolean = false
 ) {
 
     private var _elements: ArrayList<ElementObject> = ArrayList<ElementObject>()
+    var element = ArrayList<String>()
 
     var elements: ArrayList<ElementObject>
         @Exclude get() {
@@ -36,6 +38,9 @@ data class ObjectSet(
      * Get elements
      */
     fun getAllElements(): ArrayList<ElementObject> {
+        _elements.forEach(){
+            element.add(it.element)
+        }
         return elements
     }
 

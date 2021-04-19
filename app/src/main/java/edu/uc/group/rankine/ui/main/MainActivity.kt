@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainFragment: MainFragment
     private lateinit var rankSetFragment: RankSetFragment
     private lateinit var createRankSetFragment: CreateRankSetFragment
+    private lateinit var editRankFragment: EditRankFragment
     private var activeFragment: Fragment = Fragment()
     private val imageCode: Int = 204
     var imageUri: Uri? = null
@@ -44,16 +45,17 @@ class MainActivity : AppCompatActivity() {
         mainFragment = MainFragment.newInstance()
         rankSetFragment = RankSetFragment.newInstance()
         createRankSetFragment = CreateRankSetFragment.newInstance()
+        editRankFragment = EditRankFragment.newInstance()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, mainFragment)
-                .commitNow()
+                    .replace(R.id.container, mainFragment)
+                    .commitNow()
             activeFragment = mainFragment
         }
 
         vmFactory = MainViewModelFactory(this)
         vm = ViewModelProvider(this, vmFactory)
-            .get(MainViewModel::class.java)
+                .get(MainViewModel::class.java)
 
         vm.objectSets.observe(this, Observer { objectSet ->
             var observeThis = objectSet
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == imageCode) run {
-            val imageView: ImageView = findViewById(R.id.set_image)
+            val imageView: ImageView = findViewById(R.id.create_rank_fragment_image)
             imageView.clipToOutline = true
             imageUri = data?.data
             val uniqueString: String = UUID.randomUUID().toString()
@@ -78,50 +80,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Creates toolbar
-     */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
-        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchItem = menu?.findItem(R.id.search_icon)
-        val searchView = searchItem?.actionView as SearchView
-
-        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchView.clearFocus()
-                searchView.setQuery(query, false)
-                searchItem.collapseActionView()
-                Toast.makeText(this@MainActivity, "looking for $query", Toast.LENGTH_LONG).show()
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
-        return true
-    }
-
-    /**
-     * Logic if option is selected within the toolbar
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if (item.itemId == R.id.search_menu_item01) {
-            Toast.makeText(applicationContext, "Menu", Toast.LENGTH_SHORT).show()
-            return true
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
-    }
-
-
-    fun onDeleteElements(view: View) {
-        vm.removeElements(view)
-    }
 
     /**
      *  Creates a new intent that allows the user to pick a image to represent a RankSet.
@@ -130,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.flags =
-            Intent.FLAG_GRANT_WRITE_URI_PERMISSION and Intent.FLAG_GRANT_READ_URI_PERMISSION and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION and Intent.FLAG_GRANT_READ_URI_PERMISSION and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
         intent.type = "image/*"
         startActivityForResult(intent, imageCode)
     }
@@ -139,8 +97,8 @@ class MainActivity : AppCompatActivity() {
         mainFragment = MainFragment.newInstance()
         if (activeFragment != mainFragment) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, mainFragment)
-                .commitNow()
+                    .replace(R.id.container, mainFragment)
+                    .commitNow()
             activeFragment = mainFragment
         }
     }
@@ -149,8 +107,8 @@ class MainActivity : AppCompatActivity() {
         rankSetFragment = RankSetFragment.newInstance()
         if (activeFragment != rankSetFragment) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, rankSetFragment)
-                .commitNow()
+                    .replace(R.id.container, rankSetFragment)
+                    .commitNow()
             activeFragment = rankSetFragment
         }
     }
@@ -159,9 +117,19 @@ class MainActivity : AppCompatActivity() {
         createRankSetFragment = CreateRankSetFragment.newInstance()
         if (activeFragment != createRankSetFragment) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, createRankSetFragment)
-                .commitNow()
+                    .replace(R.id.container, createRankSetFragment)
+                    .commitNow()
             activeFragment = createRankSetFragment
+        }
+    }
+
+    internal fun moveToEditFragment() {
+        editRankFragment = EditRankFragment.newInstance()
+        if (activeFragment != editRankFragment) {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, editRankFragment)
+                    .commitNow()
+            activeFragment = editRankFragment
         }
     }
 }
