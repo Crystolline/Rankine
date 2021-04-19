@@ -16,4 +16,6 @@
     <string name="go_back_to_the_previous_comparison">Go back to the previous comparison</string>
     <string name="save_the_comparisons_completed_so_far">Save the comparisons completed so far</string>
     <string name="exit_the_current_ranking_session">Exit the current ranking session</string>
+    <string name="snack_bar_text">Whould you like to undo delete?</string>
+    <string name="snack_bar_undo">Delete has been undone</string>
 </resources>

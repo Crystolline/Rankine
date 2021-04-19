@@ -8,8 +8,9 @@ import org.json.JSONObject
  * An unranked set of <elements>
  */
 data class ObjectSet(
-        var name: String = "",
-        var localUri: String = ""
+    var name: String = "",
+    var localUri: String = "",
+    var menu: Boolean = false
 ) {
 
     private var _elements: ArrayList<ElementObject> = ArrayList<ElementObject>()
@@ -44,6 +45,18 @@ data class ObjectSet(
     fun modifyElements(inputObject: ElementObject, newObject: ElementObject) {
         elements.remove(inputObject)
         addElement(newObject)
+    }
+
+    fun setShowMenu(b: Boolean) {
+        menu = b
+    }
+
+    fun isShowMenu(): Boolean {
+        if (menu) {
+            return true
+        }
+        return false
+
     }
 
 }

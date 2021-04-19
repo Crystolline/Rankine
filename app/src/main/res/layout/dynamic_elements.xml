@@ -24,7 +24,7 @@
             android:overScrollMode="never"/>
 
         <ImageButton
-            android:id="@+id/delete_attribute"
+            android:id="@+id/dynamic_elements_deleteAttribute"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
