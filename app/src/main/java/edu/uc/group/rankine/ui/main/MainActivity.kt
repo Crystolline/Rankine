@@ -18,6 +18,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
 import java.util.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.firebase.ui.auth.AuthUI
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +34,10 @@ class MainActivity : AppCompatActivity() {
     private var activeFragment: Fragment = Fragment()
     private val imageCode: Int = 204
     var imageUri: Uri? = null
+
+    private val AUTH_REQUEST_CODE = 2002
+    private var user : FirebaseUser? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +69,11 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == imageCode) run {
             val uniqueString: String = UUID.randomUUID().toString()
             val fileName = File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
+
+            //Thing to use for firebase auth
+            if (requestCode == AUTH_REQUEST_CODE) {
+                user = FirebaseAuth.getInstance().currentUser
+            }
 
             //runs if editImageView is null
             try {
@@ -162,5 +174,21 @@ class MainActivity : AppCompatActivity() {
             activeFragment = editRankSetFragment
         }
     }
+
+
+
+    //Authentication stuff, needs to be made into the launch screen and only allow to the main app after successful authentication
+    private fun logon() {
+        var providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build()
+        )
+        startActivityForResult(
+            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers)
+                .build(), AUTH_REQUEST_CODE
+        )
+    }
+
+
+
 
 }
