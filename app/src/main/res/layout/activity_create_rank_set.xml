@@ -9,7 +9,7 @@
     tools:context=".ui.main.MainActivity">
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarCreateRankSet"
         layout="@layout/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toTopOf="@+id/set_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbarCreateRankSet">
 
         <ImageButton
             android:id="@+id/back_btn"
@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:layout_weight=".5"
             android:backgroundTint="@color/light_green"
-            app:srcCompat="?attr/actionModeCloseDrawable" />
+            app:srcCompat="@drawable/ic_back_icon" />
 
         <ImageButton
             android:id="@+id/add_new_element_btn"
@@ -53,7 +53,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
             android:tint="@color/black"
-            app:srcCompat="@android:drawable/ic_menu_sort_alphabetically" />
+            app:srcCompat="@drawable/ic_rank_icon" />
 
         <ImageButton
             android:id="@+id/save_btn"

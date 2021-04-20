@@ -12,7 +12,7 @@ import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
 
 /**
- * CreateRankViewModel that takes CreateRanks Context as a constructor
+ * Shared ViewModel for all fragments
  */
 class MainViewModel(activity: Activity) : ViewModel() {
     private var ctx = activity
@@ -37,7 +37,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
      *  Calls the save function to save the dto in the database.
      *  Calls the clearAll function to clear the data in the dto.
      */
-    fun create(setName: String) {
+    fun saveSet(setName: String) {
         with(objectSet) {
             this.name = setName
             localUri = imageUriString
@@ -64,7 +64,14 @@ class MainViewModel(activity: Activity) : ViewModel() {
      * Saves the data from the dto to the firebase
      */
     private fun save(objectSet: ObjectSet) {
-        val document = firestore.collection("rankData").document()
+        val document = if (objectSet.id.isNotBlank()) {
+            //update existing
+            firestore.collection("rankData").document()
+        } else {
+            //create new
+            firestore.collection("rankData").document()
+        }
+        objectSet.id = document.id
         val set = document.set(objectSet)
         set.addOnSuccessListener {
             Log.d("Firebase", "document saved")
@@ -74,6 +81,15 @@ class MainViewModel(activity: Activity) : ViewModel() {
         set.addOnFailureListener {
             Log.d("Firebase", "Save Failed $it")
         }
+    }
+
+    /**
+     * deletes the specified document from the DB
+     * @param id the id of the document to be deleted
+     */
+    fun removeDbDoc(id: String) {
+        val document = firestore.collection("rankData").document(id)
+        document.delete()
     }
 
     private fun firebaseDBListener() {

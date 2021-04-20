@@ -46,14 +46,14 @@ class MainActivity : AppCompatActivity() {
         createRankSetFragment = CreateRankSetFragment.newInstance()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, mainFragment)
-                    .commitNow()
+                .replace(R.id.container, mainFragment)
+                .commitNow()
             activeFragment = mainFragment
         }
 
         vmFactory = MainViewModelFactory(this)
         vm = ViewModelProvider(this, vmFactory)
-                .get(MainViewModel::class.java)
+            .get(MainViewModel::class.java)
 
         vm.objectSets.observe(this, Observer { objectSet ->
             var observeThis = objectSet
@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
             imageView.clipToOutline = true
             imageUri = data?.data
             val uniqueString: String = UUID.randomUUID().toString()
-            val fileName = File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
+            val fileName =
+                File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
             fileName.createNewFile()
             val outputStream = FileOutputStream(fileName)
             vm.getImageUriString(fileName.absolutePath)
@@ -125,7 +126,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.flags =
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION and Intent.FLAG_GRANT_READ_URI_PERMISSION and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION and Intent.FLAG_GRANT_READ_URI_PERMISSION and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
         intent.type = "image/*"
         startActivityForResult(intent, imageCode)
     }
@@ -133,8 +134,8 @@ class MainActivity : AppCompatActivity() {
     internal fun moveToMain() {
         if (activeFragment != mainFragment) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, mainFragment)
-                    .commitNow()
+                .replace(R.id.container, mainFragment)
+                .commitNow()
             activeFragment = mainFragment
         }
     }
@@ -142,8 +143,8 @@ class MainActivity : AppCompatActivity() {
     internal fun moveToRankSet() {
         if (activeFragment != rankSetFragment) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, rankSetFragment)
-                    .commitNow()
+                .replace(R.id.container, rankSetFragment)
+                .commitNow()
             activeFragment = rankSetFragment
         }
     }
@@ -151,8 +152,9 @@ class MainActivity : AppCompatActivity() {
     internal fun moveToCreateRankSet() {
         if (activeFragment != createRankSetFragment) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, createRankSetFragment)
-                    .commitNow()
+                .replace(R.id.container, createRankSetFragment)
+                .commitNow()
+            createRankSetFragment.updateCreateRankSetView()
             activeFragment = createRankSetFragment
         }
     }

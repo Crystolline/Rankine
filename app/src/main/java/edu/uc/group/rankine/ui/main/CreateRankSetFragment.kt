@@ -1,5 +1,6 @@
 package edu.uc.group.rankine.ui.main
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -18,6 +22,7 @@ import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.ElementObject
 import kotlinx.android.synthetic.main.activity_create_rank_set.*
 import kotlinx.android.synthetic.main.dynamic_elements.*
+import java.io.File
 
 
 open class CreateRankSetFragment : Fragment() {
@@ -39,23 +44,22 @@ open class CreateRankSetFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vmFactory = activity?.let { MainViewModelFactory(it) }!!
-        vm = ViewModelProvider(this, vmFactory).get(MainViewModel::class.java)
+        activity.let{
+            vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
+        }
         rcyElements.hasFixedSize()
         rcyElements.layoutManager = LinearLayoutManager(context)
         rcyElements.itemAnimator = DefaultItemAnimator()
         rcyElements.adapter = ElementsAdapter(vm.objectSet.elements, R.layout.dynamic_elements)
+        (toolbarCreateRankSet as Toolbar).navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
+        (toolbarCreateRankSet as Toolbar).setNavigationOnClickListener { (activity as MainActivity).moveToMain() }
 
         add_new_element_btn.setOnClickListener {
             vm.objectSet.elements.add(ElementObject(""))
             (rcyElements.adapter as ElementsAdapter).notifyDataSetChanged()
         }
 
-        save_btn.setOnClickListener {/*
-            val dynamicFieldUtil = DynamicFieldUtil(requireActivity())
-            val getAllViewChildren = GetAllViewChildren()
-            val scrollContainer =
-                    requireActivity().findViewById<LinearLayout>(R.id.scroll_Container)
-            val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)*/
+        save_btn.setOnClickListener {
             when {
                 name_edit_view.text.isBlank() -> Toast.makeText(context, "Fill Out Name Field", Toast.LENGTH_SHORT).show()
                 vm.objectSet.elements.isEmpty() -> Toast.makeText(context, "Add at least 1 Element", Toast.LENGTH_SHORT).show()
@@ -65,7 +69,7 @@ open class CreateRankSetFragment : Fragment() {
                         if (it.element.isBlank()) filled = false
                     }
                     if (filled) {
-                        vm.create(name_edit_view.text.toString())
+                        vm.saveSet(name_edit_view.text.toString())
                         (activity as MainActivity).moveToMain()
                     } else Toast.makeText(context, "Fill out all Element Names", Toast.LENGTH_SHORT).show()
                 }
@@ -76,6 +80,18 @@ open class CreateRankSetFragment : Fragment() {
             (activity as MainActivity).moveToMain()
         }
 
+    }
+
+    fun updateCreateRankSetView() {
+        val file = File(vm.objectSet.localUri)
+        set_image.clipToOutline = true
+        if (file.exists()) {
+            set_image.setImageURI(Uri.parse(vm.objectSet.localUri))
+        } else {
+            set_image.setImageResource(R.drawable.ic_launcher_foreground)
+        }
+        name_edit_view.setText(vm.objectSet.name)
+        (rcyElements.adapter as ElementsAdapter).notifyDataSetChanged()
     }
 
     inner class ElementsAdapter(val elements: ArrayList<ElementObject>, val itemLayout: Int) : RecyclerView.Adapter<ElementsAdapter.ElementsViewHolder>() {
