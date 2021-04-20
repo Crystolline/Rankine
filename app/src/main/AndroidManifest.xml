@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-feature android:name="android.hardware.type.watch" />
 
     <application
         android:allowBackup="true"
@@ -13,11 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rankine">
 
-        <activity
-            android:name=".ui.createRank.CreateRankSet"
+        <activity android:name=".ui.main.MainActivity"
             android:label="Rankine">
-        </activity>
-        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />

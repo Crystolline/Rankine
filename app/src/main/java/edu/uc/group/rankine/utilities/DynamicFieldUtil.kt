@@ -2,84 +2,51 @@ package edu.uc.group.rankine.utilities
 
 import android.app.Activity
 import android.app.Application
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.LinearLayout
-import androidx.core.view.iterator
 import edu.uc.group.rankine.R
-import org.json.JSONArray
-import org.json.JSONObject
+import edu.uc.group.rankine.dto.ElementObject
 
 /**
- * Utility that adds and removes fields dynamically and saves data from editTextViews to a sharedPreference
+ * Utility that gets the text from the ScrollContainer and filter that checks if all views have been filled.
  */
-class DynamicFieldUtil(activity: Activity) : Application() {
-    private var _activity = activity
+class DynamicFieldUtil {
     private val getAllViewChildren = GetAllViewChildren()
-    private val nameEditText = _activity.findViewById<EditText>(R.id.name_edit_view)
-    private val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
     private var attribute = ""
-    private var counter = 0
-    var jsonObject: JSONObject = JSONObject()
-    var jsonArray: JSONArray = JSONArray()
-    var jsonArrayHolder = JSONArray()
-    var jsonObjectHolder = JSONObject()
-
+    var name = ""
+    var elementArray = ArrayList<ElementObject>()
 
     /**
-     * adds the layout dynamic_elements to the scrollContainer dynamically
+     * Updates the ElementObject dto with the attribute data.
+     * Then stores a ElementObject object into an ArrayList
+     * @param nameEditText this is the name EditText view
+     * @param scrollContainer this is the Layout that holds the ScrollView
      */
-    fun addElements() {
-        val inflater = _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val rowView: View = inflater.inflate(R.layout.dynamic_elements, null)
-        val parent: ViewGroup = scrollContainer as ViewGroup
-        rowView.id = View.generateViewId()
-        parent.addView(rowView)
-    }
-
-    /**
-     * removes the layout dynamic_elements form the scrollContainer
-     */
-    fun removeElements(view: View) {
-        val scrollContainer = _activity.findViewById<LinearLayout>(R.id.scroll_Container)
-        val test = view.parent.parent
-        scrollContainer.removeView(test as View)
-    }
-
-    /**
-     * filters input from the editText views and saves it into an JSONObject
-     * the JSONObject is then passed to the sharedPreference
-     */
-    fun create(): String {
-        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer!!)
-        var jsonArray = JSONArray()
-        val storeNameText = nameEditText.text.toString()
+    fun create(nameEditText: EditText, scrollContainer: LinearLayout) {
+        val allViews: ArrayList<View> = getAllViewChildren.getAllChildren(scrollContainer)
+        name = nameEditText.text.toString()
         for (child: View in allViews) {
             if (child is EditText) run {
                 attribute = child.text.toString()
-
-                jsonObject = JSONObject()
-                val attributeJson = jsonObject.put("Attribute$counter", attribute)
-                jsonArray.put(attributeJson)
-                counter++
-
+                val elementObject = ElementObject(attribute)
+                elementArray.add(elementObject)
             }
         }
-        jsonObject = JSONObject()
-        jsonObject.put("Name", storeNameText)
-        jsonArray.put(jsonObject)
-        jsonObject = JSONObject()
-        jsonObject.put("WholeSet", jsonArray)
-        return jsonObject.toString()
-
     }
 
-    fun userFilter(view: ArrayList<View>): Boolean {
+    /**
+     * returns true if name and all created elements are populated otherwise return false
+     * @param view an ArrayList of views to check
+     * @param nameEditText the name EditText to check
+     * @return true if all fields have been filled
+     * @return false if a field is blank
+     */
+    fun userFilter(view: ArrayList<View>, nameEditText: EditText): Boolean {
         val storeNameText = nameEditText.text
+        if (view.size == 0) {
+            return false
+        }
         for (child: View in view) {
             if (child is EditText) {
                 if (child.text.toString() == "" || storeNameText.toString() == "") {
