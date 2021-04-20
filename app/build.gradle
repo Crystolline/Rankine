@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "edu.uc.group.rankine"
-        minSdkVersion 28
+        minSdkVersion 29
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -49,7 +49,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.8.0')
     implementation 'com.google.firebase:firebase-firestore:22.1.2'
     implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.firebase:firebase-analytics:18.0.2'
+    implementation 'com.google.firebase:firebase-analytics:18.0.3'
     implementation 'com.google.firebase:firebase-storage:19.2.2'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.android.support:multidex:1.0.3'

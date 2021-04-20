@@ -11,26 +11,27 @@
         android:orientation="horizontal" >
 
         <EditText
-            android:id="@+id/dynamic_elements_editText"
+            android:id="@+id/lblElementName"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:padding="5dp"
-            android:hint="Attribute"
-            android:gravity="start"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/white"
-            android:textColorHint="@color/gray"
             android:layout_weight="9"
-            android:overScrollMode="never"/>
+            android:backgroundTint="@color/white"
+            android:gravity="left"
+            android:hint="Element"
+            android:overScrollMode="never"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray" />
 
         <ImageButton
-            android:id="@+id/dynamic_elements_deleteAttribute"
+            android:id="@+id/delete_attribute"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/ic_delete"
-            android:backgroundTint="@color/light_green"/>
+            android:backgroundTint="@color/light_green"
+            android:onClick="onDeleteElements"/>
 
 
     </LinearLayout>
