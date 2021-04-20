@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
+import edu.uc.group.rankine.dto.RankedObjectSet
 import edu.uc.group.rankine.utilities.DynamicFieldUtil
 import edu.uc.group.rankine.utilities.GetAllViewChildren
 
@@ -30,6 +31,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
     private var _objectSet = ObjectSet()
+    private var _rankSets: MutableLiveData<ArrayList<RankedObjectSet>> = MutableLiveData()
     var allObjectSets = ArrayList<ObjectSet>()
 
     init {
@@ -45,6 +47,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
     companion object {
         var getData: ObjectSet? = null
         var getImageUriString = ""
+        var getRank: RankedObjectSet? = null
 
         /**
          * Sets the getData var to an individual ObjectSet
@@ -52,6 +55,10 @@ class MainViewModel(activity: Activity) : ViewModel() {
          */
         fun setData(objectSet: ObjectSet) {
             getData = objectSet
+        }
+
+        fun setRank(rankSet: RankedObjectSet) {
+            getRank = rankSet
         }
 
         /**
@@ -205,6 +212,14 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
         set(value) {
             _objectSets = value
+        }
+
+    internal var rankSets: MutableLiveData<ArrayList<RankedObjectSet>>
+        get() {
+            return _rankSets
+        }
+        set(value) {
+            _rankSets = value
         }
 
     internal var objectSet: ObjectSet

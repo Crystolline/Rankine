@@ -16,6 +16,7 @@ class RankedObjectSet(var set: ObjectSet) {
     private var indexRight: Int = 0
     lateinit var rightElement: ElementObject
     private lateinit var arrayMerge: ArrayList<ElementObject>
+    var menu: Boolean = false
 
     fun startRanking() {
         if (set.elements.size <= 1) {
@@ -62,7 +63,7 @@ class RankedObjectSet(var set: ObjectSet) {
      * Retrieve the results of a comparison and perform MergeSort steps up until next comparison is needed
      */
     fun sortStep(side: Boolean) {
-        if(isRanking()) {
+        if (isRanking()) {
             if (side) {
                 arrayMerge.add(arrayRight[indexRight])
                 indexRight++
@@ -106,5 +107,17 @@ class RankedObjectSet(var set: ObjectSet) {
                 }
             }
         }
+    }
+
+    fun setShowMenu(b: Boolean) {
+        menu = b
+    }
+
+    fun isShowMenu(): Boolean {
+        if (menu) {
+            return true
+        }
+        return false
+
     }
 }
