@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.ranking.RankSetFragment
+import kotlinx.android.synthetic.main.activity_create_rank_set.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -157,5 +158,9 @@ class MainActivity : AppCompatActivity() {
             createRankSetFragment.updateCreateRankSetView()
             activeFragment = createRankSetFragment
         }
+    }
+
+    fun notifyChangeInCreateElements() {
+        (createRankSetFragment.rcyElements as CreateRankSetFragment.ElementsAdapter).notifyDataSetChanged()
     }
 }

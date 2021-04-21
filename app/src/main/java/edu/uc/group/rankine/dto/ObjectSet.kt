@@ -1,20 +1,18 @@
 package edu.uc.group.rankine.dto
 
-import android.graphics.Bitmap
 import com.google.firebase.firestore.Exclude
-import org.json.JSONObject
 
 /**
  * An unranked set of <elements>
  */
 data class ObjectSet(
-        var id: String = "",
-        var name: String = "",
-        var localUri: String = "",
-        var menu: Boolean = false
+    var id: String = "",
+    var name: String = "",
+    var localUri: String = ""
 ) {
 
-    private var _elements: ArrayList<ElementObject> = ArrayList<ElementObject>()
+    private var _elements: ArrayList<ElementObject> = ArrayList()
+    private var _menu = false
 
     var elements: ArrayList<ElementObject>
         @Exclude get() {
@@ -22,6 +20,14 @@ data class ObjectSet(
         }
         set(value) {
             _elements = value
+        }
+
+    var menu: Boolean
+        @Exclude get() {
+            return _menu
+        }
+        set(value) {
+            _menu = value
         }
 
     /**
@@ -32,30 +38,11 @@ data class ObjectSet(
     }
 
     /**
-     * Get elements
-     */
-    fun getAllElements(): ArrayList<ElementObject> {
-        return elements
-    }
-
-    /**
      * Modify an element <inputObject> in the ObjectSet with the name and attributes of element <newObject>
      */
     fun modifyElements(inputObject: ElementObject, newObject: ElementObject) {
         elements.remove(inputObject)
         addElement(newObject)
-    }
-
-    fun setShowMenu(b: Boolean) {
-        menu = b
-    }
-
-    fun isShowMenu(): Boolean {
-        if (menu) {
-            return true
-        }
-        return false
-
     }
 
 }

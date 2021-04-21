@@ -3,13 +3,15 @@ package edu.uc.group.rankine.ui.main
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.*
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
+import java.util.concurrent.Executor
 
 /**
  * Shared ViewModel for all fragments
@@ -21,6 +23,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
     private var _objectSet = ObjectSet()
     var allObjectSets = ArrayList<ObjectSet>()
+    private var _elements = MutableLiveData<List<ElementObject>>()
 
     init {
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
@@ -44,16 +47,8 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
 
         save(objectSet)
-        clearAll()
-    }
-
-    /**
-     * Clears the data sent to the dto
-     */
-    private fun clearAll() {
-        objectSet.elements = ArrayList<ElementObject>()
-        objectSet.localUri = ""
-        objectSet.name = ""
+        objectSet = ObjectSet()
+        imageUriString = ""
     }
 
     fun getImageUriString(imageUri: String) {
@@ -66,17 +61,34 @@ class MainViewModel(activity: Activity) : ViewModel() {
     private fun save(objectSet: ObjectSet) {
         val document = if (objectSet.id.isNotBlank()) {
             //update existing
-            firestore.collection("rankData").document()
+            firestore.collection("rankData").document(objectSet.id)
         } else {
             //create new
             firestore.collection("rankData").document()
         }
         objectSet.id = document.id
         val set = document.set(objectSet)
+        var savingElements = objectSet.elements
         set.addOnSuccessListener {
-            Log.d("Firebase", "document saved")
-            idList.add(document.id)
-            val id = document.id
+            savingElements.forEach {
+                saveElement(it, document)
+            }
+        }
+        set.addOnFailureListener {
+            Log.d("Firebase", "Save Failed $it")
+        }
+    }
+
+    private fun saveElement(elementObject: ElementObject, document: DocumentReference) {
+        val elementDocument = if (elementObject.id.isNotBlank()) {
+            document.collection("elements").document(elementObject.id)
+        } else {
+            document.collection("elements").document()
+        }
+        elementObject.id = elementDocument.id
+        val set = elementDocument.set(elementObject)
+        set.addOnSuccessListener {
+            Log.d("Firebase", "Element saved $elementObject")
         }
         set.addOnFailureListener {
             Log.d("Firebase", "Save Failed $it")
@@ -104,11 +116,40 @@ class MainViewModel(activity: Activity) : ViewModel() {
                 val documents = snapshot.documents
                 documents.forEach {
                     val objectSet = it.toObject(ObjectSet::class.java)
+
                     if (objectSet != null) {
+                        val elementsCollection = firestore.collection("rankData")
+                            .document(objectSet.id)
+                            .collection("elements")
+                        elementsCollection.addSnapshotListener { querySnapshot, e ->
+                            if (querySnapshot != null) {
+                                val innerElements =
+                                    querySnapshot.toObjects(ElementObject::class.java)
+                                objectSet.elements = innerElements as ArrayList<ElementObject>
+                            }
+                        }
                         allObjectSets.add(objectSet)
                     }
                 }
                 _objectSets.value = allObjectSets
+            }
+        }
+    }
+
+    internal fun fetchElements(rcy: CreateRankSetFragment.ElementsAdapter? = null) {
+        var elementsCollection = firestore.collection("rankData")
+            .document(objectSet.id)
+            .collection("elements")
+        elementsCollection.addSnapshotListener { querySnapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen Failed", e)
+                return@addSnapshotListener
+            }
+
+            if (querySnapshot != null) {
+                var innerElements = querySnapshot?.toObjects(ElementObject::class.java)
+                objectSet.elements = innerElements as ArrayList<ElementObject>
+                rcy?.elements = objectSet.elements
             }
         }
     }
@@ -129,4 +170,5 @@ class MainViewModel(activity: Activity) : ViewModel() {
             _objectSet = value
         }
 }
+
 

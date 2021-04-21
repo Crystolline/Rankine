@@ -22,6 +22,7 @@ import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.ElementObject
 import kotlinx.android.synthetic.main.activity_create_rank_set.*
 import kotlinx.android.synthetic.main.dynamic_elements.*
+import kotlinx.coroutines.android.awaitFrame
 import java.io.File
 
 
@@ -34,9 +35,9 @@ open class CreateRankSetFragment : Fragment() {
     private lateinit var vmFactory: MainViewModelFactory
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.activity_create_rank_set, container, false)
     }
@@ -80,6 +81,7 @@ open class CreateRankSetFragment : Fragment() {
             (activity as MainActivity).moveToMain()
         }
 
+
     }
 
     fun updateCreateRankSetView() {
@@ -94,7 +96,7 @@ open class CreateRankSetFragment : Fragment() {
         (rcyElements.adapter as ElementsAdapter).notifyDataSetChanged()
     }
 
-    inner class ElementsAdapter(val elements: ArrayList<ElementObject>, val itemLayout: Int) : RecyclerView.Adapter<ElementsAdapter.ElementsViewHolder>() {
+    inner class ElementsAdapter(var elements: ArrayList<ElementObject>, val itemLayout: Int) : RecyclerView.Adapter<ElementsAdapter.ElementsViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementsViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(itemLayout, parent, false)

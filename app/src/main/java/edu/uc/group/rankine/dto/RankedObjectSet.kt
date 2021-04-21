@@ -10,7 +10,7 @@ class RankedObjectSet(var set: ObjectSet) {
 
     @JvmName("getRankedElements1")
     fun getRankedElements(): ArrayList<ElementObject> {
-        rankedElements == mergeSort(set.getAllElements())
+        rankedElements == mergeSort(set.elements)
         ranked = true
         return rankedElements
     }
