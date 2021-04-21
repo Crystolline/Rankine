@@ -74,8 +74,9 @@ class ObjectSetCreationTest {
 
 
     private fun givenRankineAndKelvinInUnrankedSet() {
-        workingObjectSet =
-            ObjectSet(arrayListOf<ElementObject>(ElementObject("Rankine"), ElementObject("Kelvin")))
+        workingObjectSet = ObjectSet()
+        workingObjectSet.elements =
+            arrayListOf<ElementObject>(ElementObject("Rankine"), ElementObject("Kelvin"))
     }
 
     private fun whenAddFahrenheitElement() {
@@ -92,12 +93,11 @@ class ObjectSetCreationTest {
     }
 
     private fun givenRankineKelvinAndFahrenheitInRankedSet() {
-        workingObjectSet = ObjectSet(
-            arrayListOf(
-                ElementObject("Rankine"),
-                ElementObject("Kelvin"),
-                ElementObject("Fahrenheit")
-            )
+        workingObjectSet = ObjectSet()
+        workingObjectSet.elements = arrayListOf(
+            ElementObject("Rankine"),
+            ElementObject("Kelvin"),
+            ElementObject("Fahrenheit")
         )
     }
 

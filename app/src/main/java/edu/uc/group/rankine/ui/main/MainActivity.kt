@@ -75,27 +75,23 @@ class MainActivity : AppCompatActivity() {
             imageView.clipToOutline = true
             imageUri = data?.data
             val uniqueString: String = UUID.randomUUID().toString()
-            val fileName = File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
+            val fileName =
+                File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
 
             //Thing to use for firebase auth
             if (requestCode == AUTH_REQUEST_CODE) {
                 user = FirebaseAuth.getInstance().currentUser
             }
 
-            //runs if editImageView is null
-            try {
-                val editImageView: ImageView = findViewById(R.id.edit_rank_fragment_image)
-            } catch (e: Exception) {
-                val imageView: ImageView = findViewById(R.id.create_rank_fragment_image)
-                imageView.clipToOutline = true
-                imageUri = data?.data
-                fileName.createNewFile()
-                val outputStream = FileOutputStream(fileName)
-                MainViewModel.setImageUriString(fileName.absolutePath)
-                val source = ImageDecoder.createSource(contentResolver, imageUri!!)
-                val bitmap = ImageDecoder.decodeBitmap(source)
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                imageView.setImageBitmap(bitmap)
+            fileName.createNewFile()
+            val outputStream = FileOutputStream(fileName)
+            vm.getImageUriString(fileName.absolutePath)
+            val source = ImageDecoder.createSource(contentResolver, imageUri!!)
+            val bitmap = ImageDecoder.decodeBitmap(source)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            imageView.setImageBitmap(bitmap)
+        }
+    }
 
     /**
      * Creates toolbar

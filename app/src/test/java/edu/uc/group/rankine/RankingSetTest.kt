@@ -52,9 +52,9 @@ class RankingSetTest {
     private fun whenRankRankineOverKelvinAndRestRandom() {
         var i = 0
         while(workingRankedSet.isRanking() && i < loopStop) {
-            if (workingRankedSet.leftElement.name == "Rankine" && workingRankedSet.rightElement.name == "Kelvin") {
+            if (workingRankedSet.leftElement.element == "Rankine" && workingRankedSet.rightElement.element == "Kelvin") {
                 workingRankedSet.sortStep(false)
-            } else if (workingRankedSet.leftElement.name == "Kelvin" && workingRankedSet.rightElement.name == "Rankine") {
+            } else if (workingRankedSet.leftElement.element == "Kelvin" && workingRankedSet.rightElement.element == "Rankine") {
                 workingRankedSet.sortStep(true)
             } else {
                 workingRankedSet.sortStep(Random.nextBoolean())
@@ -68,9 +68,9 @@ class RankingSetTest {
         var seenKelvin = false
         assert(workingRankedSet.isRanked())
         workingRankedSet.getRankedElements().forEach {
-            if (it.name == "Rankine")
+            if (it.element == "Rankine")
                 seenRankine = true
-            else if (it.name == "Kelvin") {
+            else if (it.element == "Kelvin") {
                 assert(seenRankine)
                 seenKelvin = true
             }
@@ -82,19 +82,19 @@ class RankingSetTest {
         var i = 0
         while(workingRankedSet.isRanking() && i < loopStop) {
             when {
-                workingRankedSet.leftElement.name == "Rankine" -> {
+                workingRankedSet.leftElement.element == "Rankine" -> {
                     workingRankedSet.sortStep(false)
                 }
-                workingRankedSet.rightElement.name == "Rankine" -> {
+                workingRankedSet.rightElement.element == "Rankine" -> {
                     workingRankedSet.sortStep(true)
                 }
-                workingRankedSet.leftElement.name == "Kelvin" -> {
+                workingRankedSet.leftElement.element == "Kelvin" -> {
                     workingRankedSet.sortStep(false)
                 }
-                workingRankedSet.rightElement.name == "Kelvin" -> {
+                workingRankedSet.rightElement.element == "Kelvin" -> {
                     workingRankedSet.sortStep(true)
                 }
-                workingRankedSet.leftElement.name == "Celsius" -> {
+                workingRankedSet.leftElement.element == "Celsius" -> {
                     workingRankedSet.sortStep(false)
                 }
                 else -> {
@@ -112,7 +112,7 @@ class RankingSetTest {
         var seenFahrenheit = false
         assert(workingRankedSet.isRanked())
         workingRankedSet.getRankedElements().forEach {
-            when (it.name) {
+            when (it.element) {
                 "Rankine" -> seenRankine = true
                 "Kelvin" -> {
                     assert(seenRankine)
@@ -124,7 +124,7 @@ class RankingSetTest {
                 }
                 else -> {
                     assert(seenCelsius)
-                    assert(it.name == "Fahrenheit")
+                    assert(it.element == "Fahrenheit")
                     seenFahrenheit = true
                 }
             }
@@ -144,7 +144,7 @@ class RankingSetTest {
     private fun whenRankNumbers() {
         var i = 0
         while(workingRankedSet.isRanking() && i < loopStop) {
-            workingRankedSet.sortStep(workingRankedSet.rightElement.name.toInt() > workingRankedSet.leftElement.name.toInt())
+            workingRankedSet.sortStep(workingRankedSet.rightElement.element.toInt() > workingRankedSet.leftElement.element.toInt())
             i++
         }
     }
@@ -152,7 +152,7 @@ class RankingSetTest {
     private fun thenNumbersInOrder() {
         assert(workingRankedSet.isRanked())
         for (i in 1 until workingRankedSet.getRankedElements().size) {
-            assert(workingRankedSet.getRankedElements()[i].name.toInt() <= workingRankedSet.getRankedElements()[i - 1].name.toInt())
+            assert(workingRankedSet.getRankedElements()[i].element.toInt() <= workingRankedSet.getRankedElements()[i - 1].element.toInt())
         }
     }
 }
