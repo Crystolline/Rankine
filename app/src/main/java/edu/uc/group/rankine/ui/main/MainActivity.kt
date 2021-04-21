@@ -24,6 +24,9 @@ import kotlinx.android.synthetic.main.activity_create_rank_set.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.firebase.ui.auth.AuthUI
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +39,10 @@ class MainActivity : AppCompatActivity() {
     private var activeFragment: Fragment = Fragment()
     private val imageCode: Int = 204
     var imageUri: Uri? = null
+
+    private val AUTH_REQUEST_CODE = 2002
+    private var user : FirebaseUser? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,17 +75,27 @@ class MainActivity : AppCompatActivity() {
             imageView.clipToOutline = true
             imageUri = data?.data
             val uniqueString: String = UUID.randomUUID().toString()
-            val fileName =
-                File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
-            fileName.createNewFile()
-            val outputStream = FileOutputStream(fileName)
-            vm.getImageUriString(fileName.absolutePath)
-            val source = ImageDecoder.createSource(contentResolver, imageUri!!)
-            val bitmap = ImageDecoder.decodeBitmap(source)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-            imageView.setImageBitmap(bitmap)
-        }
-    }
+            val fileName = File(applicationContext.filesDir.absolutePath + File.separator + "$uniqueString.png")
+
+            //Thing to use for firebase auth
+            if (requestCode == AUTH_REQUEST_CODE) {
+                user = FirebaseAuth.getInstance().currentUser
+            }
+
+            //runs if editImageView is null
+            try {
+                val editImageView: ImageView = findViewById(R.id.edit_rank_fragment_image)
+            } catch (e: Exception) {
+                val imageView: ImageView = findViewById(R.id.create_rank_fragment_image)
+                imageView.clipToOutline = true
+                imageUri = data?.data
+                fileName.createNewFile()
+                val outputStream = FileOutputStream(fileName)
+                MainViewModel.setImageUriString(fileName.absolutePath)
+                val source = ImageDecoder.createSource(contentResolver, imageUri!!)
+                val bitmap = ImageDecoder.decodeBitmap(source)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                imageView.setImageBitmap(bitmap)
 
     /**
      * Creates toolbar
@@ -162,5 +179,16 @@ class MainActivity : AppCompatActivity() {
 
     fun notifyChangeInCreateElements() {
         (createRankSetFragment.rcyElements as CreateRankSetFragment.ElementsAdapter).notifyDataSetChanged()
+    }
+
+    //Authentication stuff, needs to be made into the launch screen and only allow to the main app after successful authentication
+    private fun logon() {
+        var providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build()
+        )
+        startActivityForResult(
+            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers)
+                .build(), AUTH_REQUEST_CODE
+        )
     }
 }
