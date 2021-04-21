@@ -27,6 +27,7 @@ import java.util.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.firebase.ui.auth.AuthUI
+import edu.uc.group.rankine.ui.ranking.ViewSelectedRankSetFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,13 +38,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rankSetFragment: RankSetFragment
     private lateinit var createRankSetFragment: CreateRankSetFragment
     private lateinit var rankedSetViewFragment: RankSetViewFragment
+    private lateinit var viewSelectedRankSetFragment: ViewSelectedRankSetFragment
     private var activeFragment: Fragment = Fragment()
     private val imageCode: Int = 204
     var imageUri: Uri? = null
 
     private val AUTH_REQUEST_CODE = 2002
-    private var user : FirebaseUser? = null
-
+    private var user: FirebaseUser? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         rankSetFragment = RankSetFragment.newInstance()
         createRankSetFragment = CreateRankSetFragment.newInstance()
         rankedSetViewFragment = RankSetViewFragment.newInstance()
+        viewSelectedRankSetFragment = ViewSelectedRankSetFragment.newInstance()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, mainFragment)
@@ -153,17 +155,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     internal fun moveToRankSet() {
-        if (activeFragment != rankSetFragment && vm.rankSet != null && vm.rankSet!!.isRanking()) {
+        if (activeFragment != rankSetFragment) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, rankSetFragment)
                 .commitNow()
+            rankSetFragment.updateRankSetView()
             activeFragment = rankSetFragment
         }
     }
 
     internal fun moveToCreateRankSet() {
         if (activeFragment != createRankSetFragment) {
-            vm.objectSet.initialSize = vm.objectSet.elements.size
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, createRankSetFragment)
                 .commitNow()
@@ -182,6 +184,16 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, rankedSetViewFragment)
                 .commitNow()
             activeFragment = rankedSetViewFragment
+        }
+    }
+
+    internal fun moveToViewSelectedRankSetFragment() {
+        if (activeFragment != viewSelectedRankSetFragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, viewSelectedRankSetFragment)
+                .commitNow()
+            viewSelectedRankSetFragment.updateSelectedRankSetView()
+            activeFragment = viewSelectedRankSetFragment
         }
     }
 

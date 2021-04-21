@@ -37,32 +37,36 @@ class RankSetFragment : Fragment() {
             vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
         }
         (rankSetToolbar as Toolbar).navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
-        (rankSetToolbar as Toolbar).setNavigationOnClickListener { (activity as MainActivity).moveToMain() }
+        (rankSetToolbar as Toolbar).setNavigationOnClickListener { (activity as MainActivity).moveToViewSelectedRankSetFragment() }
         updateRankSetView()
 
         btnSave.setOnClickListener{
-
+            vm.saveRankToFirebase(vm.rankSet)
+            (activity as MainActivity).moveToMain()
         }
 
         btnFirstElement.setOnClickListener{
             vm.rankSet.sortStep(false)
-            if(vm.rankSet.isRanking())
-                updateRankSetView()
-            else
-                (activity as MainActivity).moveToMain()
+            updateRankSetView()
         }
 
         btnSecondElement.setOnClickListener{
             vm.rankSet.sortStep(true)
-            if(vm.rankSet.isRanking())
-                updateRankSetView()
-            else
-                (activity as MainActivity).moveToMain()
+            updateRankSetView()
         }
     }
 
-    private fun updateRankSetView() {
-        txtFirstElement.text = vm.rankSet.leftElement.element
-        txtSecondElement.text = vm.rankSet.rightElement.element
+    fun updateRankSetView() {
+        if(vm.rankSet.isRanking()) {
+            txtFirstElement.text = vm.rankSet.leftElement.element
+            txtSecondElement.text = vm.rankSet.rightElement.element
+            btnFirstElement.isEnabled = true
+            btnSecondElement.isEnabled = true
+        } else {
+            txtFirstElement.text = "RANKING"
+            txtSecondElement.text = "COMPLETED"
+            btnFirstElement.isEnabled = false
+            btnSecondElement.isEnabled = false
+        }
     }
 }

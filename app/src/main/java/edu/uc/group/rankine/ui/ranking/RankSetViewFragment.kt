@@ -21,8 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.RankedObjectSet
+import edu.uc.group.rankine.ui.main.MainActivity
 import edu.uc.group.rankine.ui.main.MainViewModel
 import edu.uc.group.rankine.ui.main.MainViewModelFactory
+import kotlinx.android.synthetic.main.fragment_rank_set_view.*
 import java.io.File
 
 
@@ -64,6 +66,10 @@ class RankSetViewFragment : Fragment() {
             _rankSets.addAll(it)
             recycle.adapter!!.notifyDataSetChanged()
         })
+
+        btnMainView.setOnClickListener{
+            (activity as MainActivity).moveToMain()
+        }
 
 
     }
@@ -204,22 +210,20 @@ class RankSetViewFragment : Fragment() {
                 rankedObjectSet: RankedObjectSet
             ) {
                 rankBtn.setOnClickListener {
-                    MainViewModel.setRank(rankedObjectSet)
-
+                    vm.rankSet = rankedObjectSet
+                    (activity as MainActivity).moveToRankSet()
                 }
 
                 editBtn.setOnClickListener {
-                    MainViewModel.setRank(rankedObjectSet)
-
+                    vm.rankSet = rankedObjectSet
+                    (activity as MainActivity).moveToViewSelectedRankSetFragment()
                 }
 
                 deleteBtn.setOnClickListener {
-
-                    //vm.removeDbDoc() used to remove a doc
+                    vm.removeDbDoc(rankedObjectSet.id)
                 }
             }
         }
-
     }
 
 

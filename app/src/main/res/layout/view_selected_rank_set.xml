@@ -24,37 +24,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:weightSum="3"
+        android:weightSum="1"
         app:layout_constraintBottom_toTopOf="@+id/set_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarCreateRankSet">
 
         <ImageButton
-            android:id="@+id/add_new_element_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="@color/light_green"
-            app:srcCompat="@drawable/ic_plus_icon" />
-
-        <ImageButton
-            android:id="@+id/btn_Create_Ranking"
+            android:id="@+id/btn_Continue_Ranking"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
             android:tint="@color/black"
             app:srcCompat="@drawable/ic_rank_icon" />
-
-        <ImageButton
-            android:id="@+id/save_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="@color/light_green"
-            android:tint="@color/black"
-            app:srcCompat="@android:drawable/ic_menu_save" />
 
     </LinearLayout>
 
@@ -63,37 +46,37 @@
         android:layout_width="136dp"
         android:layout_height="136dp"
         android:background="@drawable/ic_border"
-        android:onClick="onImageAdd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
     </ImageView>
 
-    <EditText
-        android:id="@+id/name_edit_view"
+    <TextView
+        android:id="@+id/name_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
         android:layout_weight="10"
         android:backgroundTint="@color/white"
-        android:hint="Enter Name"
+        android:hint="Set Name"
         android:padding="5dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/rcyElements"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/rcyRankedElements"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/set_image" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcyElements"
+        android:id="@+id/rcyRankedElements"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_edit_view" />
+        app:layout_constraintTop_toBottomOf="@+id/name_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

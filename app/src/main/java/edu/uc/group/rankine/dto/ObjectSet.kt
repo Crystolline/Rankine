@@ -3,7 +3,12 @@ package edu.uc.group.rankine.dto
 import com.google.firebase.firestore.Exclude
 
 /**
- * An unranked set of <elements>
+ * A set of unranked elements
+ * @property id the Firestore id of the ObjectSet
+ * @property name the name of the ObjectSet
+ * @property localUri the local uri of the ObjectSet's image
+ * @property elements the list of [ElementObject]s the ObjectSet stores
+ * @property menu whether the menu on the [RankSetViewFragment] for this ObjectSet is showing
  */
 data class ObjectSet(
     var id: String = "",
@@ -13,7 +18,6 @@ data class ObjectSet(
 
     private var _elements: ArrayList<ElementObject> = ArrayList()
     private var _menu = false
-    private var _initialSize = _elements.size
 
     var elements: ArrayList<ElementObject>
         @Exclude get() {
@@ -31,23 +35,15 @@ data class ObjectSet(
             _menu = value
         }
 
-    var initialSize: Int
-        @Exclude get() {
-            return _initialSize
-        }
-        set(value) {
-            _initialSize = value
-        }
-
     /**
-     * Add element <e> to the ObjectSet's element list
+     * Add element [e] to the ObjectSet's element list
      */
     fun addElement(e: ElementObject) {
         elements.add(e)
     }
 
     /**
-     * Modify an element <inputObject> in the ObjectSet with the name and attributes of element <newObject>
+     * Modify an element [inputObject] in the ObjectSet with the name and attributes of element [newObject]
      */
     fun modifyElements(inputObject: ElementObject, newObject: ElementObject) {
         elements.remove(inputObject)

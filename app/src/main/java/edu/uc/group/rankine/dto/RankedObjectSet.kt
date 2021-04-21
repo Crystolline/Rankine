@@ -3,7 +3,19 @@ package edu.uc.group.rankine.dto
 import com.google.firebase.firestore.Exclude
 
 /**
- * A <set> of elements that is being ranked or is ranked
+ * A set of elements that is being ranked or is ranked
+ * @property indexLeft The index of the next [ElementObject] in [arrayLeft]
+ * @property indexRight The index of the next [ElementObject] in [arrayRight]
+ * @property id The Firestore id for the RankedObjectSet
+ * @property set A copy of the [ObjectSet] the RankedObjectSet was made from
+ * @property rankedElements A list of ranked [ElementObject]s, assuming the RankedObjectSet has been ranked
+ * @property fullMergeList The ArrayList of [ElementObject] ArrayLists to be merged
+ * @property arrayLeft The ArrayList of [ElementObject]s that is currently being merged on the left
+ * @property leftElement The current left [ElementObject]
+ * @property arrayRight The ArrayList of [ElementObject]s that is currently being merged on the right
+ * @property rightElement The current right [ElementObject]
+ * @property arrayMerge The merged [ElementObject]s from [arrayLeft] and [arrayRight]
+ * @property menu Whether or not the menu is currently showing on the [RankSetViewFragment]
  */
 class RankedObjectSet(
     var indexLeft: Int = 0,
@@ -11,7 +23,7 @@ class RankedObjectSet(
     var id: String = "") {
 
     private var _set: ObjectSet = ObjectSet()
-    private var _rankedElements: ArrayList<ElementObject>? = null
+    private var _rankedElements: ArrayList<ElementObject> = ArrayList()
     private var _fullMergeList: ArrayList<ArrayList<ElementObject>> = ArrayList()
     private var _arrayLeft: ArrayList<ElementObject> = ArrayList()
     private var _leftElement: ElementObject = ElementObject()
@@ -28,7 +40,7 @@ class RankedObjectSet(
             _set = value
         }
 
-    var rankedElements: ArrayList<ElementObject>?
+    var rankedElements: ArrayList<ElementObject>
         @Exclude get() {
             return _rankedElements
         }
@@ -92,6 +104,9 @@ class RankedObjectSet(
             _menu = value
         }
 
+    /**
+     * Starts a new ranking
+     */
     fun startRanking() {
         if (set.elements.size <= 1) {
             rankedElements = set.elements
@@ -110,35 +125,37 @@ class RankedObjectSet(
         }
     }
 
-    @JvmName("getRankedElements1")
-    fun getRankedElements(): ArrayList<ElementObject> {
-        if (rankedElements != null) {
-            return rankedElements!!
+    /**
+     * @return [rankedElements] if the RankedObjectSet has been ranked, [set]'s elements if otherwise
+     */
+    @Exclude fun getCleanRankedElements(): ArrayList<ElementObject> {
+        if (rankedElements.isNotEmpty()) {
+            return rankedElements
         }
         return set.elements
     }
 
-    fun getRankings(index: Int): ElementObject? {
-        if (rankedElements != null && index < rankedElements!!.count()) {
-            return rankedElements!![index]
-        }
-        return null
+    /**
+     * @return Whether or not the RankedObjectSet has been ranked
+     */
+    @Exclude fun isRanked(): Boolean {
+        return rankedElements.isNotEmpty()
     }
 
-    fun isRanked(): Boolean {
-        return rankedElements != null
-    }
-
-    fun isRanking(): Boolean {
+    /**
+     * @return Whether or not the RankedObjectSet has a ranking in progress
+     */
+    @Exclude fun isRanking(): Boolean {
         return fullMergeList.count() > 0 || arrayLeft.count() > 0 || arrayRight.count() > 0 || arrayMerge.count() > 0
     }
 
     /**
      * Retrieve the results of a comparison and perform MergeSort steps up until next comparison is needed
+     * @param rightChosen whether the rightElement was chosen over the leftElement
      */
-    fun sortStep(side: Boolean) {
+    fun sortStep(rightChosen: Boolean) {
         if (isRanking()) {
-            if (side) {
+            if (rightChosen) {
                 arrayMerge.add(arrayRight[indexRight])
                 indexRight++
             } else {

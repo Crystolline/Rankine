@@ -54,15 +54,17 @@ open class CreateRankSetFragment : Fragment() {
         (toolbarCreateRankSet as Toolbar).navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
         (toolbarCreateRankSet as Toolbar).setNavigationOnClickListener { (activity as MainActivity).moveToMain() }
 
+        // Add a new empty element field to the objectSet
         add_new_element_btn.setOnClickListener {
             vm.objectSet.elements.add(ElementObject(""))
             (rcyElements.adapter as ElementsAdapter).notifyDataSetChanged()
         }
 
+        // Starts a new ranking with the current objectSet and moves to the RankSetFragment for the new ranking
         btn_Create_Ranking.setOnClickListener{
             with(vm.objectSet) {
                 this.name = lblElementName.text.toString()
-                localUri = edu.uc.group.rankine.ui.main.MainViewModel.imageUriString
+                localUri = MainViewModel.imageUriString
             }
             vm.rankSet = RankedObjectSet()
             vm.rankSet.set = vm.objectSet
@@ -70,6 +72,7 @@ open class CreateRankSetFragment : Fragment() {
             (activity as MainActivity).moveToRankSet()
         }
 
+        // Save the ObjectSet being created if the name field and at least 1 element field is filled out
         save_btn.setOnClickListener {
             when {
                 name_edit_view.text.isBlank() -> Toast.makeText(context, "Fill Out Name Field", Toast.LENGTH_SHORT).show()
@@ -86,14 +89,11 @@ open class CreateRankSetFragment : Fragment() {
                 }
             }
         }
-
-        back_btn.setOnClickListener {
-            (activity as MainActivity).moveToMain()
-        }
-
-
     }
 
+    /**
+     * updates the CreateRankSetFragment's components with the viewModel's current objectSet
+     */
     fun updateCreateRankSetView() {
         val file = File(vm.objectSet.localUri)
         set_image.clipToOutline = true
@@ -124,17 +124,24 @@ open class CreateRankSetFragment : Fragment() {
             holder.myCustomEditTextListener.updatePosition(holder.getAdapterPosition());
             holder.updateElement(element)
 
+            //Remove the element when the delete button is pressed
             holder.btnDelete.setOnClickListener {
                 elements.removeAt(getItemViewType(position))
                 notifyItemRemoved(getItemViewType(position))
             }
         }
 
+        /**
+         * Enable the TextWatcher when the fragment is active
+         */
         override fun onViewAttachedToWindow(holder: ElementsViewHolder) {
             holder.enableTextWatcher()
             super.onViewAttachedToWindow(holder)
         }
 
+        /**
+         * Disable the TextWatcher when the fragment is inactive
+         */
         override fun onViewDetachedFromWindow(holder: ElementsViewHolder) {
             holder.disableTextWatcher()
             super.onViewDetachedFromWindow(holder)

@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.ObjectSet
 import edu.uc.group.rankine.dto.RankedObjectSet
+import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
 open class MainFragment : Fragment() {
@@ -51,6 +52,9 @@ open class MainFragment : Fragment() {
         btnOpenActivity?.setOnClickListener {
             vm.objectSet = ObjectSet()
             (activity as MainActivity).moveToCreateRankSet()
+        }
+        btnRankView.setOnClickListener {
+            (activity as MainActivity).moveToRankedSetViewFragment()
         }
 
         recycle?.layoutManager = LinearLayoutManager(context)
