@@ -20,7 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.ranking.RankSetFragment
-import kotlinx.android.synthetic.main.activity_create_rank_set.*
+import edu.uc.group.rankine.ui.ranking.RankSetViewFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainFragment: MainFragment
     private lateinit var rankSetFragment: RankSetFragment
     private lateinit var createRankSetFragment: CreateRankSetFragment
+    private lateinit var rankedSetViewFragment: RankSetViewFragment
     private var activeFragment: Fragment = Fragment()
     private val imageCode: Int = 204
     var imageUri: Uri? = null
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         mainFragment = MainFragment.newInstance()
         rankSetFragment = RankSetFragment.newInstance()
         createRankSetFragment = CreateRankSetFragment.newInstance()
+        rankedSetViewFragment = RankSetViewFragment.newInstance()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, mainFragment)
@@ -62,10 +64,6 @@ class MainActivity : AppCompatActivity() {
         vmFactory = MainViewModelFactory(this)
         vm = ViewModelProvider(this, vmFactory)
             .get(MainViewModel::class.java)
-
-        vm.objectSets.observe(this, Observer { objectSet ->
-            var observeThis = objectSet
-        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -179,6 +177,19 @@ class MainActivity : AppCompatActivity() {
 
     fun notifyChangeInCreateElements() {
         (createRankSetFragment.rcyElements as CreateRankSetFragment.ElementsAdapter).notifyDataSetChanged()
+    }
+
+    /**
+     * Changes the active fragment to the EditRankSetFragment
+     */
+    internal fun moveToRankedSetViewFragment() {
+        rankedSetViewFragment = RankSetViewFragment.newInstance()
+        if (activeFragment != rankedSetViewFragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, rankedSetViewFragment)
+                .commitNow()
+            activeFragment = rankedSetViewFragment
+        }
     }
 
     //Authentication stuff, needs to be made into the launch screen and only allow to the main app after successful authentication

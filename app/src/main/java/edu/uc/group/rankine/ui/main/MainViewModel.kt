@@ -11,6 +11,9 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.*
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
+import edu.uc.group.rankine.dto.RankedObjectSet
+import edu.uc.group.rankine.utilities.DynamicFieldUtil
+import edu.uc.group.rankine.utilities.GetAllViewChildren
 import java.util.concurrent.Executor
 
 /**
@@ -22,6 +25,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
     private var _objectSet = ObjectSet()
+    private var _rankSets: MutableLiveData<ArrayList<RankedObjectSet>> = MutableLiveData()
     var allObjectSets = ArrayList<ObjectSet>()
     private var _elements = MutableLiveData<List<ElementObject>>()
 
@@ -32,7 +36,22 @@ class MainViewModel(activity: Activity) : ViewModel() {
     }
 
     companion object {
-        private var imageUriString = ""
+        var getData: ObjectSet? = null
+        var imageUriString = ""
+        var getRank: RankedObjectSet? = null
+
+        /**
+         * Sets the getData var to an individual ObjectSet
+         * This should be used to get the ObjectSet at a certain position in the MainFragment RecyclerView
+         */
+        fun setData(objectSet: ObjectSet) {
+            getData = objectSet
+        }
+
+        fun setRank(rankSet: RankedObjectSet) {
+            getRank = rankSet
+        }
+
     }
 
     /**
@@ -160,6 +179,14 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
         set(value) {
             _objectSets = value
+        }
+
+    internal var rankSets: MutableLiveData<ArrayList<RankedObjectSet>>
+        get() {
+            return _rankSets
+        }
+        set(value) {
+            _rankSets = value
         }
 
     internal var objectSet: ObjectSet
