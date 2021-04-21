@@ -1,6 +1,7 @@
 package edu.uc.group.rankine.dto
 
 import com.google.firebase.firestore.Exclude
+import edu.uc.group.rankine.ui.ranking.RankSetViewFragment
 
 /**
  * A set of elements that is being ranked or is ranked
@@ -20,7 +21,8 @@ import com.google.firebase.firestore.Exclude
 class RankedObjectSet(
     var indexLeft: Int = 0,
     var indexRight: Int = 0,
-    var id: String = "") {
+    var id: String = ""
+) {
 
     private var _set: ObjectSet = ObjectSet()
     private var _rankedElements: ArrayList<ElementObject> = ArrayList()
@@ -96,7 +98,7 @@ class RankedObjectSet(
             _arrayMerge = value
         }
 
-    var menu: Boolean
+    private var menu: Boolean
         @Exclude get() {
             return _menu
         }
@@ -128,7 +130,8 @@ class RankedObjectSet(
     /**
      * @return [rankedElements] if the RankedObjectSet has been ranked, [set]'s elements if otherwise
      */
-    @Exclude fun getCleanRankedElements(): ArrayList<ElementObject> {
+    @Exclude
+    fun getCleanRankedElements(): ArrayList<ElementObject> {
         if (rankedElements.isNotEmpty()) {
             return rankedElements
         }
@@ -138,14 +141,16 @@ class RankedObjectSet(
     /**
      * @return Whether or not the RankedObjectSet has been ranked
      */
-    @Exclude fun isRanked(): Boolean {
+    @Exclude
+    fun isRanked(): Boolean {
         return rankedElements.isNotEmpty()
     }
 
     /**
      * @return Whether or not the RankedObjectSet has a ranking in progress
      */
-    @Exclude fun isRanking(): Boolean {
+    @Exclude
+    fun isRanking(): Boolean {
         return fullMergeList.count() > 0 || arrayLeft.count() > 0 || arrayRight.count() > 0 || arrayMerge.count() > 0
     }
 

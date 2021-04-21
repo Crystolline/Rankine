@@ -1,6 +1,7 @@
 package edu.uc.group.rankine.dto
 
 import com.google.firebase.firestore.Exclude
+import edu.uc.group.rankine.ui.main.MainFragment
 
 /**
  * A set of unranked elements
@@ -8,7 +9,7 @@ import com.google.firebase.firestore.Exclude
  * @property name the name of the ObjectSet
  * @property localUri the local uri of the ObjectSet's image
  * @property elements the list of [ElementObject]s the ObjectSet stores
- * @property menu whether the menu on the [RankSetViewFragment] for this ObjectSet is showing
+ * @property menu whether the menu on the [MainFragment] for this ObjectSet is showing
  */
 data class ObjectSet(
     var id: String = "",

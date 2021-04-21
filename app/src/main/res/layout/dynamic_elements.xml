@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -22,12 +21,13 @@
             android:layout_margin="5dp"
             android:layout_weight="9"
             android:backgroundTint="@color/white"
-            android:gravity="left"
-            android:hint="Element"
+            android:gravity="start"
+            android:hint="@string/element"
             android:overScrollMode="never"
             android:padding="5dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/gray" />
+            android:textColorHint="@color/gray"
+            android:autofillHints="Text" />
 
         <ImageButton
             android:id="@+id/delete_attribute"
@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:background="@drawable/ic_delete"
             android:backgroundTint="@color/light_green"
-            android:onClick="onDeleteElements" />
+            android:contentDescription="@string/delete_element" />
 
 
     </LinearLayout>

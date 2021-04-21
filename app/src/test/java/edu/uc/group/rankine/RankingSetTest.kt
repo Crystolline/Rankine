@@ -45,7 +45,8 @@ class RankingSetTest {
             addElement(ElementObject("Kelvin"))
             addElement(ElementObject("Rankine"))
         }
-        workingRankedSet = RankedObjectSet(workingObjectSet)
+        workingRankedSet = RankedObjectSet()
+        workingRankedSet.set = workingObjectSet
         workingRankedSet.startRanking()
     }
 
@@ -67,7 +68,7 @@ class RankingSetTest {
         var seenRankine = false
         var seenKelvin = false
         assert(workingRankedSet.isRanked())
-        workingRankedSet.getRankedElements().forEach {
+        workingRankedSet.getCleanRankedElements().forEach {
             if (it.element == "Rankine")
                 seenRankine = true
             else if (it.element == "Kelvin") {
@@ -111,7 +112,7 @@ class RankingSetTest {
         var seenCelsius = false
         var seenFahrenheit = false
         assert(workingRankedSet.isRanked())
-        workingRankedSet.getRankedElements().forEach {
+        workingRankedSet.getCleanRankedElements().forEach {
             when (it.element) {
                 "Rankine" -> seenRankine = true
                 "Kelvin" -> {
@@ -137,7 +138,8 @@ class RankingSetTest {
         for (i in 1..5000) {
             workingObjectSet.addElement(ElementObject(Random.nextInt(-2000000000, 2000000000).toString()))
         }
-        workingRankedSet = RankedObjectSet(workingObjectSet)
+        workingRankedSet = RankedObjectSet()
+        workingRankedSet.set = workingObjectSet
         workingRankedSet.startRanking()
     }
 
@@ -151,8 +153,8 @@ class RankingSetTest {
 
     private fun thenNumbersInOrder() {
         assert(workingRankedSet.isRanked())
-        for (i in 1 until workingRankedSet.getRankedElements().size) {
-            assert(workingRankedSet.getRankedElements()[i].element.toInt() <= workingRankedSet.getRankedElements()[i - 1].element.toInt())
+        for (i in 1 until workingRankedSet.getCleanRankedElements().size) {
+            assert(workingRankedSet.getCleanRankedElements()[i].element.toInt() <= workingRankedSet.getCleanRankedElements()[i - 1].element.toInt())
         }
     }
 }

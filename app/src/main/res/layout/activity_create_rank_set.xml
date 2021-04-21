@@ -36,6 +36,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
+            android:contentDescription="@string/add_a_new_element"
             app:srcCompat="@drawable/ic_plus_icon" />
 
         <ImageButton
@@ -44,6 +45,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
+            android:contentDescription="@string/create_a_new_ranking"
             android:tint="@color/black"
             app:srcCompat="@drawable/ic_rank_icon" />
 
@@ -53,6 +55,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:backgroundTint="@color/light_green"
+            android:contentDescription="@string/save_the_current_objectset"
             android:tint="@color/black"
             app:srcCompat="@android:drawable/ic_menu_save" />
 
@@ -63,6 +66,7 @@
         android:layout_width="136dp"
         android:layout_height="136dp"
         android:background="@drawable/ic_border"
+        android:contentDescription="@string/the_image_representing_the_objectset"
         android:onClick="onImageAdd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +82,9 @@
         android:layout_margin="5dp"
         android:layout_weight="10"
         android:backgroundTint="@color/white"
-        android:hint="Enter Name"
+        android:hint="@string/enter_name"
+        android:importantForAutofill="no"
+        android:inputType="textShortMessage|text"
         android:padding="5dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"

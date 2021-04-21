@@ -43,15 +43,16 @@ open class CreateRankSetFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vmFactory = activity?.let { MainViewModelFactory(it) }!!
-        activity.let{
+        vmFactory = activity?.let { MainViewModelFactory() }!!
+        activity.let {
             vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
         }
         rcyElements.hasFixedSize()
         rcyElements.layoutManager = LinearLayoutManager(context)
         rcyElements.itemAnimator = DefaultItemAnimator()
         rcyElements.adapter = ElementsAdapter(vm.objectSet.elements, R.layout.dynamic_elements)
-        (toolbarCreateRankSet as Toolbar).navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
+        (toolbarCreateRankSet as Toolbar).navigationIcon =
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
         (toolbarCreateRankSet as Toolbar).setNavigationOnClickListener { (activity as MainActivity).moveToMain() }
 
         // Add a new empty element field to the objectSet
@@ -61,7 +62,7 @@ open class CreateRankSetFragment : Fragment() {
         }
 
         // Starts a new ranking with the current objectSet and moves to the RankSetFragment for the new ranking
-        btn_Create_Ranking.setOnClickListener{
+        btn_Create_Ranking.setOnClickListener {
             with(vm.objectSet) {
                 this.name = lblElementName.text.toString()
                 localUri = MainViewModel.imageUriString
@@ -75,8 +76,16 @@ open class CreateRankSetFragment : Fragment() {
         // Save the ObjectSet being created if the name field and at least 1 element field is filled out
         save_btn.setOnClickListener {
             when {
-                name_edit_view.text.isBlank() -> Toast.makeText(context, "Fill Out Name Field", Toast.LENGTH_SHORT).show()
-                vm.objectSet.elements.isEmpty() -> Toast.makeText(context, "Add at least 1 Element", Toast.LENGTH_SHORT).show()
+                name_edit_view.text.isBlank() -> Toast.makeText(
+                    context,
+                    "Fill Out Name Field",
+                    Toast.LENGTH_SHORT
+                ).show()
+                vm.objectSet.elements.isEmpty() -> Toast.makeText(
+                    context,
+                    "Add at least 1 Element",
+                    Toast.LENGTH_SHORT
+                ).show()
                 else -> {
                     var filled = true
                     vm.objectSet.elements.forEach {
@@ -85,7 +94,8 @@ open class CreateRankSetFragment : Fragment() {
                     if (filled) {
                         vm.saveSet(name_edit_view.text.toString())
                         (activity as MainActivity).moveToMain()
-                    } else Toast.makeText(context, "Fill out all Element Names", Toast.LENGTH_SHORT).show()
+                    } else Toast.makeText(context, "Fill out all Element Names", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -106,7 +116,11 @@ open class CreateRankSetFragment : Fragment() {
         (rcyElements.adapter as ElementsAdapter).notifyDataSetChanged()
     }
 
-    inner class ElementsAdapter(var elements: ArrayList<ElementObject>, val itemLayout: Int) : RecyclerView.Adapter<ElementsAdapter.ElementsViewHolder>() {
+    inner class ElementsAdapter(
+        var elements: ArrayList<ElementObject>,
+        private val itemLayout: Int
+    ) :
+        RecyclerView.Adapter<ElementsAdapter.ElementsViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementsViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(itemLayout, parent, false)
@@ -118,10 +132,10 @@ open class CreateRankSetFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ElementsViewHolder, position: Int) {
-            val element = elements.get(getItemViewType(position))
+            val element = elements[getItemViewType(position)]
             // update MyCustomEditTextListener every time we bind a new item
             // so that it knows what item in mDataset to update
-            holder.myCustomEditTextListener.updatePosition(holder.getAdapterPosition());
+            holder.myCustomEditTextListener.updatePosition(holder.adapterPosition)
             holder.updateElement(element)
 
             //Remove the element when the delete button is pressed
@@ -151,9 +165,12 @@ open class CreateRankSetFragment : Fragment() {
             return position
         }
 
-        inner class ElementsViewHolder(itemView: View, var myCustomEditTextListener: MyCustomEditTextListener) : RecyclerView.ViewHolder(itemView) {
+        inner class ElementsViewHolder(
+            itemView: View,
+            var myCustomEditTextListener: MyCustomEditTextListener
+        ) : RecyclerView.ViewHolder(itemView) {
             var btnDelete: ImageButton = itemView.findViewById(R.id.delete_attribute)
-            var lblElementName: TextView = itemView.findViewById(R.id.lblElementName)
+            private var lblElementName: TextView = itemView.findViewById(R.id.lblElementName)
 
             /**
              * This function will get called once for each item in the collection in the recyclerView
@@ -186,7 +203,7 @@ open class CreateRankSetFragment : Fragment() {
             }
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {
-                elements.get(position).element = charSequence.toString()
+                elements[position].element = charSequence.toString()
             }
 
             override fun afterTextChanged(editable: Editable) {

@@ -16,33 +16,36 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.ui.ranking.RankSetFragment
 import edu.uc.group.rankine.ui.ranking.RankSetViewFragment
+import edu.uc.group.rankine.ui.ranking.ViewSelectedRankSetFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.firebase.ui.auth.AuthUI
-import edu.uc.group.rankine.ui.ranking.ViewSelectedRankSetFragment
 
 
+@Suppress("unused")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var vm: MainViewModel
     private lateinit var vmFactory: MainViewModelFactory
+
     private lateinit var mainFragment: MainFragment
     private lateinit var rankSetFragment: RankSetFragment
     private lateinit var createRankSetFragment: CreateRankSetFragment
     private lateinit var rankedSetViewFragment: RankSetViewFragment
     private lateinit var viewSelectedRankSetFragment: ViewSelectedRankSetFragment
     private var activeFragment: Fragment = Fragment()
-    private val imageCode: Int = 204
-    var imageUri: Uri? = null
 
+    private val imageCode: Int = 204
+    private var imageUri: Uri? = null
+
+    @Suppress("PrivatePropertyName")
     private val AUTH_REQUEST_CODE = 2002
     private var user: FirebaseUser? = null
 
@@ -51,6 +54,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         setSupportActionBar(findViewById(R.id.toolbar))
+
+        //instantiate fragments
         mainFragment = MainFragment.newInstance()
         rankSetFragment = RankSetFragment.newInstance()
         createRankSetFragment = CreateRankSetFragment.newInstance()
@@ -63,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             activeFragment = mainFragment
         }
 
-        vmFactory = MainViewModelFactory(this)
+        vmFactory = MainViewModelFactory()
         vm = ViewModelProvider(this, vmFactory)
             .get(MainViewModel::class.java)
     }
@@ -125,18 +130,18 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (item.itemId == R.id.search_menu_item01) {
+        return if (item.itemId == R.id.search_menu_item01) {
             Toast.makeText(applicationContext, "Menu", Toast.LENGTH_SHORT).show()
-            return true
+            true
         } else {
-            return super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
         }
     }
 
     /**
      *  Creates a new intent that allows the user to pick a image to represent a RankSet.
      */
-    fun onImageAdd(view: View) {
+    fun View.onImageAdd() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.flags =
@@ -145,6 +150,9 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, imageCode)
     }
 
+    /**
+     * Changes the active fragment to the [MainFragment]
+     */
     internal fun moveToMain() {
         if (activeFragment != mainFragment) {
             supportFragmentManager.beginTransaction()
@@ -154,6 +162,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Changes the active fragment to the [rankSetFragment]
+     */
     internal fun moveToRankSet() {
         if (activeFragment != rankSetFragment) {
             supportFragmentManager.beginTransaction()
@@ -164,6 +175,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Changes the active fragment to the [CreateRankSetFragment]
+     */
     internal fun moveToCreateRankSet() {
         if (activeFragment != createRankSetFragment) {
             supportFragmentManager.beginTransaction()
@@ -175,7 +189,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Changes the active fragment to the EditRankSetFragment
+     * Changes the active fragment to the [RankSetViewFragment]
      */
     internal fun moveToRankedSetViewFragment() {
         rankedSetViewFragment = RankSetViewFragment.newInstance()
@@ -187,6 +201,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Changes the active fragment to the [ViewSelectedRankSetFragment]
+     */
     internal fun moveToViewSelectedRankSetFragment() {
         if (activeFragment != viewSelectedRankSetFragment) {
             supportFragmentManager.beginTransaction()
@@ -199,7 +216,7 @@ class MainActivity : AppCompatActivity() {
 
     //Authentication stuff, needs to be made into the launch screen and only allow to the main app after successful authentication
     private fun logon() {
-        var providers = arrayListOf(
+        val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build()
         )
         startActivityForResult(

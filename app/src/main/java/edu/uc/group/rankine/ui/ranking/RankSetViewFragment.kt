@@ -27,7 +27,9 @@ import edu.uc.group.rankine.ui.main.MainViewModelFactory
 import kotlinx.android.synthetic.main.fragment_rank_set_view.*
 import java.io.File
 
-
+/**
+ * A fragment listing in-progress and completed [RankedObjectSet]s
+ */
 class RankSetViewFragment : Fragment() {
     private lateinit var vm: MainViewModel
     private lateinit var vmFactory: MainViewModelFactory
@@ -49,7 +51,7 @@ class RankSetViewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val recycle = activity?.findViewById<RecyclerView>(R.id.fragment_rank_set_view_recycle)
-        vmFactory = activity?.let { MainViewModelFactory(it) }!!
+        vmFactory = activity?.let { MainViewModelFactory() }!!
         activity.let {
             vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
         }
@@ -58,7 +60,7 @@ class RankSetViewFragment : Fragment() {
         recycle?.itemAnimator = DefaultItemAnimator()
         adapter = RankSetViewAdapter(_rankSets)
         recycle?.adapter = adapter
-        val set = ItemTouchHelper(ItemTouchCallback(adapter!!))
+        val set = ItemTouchHelper(ItemTouchCallback())
         set.attachToRecyclerView(recycle!!)
 
         vm.rankSets.observe(viewLifecycleOwner, Observer {
@@ -67,7 +69,8 @@ class RankSetViewFragment : Fragment() {
             recycle.adapter!!.notifyDataSetChanged()
         })
 
-        btnMainView.setOnClickListener{
+        // Moves to the MainFragment
+        btnMainView.setOnClickListener {
             (activity as MainActivity).moveToMain()
         }
 
@@ -129,7 +132,7 @@ class RankSetViewFragment : Fragment() {
             }
 
             if (holder is MenuViewHolder) {
-                holder.setClickListeners(holder.adapterPosition, rank)
+                holder.setClickListeners(rank)
 
             }
 
@@ -145,20 +148,6 @@ class RankSetViewFragment : Fragment() {
             }
             ranks[position].setShowMenu(true)
             notifyDataSetChanged()
-        }
-
-        /**
-         * determines if the menu is currently being shown.
-         * @return true if menu is shown
-         * @return false if menu is not shown
-         */
-        fun isMenuShown(): Boolean {
-            for (i in 0 until ranks.size) {
-                if (ranks[i].isShowMenu()) {
-                    return true
-                }
-            }
-            return false
         }
 
         /**
@@ -206,21 +195,23 @@ class RankSetViewFragment : Fragment() {
             private var editBtn: Button = itemView.findViewById(R.id.ranked_options_editBtn)
             private var deleteBtn: Button = itemView.findViewById(R.id.ranked_options_deleteBtn)
             fun setClickListeners(
-                adapterPosition: Int,
                 rankedObjectSet: RankedObjectSet
             ) {
+                // Resume ranking the selected RankedObjectSet
                 rankBtn.setOnClickListener {
                     vm.rankSet = rankedObjectSet
                     (activity as MainActivity).moveToRankSet()
                 }
 
+                // View the selected RankedObjectSet's elements
                 editBtn.setOnClickListener {
                     vm.rankSet = rankedObjectSet
                     (activity as MainActivity).moveToViewSelectedRankSetFragment()
                 }
 
+                // Delete the selected RankedObjectSet
                 deleteBtn.setOnClickListener {
-                    vm.removeDbDoc(rankedObjectSet.id)
+                    vm.removeRankedDbDoc(rankedObjectSet.id)
                 }
             }
         }
@@ -230,7 +221,7 @@ class RankSetViewFragment : Fragment() {
     /**
      * Adds swipe support to RecyclerView
      */
-    inner class ItemTouchCallback(adapter: RankSetViewAdapter) :
+    inner class ItemTouchCallback :
         ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
         private val background: ColorDrawable? =
             ColorDrawable(Color.rgb(1, 64, 23))

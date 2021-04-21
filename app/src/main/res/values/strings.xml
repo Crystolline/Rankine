@@ -18,4 +18,14 @@
     <string name="exit_the_current_ranking_session">Exit the current ranking session</string>
     <string name="snack_bar_text">Whould you like to undo delete?</string>
     <string name="snack_bar_undo">Delete has been undone</string>
+    <string name="RANKING">RANKING</string>
+    <string name="COMPLETED">COMPLETED</string>
+    <string name="add_a_new_element">Add a new element</string>
+    <string name="create_a_new_ranking">Create a new ranking</string>
+    <string name="save_the_current_objectset">Save the current ObjectSet</string>
+    <string name="the_image_representing_the_objectset">The image representing the ObjectSet</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="element">Element</string>
+    <string name="delete_element">Delete element</string>
+    <string name="the_image_for_the_objectset">The image for the ObjectSet</string>
 </resources>

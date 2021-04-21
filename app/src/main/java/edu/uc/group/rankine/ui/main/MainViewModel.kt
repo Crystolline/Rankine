@@ -1,34 +1,29 @@
 package edu.uc.group.rankine.ui.main
 
-import android.app.Activity
 import android.content.ContentValues.TAG
-import android.renderscript.Allocation
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.*
-import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
 import edu.uc.group.rankine.dto.RankedObjectSet
-import kotlinx.coroutines.*
 
 /**
  * Shared ViewModel for all fragments
  */
-class MainViewModel(activity: Activity) : ViewModel() {
-    private var ctx = activity
-    var idList = ArrayList<String>()
+@Suppress("NAME_SHADOWING")
+class MainViewModel : ViewModel() {
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
     private var _objectSet = ObjectSet()
     private var _rankSets: MutableLiveData<ArrayList<RankedObjectSet>> = MutableLiveData()
     private var _rankSet: RankedObjectSet = RankedObjectSet()
-    var allObjectSets = ArrayList<ObjectSet>()
-    var allRankedObjectSets = ArrayList<RankedObjectSet>()
-    private var _elements = MutableLiveData<List<ElementObject>>()
+    private var allObjectSets = ArrayList<ObjectSet>()
+    private var allRankedObjectSets = ArrayList<RankedObjectSet>()
 
     init {
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
@@ -37,36 +32,21 @@ class MainViewModel(activity: Activity) : ViewModel() {
     }
 
     companion object {
-        var getData: ObjectSet? = null
         var imageUriString = ""
-        var getRank: RankedObjectSet? = null
-
-        /**
-         * Sets the getData var to an individual ObjectSet
-         * This should be used to get the ObjectSet at a certain position in the MainFragment RecyclerView
-         */
-        fun setData(objectSet: ObjectSet) {
-            getData = objectSet
-        }
-
-        fun setRank(rankSet: RankedObjectSet) {
-            getRank = rankSet
-        }
-
     }
 
     /**
-     *  Populates the ObjectSet dto with data.
+     *  Populates the [objectSet] dto with data.
      *  Calls the save function to save the dto in the database.
      *  Calls the clearAll function to clear the data in the dto.
      */
     fun saveSet(setName: String) {
         with(objectSet) {
             this.name = setName
-            if(imageUriString != "") localUri = imageUriString
+            if (imageUriString != "") localUri = imageUriString
         }
 
-        var document = if (objectSet.id.isNotBlank()) {
+        val document = if (objectSet.id.isNotBlank()) {
             //update existing
             firestore.collection("rankData").document(objectSet.id)
         } else {
@@ -79,9 +59,13 @@ class MainViewModel(activity: Activity) : ViewModel() {
     }
 
     fun getImageUriString(imageUri: String) {
-        MainViewModel.imageUriString = imageUri
+        imageUriString = imageUri
     }
 
+    /**
+     * Saves a [RankedObjectSet] to Firestore
+     * @param rankedSet The [RankedObjectSet] to be saved
+     */
     fun saveRankToFirebase(rankedSet: RankedObjectSet) {
         val document = if (rankedSet.id.isNotBlank()) {
             firestore.collection("rankedData").document(rankedSet.id)
@@ -137,7 +121,9 @@ class MainViewModel(activity: Activity) : ViewModel() {
     }
 
     /**
-     * Saves the data from the dto to the firebase
+     * Saves an [ObjectSet] to Firestore
+     * @param document The location to save the [ObjectSet]
+     * @param objectSet The [ObjectSet] to be saved
      */
     private fun saveSetToFirebase(document: DocumentReference, objectSet: ObjectSet) {
         objectSet.id = document.id
@@ -150,12 +136,17 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Saves an ArrayList of [ElementObject]s to Firestore
+     * @param collection The location to save the ArrayList
+     * @param elements The ArrayList of [ElementObject]s to be saved
+     */
     private fun saveArrayListOfElementsToFirebase(
         collection: CollectionReference,
         elements: ArrayList<ElementObject>
     ) {
         for (i in 0 until elements.size) {
-            var id = "00000000000000000000".dropLast(i.toString().length) + i.toString()
+            val id = "00000000000000000000".dropLast(i.toString().length) + i.toString()
             saveElement(elements[i], collection.document(id))
         }
         collection.get()
@@ -165,6 +156,11 @@ class MainViewModel(activity: Activity) : ViewModel() {
             }
     }
 
+    /**
+     * Saves an [ElementObject] to Firestore
+     * @param elementObject The [ElementObject] to be saved
+     * @param elementDocument The location to save the [ElementObject]
+     */
     private fun saveElement(elementObject: ElementObject, elementDocument: DocumentReference) {
         elementObject.id = elementDocument.id
         val set = elementDocument.set(elementObject)
@@ -176,6 +172,11 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Saves a nullable ArrayList of [ElementObject]s to Firestore
+     * @param collection The location to save the ArrayList
+     * @param list The nullable ArrayList of [ElementObject]s to be saved
+     */
     private fun saveNullableArrayListOfElementsToFirebase(
         collection: CollectionReference,
         list: ArrayList<ElementObject>?
@@ -185,6 +186,11 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Saves an ArrayList of ArrayLists of [ElementObject]s to Firestore
+     * @param collection The location to save the nested ArrayList
+     * @param list The ArrayList of ArrayLists of [ElementObject]s to be saved
+     */
     private fun saveArrayListOfArrayListOfElementsToFirebase(
         collection: CollectionReference,
         list: ArrayList<ArrayList<ElementObject>>
@@ -195,7 +201,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
                     removeArrayListFromFirebase(document.reference)
             }
         for (i in 0 until list.size) {
-            var id = "00000000000000000000".dropLast(i.toString().length) + i.toString()
+            val id = "00000000000000000000".dropLast(i.toString().length) + i.toString()
             saveArrayListOfElementsToFirebase(
                 collection.document(id).collection("elements"),
                 list[i]
@@ -203,6 +209,10 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Removes an ArrayList of [ElementObject]s from Firestore
+     * @param document The location where the ArrayList to be removed is located
+     */
     private fun removeArrayListFromFirebase(document: DocumentReference) {
         document.collection("elements").get()
             .addOnSuccessListener { doc ->
@@ -221,6 +231,18 @@ class MainViewModel(activity: Activity) : ViewModel() {
         document.delete()
     }
 
+    /**
+     * deletes the specified document from the DB
+     * @param id the id of the document to be deleted
+     */
+    fun removeRankedDbDoc(id: String) {
+        val document = firestore.collection("rankedData").document(id)
+        document.delete()
+    }
+
+    /**
+     * Fetches all [ObjectSet]s from Firestore and stores them in [_objectSets]
+     */
     private fun firebaseDBListenerSets() {
         firestore.collection("rankData").addSnapshotListener { snapshot, e ->
             if (e != null) {
@@ -229,7 +251,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
             }
 
             if (snapshot != null) {
-                allObjectSets = ArrayList<ObjectSet>()
+                allObjectSets = ArrayList()
                 val documents = snapshot.documents
                 documents.forEach {
                     val objectSet = it.toObject(ObjectSet::class.java)
@@ -238,7 +260,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
                         val elementsCollection = firestore.collection("rankData")
                             .document(objectSet.id)
                             .collection("elements")
-                        elementsCollection.addSnapshotListener { querySnapshot, e ->
+                        elementsCollection.addSnapshotListener { querySnapshot, _ ->
                             if (querySnapshot != null) {
                                 val innerElements =
                                     querySnapshot.toObjects(ElementObject::class.java)
@@ -253,6 +275,9 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Fetches all [RankedObjectSet]s from Firestore and stores them in [_rankSets]
+     */
     private fun firebaseDBListenerRanks() {
         firestore.collection("rankedData").addSnapshotListener { snapshot, e ->
             if (e != null) {
@@ -261,10 +286,10 @@ class MainViewModel(activity: Activity) : ViewModel() {
             }
 
             if (snapshot != null) {
-                allRankedObjectSets = ArrayList<RankedObjectSet>()
+                allRankedObjectSets = ArrayList()
                 val documents = snapshot.documents
                 documents.forEach {
-                    var rankedSet = it.toObject(RankedObjectSet::class.java)
+                    val rankedSet = it.toObject(RankedObjectSet::class.java)
 
                     if (rankedSet != null) {
                         //Retrieve set
@@ -273,7 +298,6 @@ class MainViewModel(activity: Activity) : ViewModel() {
                             rankedSet.set
                         )
                         //Retrieve rankedElements
-                        val standInArray = ArrayList<ElementObject>()
                         fetchArrayListOfElementsFromFirebase(
                             it.reference.collection("rankedElements"),
                             rankedSet.rankedElements
@@ -316,7 +340,15 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
-    private fun fetchSetFromFirebase(document: DocumentReference, objectSet: ObjectSet) {
+    /**
+     * Fetches an [ObjectSet] from Firestore
+     * @param document The location the [ObjectSet] to fetch is located
+     * @param objectSet Where to store the fetched [ObjectSet]
+     */
+    private fun fetchSetFromFirebase(
+        document: DocumentReference,
+        objectSet: ObjectSet
+    ) {
         document.get().addOnSuccessListener {
             val localObjectSet = it.toObject(ObjectSet::class.java)
             if (localObjectSet != null) {
@@ -331,6 +363,11 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Fetches an ArrayList of ArrayLists of [ElementObject]s from Firestore
+     * @param collection The location the nested Arraylist to fetch is located
+     * @param list Where to store the fetched nested ArrayList
+     */
     private fun fetchArrayListOfArrayListOfElementsFromFirebase(
         collection: CollectionReference,
         list: ArrayList<ArrayList<ElementObject>>
@@ -342,7 +379,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
             }
 
             snapshot?.documents?.forEach {
-                val elementList: ArrayList<ElementObject> = ArrayList<ElementObject>()
+                val elementList: ArrayList<ElementObject> = ArrayList()
                 fetchArrayListOfElementsFromFirebase(
                     it.reference.collection("elements"),
                     elementList
@@ -352,6 +389,11 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Fetches an ArrayList of [ElementObject]s from Firestore
+     * @param collection The location the ArrayList to fetch is located
+     * @param elements Where to store the fetched ArrayList of [ElementObject]s
+     */
     private fun fetchArrayListOfElementsFromFirebase(
         collection: CollectionReference,
         elements: ArrayList<ElementObject>
@@ -372,9 +414,14 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
+    /**
+     * Fetches an [ElementObject] from Firestore
+     * @param document The location the [ElementObject] to fetch is located
+     * @param elementObject Where to store the fetched [ElementObject]
+     */
     private fun fetchElement(document: DocumentReference, elementObject: ElementObject) {
         document.get().addOnSuccessListener {
-            var localElement = it.toObject(ElementObject::class.java)
+            val localElement = it.toObject(ElementObject::class.java)
             if (localElement != null) {
                 elementObject.element = localElement.element
                 elementObject.id = localElement.id

@@ -23,6 +23,9 @@ import edu.uc.group.rankine.dto.RankedObjectSet
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
+/**
+ * Main Fragment: contains list of created [ObjectSet]s to choose between
+ */
 open class MainFragment : Fragment() {
     private lateinit var vm: MainViewModel
     private lateinit var vmFactory: MainViewModelFactory
@@ -45,14 +48,18 @@ open class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val btnOpenActivity: FloatingActionButton? = activity?.findViewById(R.id.btnCreateRank)
         val recycle = activity?.findViewById<RecyclerView>(R.id.recycle)
-        vmFactory = activity?.let { MainViewModelFactory(it) }!!
-        activity.let{
+        vmFactory = activity?.let { MainViewModelFactory() }!!
+        activity.let {
             vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
         }
+
+        // Create a new set
         btnOpenActivity?.setOnClickListener {
             vm.objectSet = ObjectSet()
             (activity as MainActivity).moveToCreateRankSet()
         }
+
+        // Move to the [ViewSelectedRankSetFragment]
         btnRankView.setOnClickListener {
             (activity as MainActivity).moveToRankedSetViewFragment()
         }
@@ -61,7 +68,7 @@ open class MainFragment : Fragment() {
         recycle?.itemAnimator = DefaultItemAnimator()
         adapter = MainViewAdaptor(_objectSets)
         recycle?.adapter = adapter
-        val set = ItemTouchHelper(ItemTouchCallback(adapter!!))
+        val set = ItemTouchHelper(ItemTouchCallback())
         set.attachToRecyclerView(recycle!!)
 
         vm.objectSets.observe(viewLifecycleOwner, Observer {
@@ -126,7 +133,7 @@ open class MainFragment : Fragment() {
             }
 
             if (holder is MenuViewHolder) {
-                holder.setClickListeners(holder.adapterPosition, element)
+                holder.setClickListeners(element)
             }
 
         }
@@ -141,20 +148,6 @@ open class MainFragment : Fragment() {
             }
             elements[position].menu = true
             notifyDataSetChanged()
-        }
-
-        /**
-         * determines if the menu is currently being shown.
-         * @return true if menu is shown
-         * @return false if menu is not shown
-         */
-        fun isMenuShown(): Boolean {
-            for (i in 0 until elements.size) {
-                if (elements[i].menu) {
-                    return true
-                }
-            }
-            return false
         }
 
         /**
@@ -199,7 +192,6 @@ open class MainFragment : Fragment() {
             private var editBtn: Button = itemView.findViewById(R.id.dynamic_options_editBtn)
             private var deleteBtn: Button = itemView.findViewById(R.id.dynamic_options_deleteBtn)
             fun setClickListeners(
-                adapterPosition: Int,
                 element: ObjectSet
             ) {
                 rankBtn.setOnClickListener {
@@ -230,7 +222,7 @@ open class MainFragment : Fragment() {
     /**
      * Adds swipe support to RecyclerView
      */
-    inner class ItemTouchCallback(adapter: MainViewAdaptor) :
+    inner class ItemTouchCallback :
         ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
         private val background: ColorDrawable? =
             ColorDrawable(android.graphics.Color.rgb(1, 64, 23))
