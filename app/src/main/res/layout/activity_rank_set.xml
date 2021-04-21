@@ -55,6 +55,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgFirstElement" />
@@ -130,6 +131,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgSecondElement" />
@@ -179,15 +181,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="@color/light_green"
-            android:contentDescription="@string/go_back_to_the_previous_comparison"
-            app:srcCompat="@android:drawable/ic_menu_revert" />
-
-        <ImageButton
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -196,14 +189,6 @@
             android:contentDescription="@string/save_the_comparisons_completed_so_far"
             app:srcCompat="@android:drawable/ic_menu_save" />
 
-        <ImageButton
-            android:id="@+id/btnExit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/light_green"
-            android:contentDescription="@string/exit_the_current_ranking_session"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

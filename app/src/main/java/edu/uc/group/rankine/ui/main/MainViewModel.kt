@@ -3,18 +3,13 @@ package edu.uc.group.rankine.ui.main
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.*
 import edu.uc.group.rankine.dto.ElementObject
 import edu.uc.group.rankine.dto.ObjectSet
 import edu.uc.group.rankine.dto.RankedObjectSet
-import edu.uc.group.rankine.utilities.DynamicFieldUtil
-import edu.uc.group.rankine.utilities.GetAllViewChildren
-import java.util.concurrent.Executor
 
 /**
  * Shared ViewModel for all fragments
@@ -26,13 +21,13 @@ class MainViewModel(activity: Activity) : ViewModel() {
     private var _objectSets: MutableLiveData<ArrayList<ObjectSet>> = MutableLiveData()
     private var _objectSet = ObjectSet()
     private var _rankSets: MutableLiveData<ArrayList<RankedObjectSet>> = MutableLiveData()
+    private var _rankSet: RankedObjectSet = RankedObjectSet()
     var allObjectSets = ArrayList<ObjectSet>()
     private var _elements = MutableLiveData<List<ElementObject>>()
 
     init {
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
-        firebaseDBListener()
-
+        firebaseDBListenerSets()
     }
 
     companion object {
@@ -65,7 +60,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
             localUri = imageUriString
         }
 
-        save(objectSet)
+        saveSets(objectSet)
         objectSet = ObjectSet()
         imageUriString = ""
     }
@@ -77,7 +72,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
     /**
      * Saves the data from the dto to the firebase
      */
-    private fun save(objectSet: ObjectSet) {
+    private fun saveSets(objectSet: ObjectSet) {
         val document = if (objectSet.id.isNotBlank()) {
             //update existing
             firestore.collection("rankData").document(objectSet.id)
@@ -87,23 +82,40 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
         objectSet.id = document.id
         val set = document.set(objectSet)
-        var savingElements = objectSet.elements
         set.addOnSuccessListener {
-            savingElements.forEach {
-                saveElement(it, document)
+            var zeroes = "00000000000000000000"
+            for(i in 0 until objectSet.elements.size){
+                var id = zeroes
+                id = id.dropLast(i.toString().length)
+                id += i.toString()
+                saveElement(objectSet.elements[i], id, document)
             }
+            for(i in objectSet.elements.size until objectSet.initialSize){
+                var id = zeroes
+                id = id.dropLast(i.toString().length)
+                id += i.toString()
+                removeElement(id, document)
+            }
+            objectSet.initialSize = objectSet.elements.size
         }
         set.addOnFailureListener {
             Log.d("Firebase", "Save Failed $it")
         }
     }
 
-    private fun saveElement(elementObject: ElementObject, document: DocumentReference) {
-        val elementDocument = if (elementObject.id.isNotBlank()) {
-            document.collection("elements").document(elementObject.id)
+    private fun saveRanks(rankedSet: RankedObjectSet) {
+        val document = if (rankedSet.id.isNotBlank()) {
+            firestore.collection("rankedData").document(rankedSet.id)
         } else {
-            document.collection("elements").document()
+            firestore.collection("rankedData").document()
         }
+        rankedSet.id = document.id
+        val set = document.set(rankedSet)
+
+    }
+
+    private fun saveElement(elementObject: ElementObject, id: String, document: DocumentReference) {
+        val elementDocument = document.collection("elements").document(id)
         elementObject.id = elementDocument.id
         val set = elementDocument.set(elementObject)
         set.addOnSuccessListener {
@@ -112,6 +124,11 @@ class MainViewModel(activity: Activity) : ViewModel() {
         set.addOnFailureListener {
             Log.d("Firebase", "Save Failed $it")
         }
+    }
+
+    private fun removeElement(id: String, document: DocumentReference) {
+        val elementDocument = document.collection("elements").document(id)
+        elementDocument.delete()
     }
 
     /**
@@ -123,7 +140,7 @@ class MainViewModel(activity: Activity) : ViewModel() {
         document.delete()
     }
 
-    private fun firebaseDBListener() {
+    private fun firebaseDBListenerSets() {
         firestore.collection("rankData").addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Listen Failed", e)
@@ -155,22 +172,8 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
     }
 
-    internal fun fetchElements(rcy: CreateRankSetFragment.ElementsAdapter? = null) {
-        var elementsCollection = firestore.collection("rankData")
-            .document(objectSet.id)
-            .collection("elements")
-        elementsCollection.addSnapshotListener { querySnapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen Failed", e)
-                return@addSnapshotListener
-            }
+    private fun firebaseDBListenerRanks() {
 
-            if (querySnapshot != null) {
-                var innerElements = querySnapshot?.toObjects(ElementObject::class.java)
-                objectSet.elements = innerElements as ArrayList<ElementObject>
-                rcy?.elements = objectSet.elements
-            }
-        }
     }
 
     internal var objectSets: MutableLiveData<ArrayList<ObjectSet>>
@@ -195,6 +198,14 @@ class MainViewModel(activity: Activity) : ViewModel() {
         }
         set(value) {
             _objectSet = value
+        }
+
+    internal var rankSet: RankedObjectSet
+        get() {
+            return _rankSet
+        }
+        set(value) {
+            _rankSet = value
         }
 }
 

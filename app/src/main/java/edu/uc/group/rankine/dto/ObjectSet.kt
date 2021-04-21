@@ -13,6 +13,7 @@ data class ObjectSet(
 
     private var _elements: ArrayList<ElementObject> = ArrayList()
     private var _menu = false
+    private var _initialSize = _elements.size
 
     var elements: ArrayList<ElementObject>
         @Exclude get() {
@@ -28,6 +29,14 @@ data class ObjectSet(
         }
         set(value) {
             _menu = value
+        }
+
+    var initialSize: Int
+        @Exclude get() {
+            return _initialSize
+        }
+        set(value) {
+            _initialSize = value
         }
 
     /**

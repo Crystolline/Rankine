@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.ObjectSet
+import edu.uc.group.rankine.dto.RankedObjectSet
 import java.io.File
 
 open class MainFragment : Fragment() {
@@ -198,8 +199,9 @@ open class MainFragment : Fragment() {
                 element: ObjectSet
             ) {
                 rankBtn.setOnClickListener {
-                    vm.objectSet = element
-                    vm.fetchElements()
+                    vm.rankSet = RankedObjectSet()
+                    vm.rankSet.set = element
+                    vm.rankSet.startRanking()
                     (activity as MainActivity).moveToRankSet()
                 }
 

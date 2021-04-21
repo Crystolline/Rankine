@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import edu.uc.group.rankine.R
@@ -35,6 +36,33 @@ class RankSetFragment : Fragment() {
         activity.let {
             vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
         }
+        (rankSetToolbar as Toolbar).navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_icon, null)
         (rankSetToolbar as Toolbar).setNavigationOnClickListener { (activity as MainActivity).moveToMain() }
+        updateRankSetView()
+
+        btnSave.setOnClickListener{
+
+        }
+
+        btnFirstElement.setOnClickListener{
+            vm.rankSet.sortStep(false)
+            if(vm.rankSet.isRanking())
+                updateRankSetView()
+            else
+                (activity as MainActivity).moveToMain()
+        }
+
+        btnSecondElement.setOnClickListener{
+            vm.rankSet.sortStep(true)
+            if(vm.rankSet.isRanking())
+                updateRankSetView()
+            else
+                (activity as MainActivity).moveToMain()
+        }
+    }
+
+    private fun updateRankSetView() {
+        txtFirstElement.text = vm.rankSet.leftElement.element
+        txtSecondElement.text = vm.rankSet.rightElement.element
     }
 }

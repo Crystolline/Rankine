@@ -1,22 +1,96 @@
 package edu.uc.group.rankine.dto
 
-import android.sax.Element
-
+import com.google.firebase.firestore.Exclude
 
 /**
  * A <set> of elements that is being ranked or is ranked
  */
-class RankedObjectSet(var set: ObjectSet) {
-    private var rankedElements: ArrayList<ElementObject>? = null
-    private lateinit var fullMergeList: ArrayList<ArrayList<ElementObject>>
-    private lateinit var arrayLeft: ArrayList<ElementObject>
-    private var indexLeft: Int = 0
-    lateinit var leftElement: ElementObject
-    private lateinit var arrayRight: ArrayList<ElementObject>
-    private var indexRight: Int = 0
-    lateinit var rightElement: ElementObject
-    private lateinit var arrayMerge: ArrayList<ElementObject>
-    var menu: Boolean = false
+class RankedObjectSet(
+    var indexLeft: Int = 0,
+    var indexRight: Int = 0,
+    var id: String = "") {
+
+    private var _set: ObjectSet = ObjectSet()
+    private var _rankedElements: ArrayList<ElementObject>? = null
+    private var _fullMergeList: ArrayList<ArrayList<ElementObject>> = ArrayList()
+    private var _arrayLeft: ArrayList<ElementObject> = ArrayList()
+    private var _leftElement: ElementObject = ElementObject()
+    private var _arrayRight: ArrayList<ElementObject> = ArrayList()
+    private var _rightElement: ElementObject = ElementObject()
+    private var _arrayMerge: ArrayList<ElementObject> = ArrayList()
+    private var _menu: Boolean = false
+
+    var set: ObjectSet
+        @Exclude get() {
+            return _set
+        }
+        set(value) {
+            _set = value
+        }
+
+    var rankedElements: ArrayList<ElementObject>?
+        @Exclude get() {
+            return _rankedElements
+        }
+        set(value) {
+            _rankedElements = value
+        }
+
+    var fullMergeList: ArrayList<ArrayList<ElementObject>>
+        @Exclude get() {
+            return _fullMergeList
+        }
+        set(value) {
+            _fullMergeList = value
+        }
+
+    var arrayLeft: ArrayList<ElementObject>
+        @Exclude get() {
+            return _arrayLeft
+        }
+        set(value) {
+            _arrayLeft = value
+        }
+
+    var leftElement: ElementObject
+        @Exclude get() {
+            return _leftElement
+        }
+        set(value) {
+            _leftElement = value
+        }
+
+    var arrayRight: ArrayList<ElementObject>
+        @Exclude get() {
+            return _arrayRight
+        }
+        set(value) {
+            _arrayRight = value
+        }
+
+    var rightElement: ElementObject
+        @Exclude get() {
+            return _rightElement
+        }
+        set(value) {
+            _rightElement = value
+        }
+
+    var arrayMerge: ArrayList<ElementObject>
+        @Exclude get() {
+            return _arrayMerge
+        }
+        set(value) {
+            _arrayMerge = value
+        }
+
+    var menu: Boolean
+        @Exclude get() {
+            return _menu
+        }
+        set(value) {
+            _menu = value
+        }
 
     fun startRanking() {
         if (set.elements.size <= 1) {

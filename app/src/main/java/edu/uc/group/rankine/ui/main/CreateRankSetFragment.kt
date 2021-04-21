@@ -11,7 +11,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,9 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.ElementObject
+import edu.uc.group.rankine.dto.RankedObjectSet
 import kotlinx.android.synthetic.main.activity_create_rank_set.*
 import kotlinx.android.synthetic.main.dynamic_elements.*
-import kotlinx.coroutines.android.awaitFrame
 import java.io.File
 
 
@@ -58,6 +57,17 @@ open class CreateRankSetFragment : Fragment() {
         add_new_element_btn.setOnClickListener {
             vm.objectSet.elements.add(ElementObject(""))
             (rcyElements.adapter as ElementsAdapter).notifyDataSetChanged()
+        }
+
+        btn_Create_Ranking.setOnClickListener{
+            with(vm.objectSet) {
+                this.name = lblElementName.text.toString()
+                localUri = edu.uc.group.rankine.ui.main.MainViewModel.imageUriString
+            }
+            vm.rankSet = RankedObjectSet()
+            vm.rankSet.set = vm.objectSet
+            vm.rankSet.startRanking()
+            (activity as MainActivity).moveToRankSet()
         }
 
         save_btn.setOnClickListener {

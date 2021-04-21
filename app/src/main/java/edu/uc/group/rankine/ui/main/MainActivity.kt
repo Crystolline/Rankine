@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     internal fun moveToRankSet() {
-        if (activeFragment != rankSetFragment) {
+        if (activeFragment != rankSetFragment && vm.rankSet != null && vm.rankSet!!.isRanking()) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, rankSetFragment)
                 .commitNow()
@@ -163,16 +163,13 @@ class MainActivity : AppCompatActivity() {
 
     internal fun moveToCreateRankSet() {
         if (activeFragment != createRankSetFragment) {
+            vm.objectSet.initialSize = vm.objectSet.elements.size
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, createRankSetFragment)
                 .commitNow()
             createRankSetFragment.updateCreateRankSetView()
             activeFragment = createRankSetFragment
         }
-    }
-
-    fun notifyChangeInCreateElements() {
-        (createRankSetFragment.rcyElements as CreateRankSetFragment.ElementsAdapter).notifyDataSetChanged()
     }
 
     /**

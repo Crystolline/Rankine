@@ -15,12 +15,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.group.rankine.R
 import edu.uc.group.rankine.dto.RankedObjectSet
-import edu.uc.group.rankine.ui.main.MainActivity
 import edu.uc.group.rankine.ui.main.MainViewModel
 import edu.uc.group.rankine.ui.main.MainViewModelFactory
 import java.io.File
@@ -29,7 +29,7 @@ import java.io.File
 class RankSetViewFragment : Fragment() {
     private lateinit var vm: MainViewModel
     private lateinit var vmFactory: MainViewModelFactory
-    private var rankSets = ArrayList<RankedObjectSet>()
+    private var _rankSets = ArrayList<RankedObjectSet>()
     private var adapter: RankSetViewAdapter? = null
 
     companion object {
@@ -48,18 +48,20 @@ class RankSetViewFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val recycle = activity?.findViewById<RecyclerView>(R.id.fragment_rank_set_view_recycle)
         vmFactory = activity?.let { MainViewModelFactory(it) }!!
-        vm = ViewModelProvider(this, vmFactory)
-            .get(MainViewModel::class.java)
+        activity.let {
+            vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
+        }
 
         recycle?.layoutManager = LinearLayoutManager(context)
-        adapter = RankSetViewAdapter(rankSets)
+        recycle?.itemAnimator = DefaultItemAnimator()
+        adapter = RankSetViewAdapter(_rankSets)
         recycle?.adapter = adapter
         val set = ItemTouchHelper(ItemTouchCallback(adapter!!))
         set.attachToRecyclerView(recycle!!)
 
         vm.rankSets.observe(viewLifecycleOwner, Observer {
-            rankSets.removeAll(rankSets)
-            rankSets.addAll(it)
+            _rankSets.removeAll(_rankSets)
+            _rankSets.addAll(it)
             recycle.adapter!!.notifyDataSetChanged()
         })
 
@@ -168,12 +170,15 @@ class RankSetViewFragment : Fragment() {
          * What happens in dynamic_main_view
          */
         inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private var name: TextView = itemView.findViewById(R.id.dynamic_main_view_name)
-            private var image: ImageView = itemView.findViewById(R.id.dynamic_main_view_image)
+            private var name: TextView = itemView.findViewById(R.id.dynamic_name)
+            private var image: ImageView = itemView.findViewById(R.id.dynamic_image)
             fun updateElement(rankedObjectSet: RankedObjectSet) {
                 image.clipToOutline = true
                 name.text = rankedObjectSet.set.name
-                if (rankedObjectSet.set.localUri != "null" && rankedObjectSet.set.localUri != "" && File(rankedObjectSet.set.localUri).exists()) {
+                if (rankedObjectSet.set.localUri != "null" && rankedObjectSet.set.localUri != "" && File(
+                        rankedObjectSet.set.localUri
+                    ).exists()
+                ) {
                     val uri = Uri.fromFile(File(rankedObjectSet.set.localUri))
                     val source = ImageDecoder.createSource(activity!!.contentResolver, uri)
                     val bitmap = ImageDecoder.decodeBitmap(source)
