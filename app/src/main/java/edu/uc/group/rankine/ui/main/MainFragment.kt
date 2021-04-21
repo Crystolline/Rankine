@@ -5,15 +5,14 @@ import android.graphics.ImageDecoder
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,13 +44,16 @@ open class MainFragment : Fragment() {
         val btnOpenActivity: FloatingActionButton? = activity?.findViewById(R.id.btnCreateRank)
         val recycle = activity?.findViewById<RecyclerView>(R.id.recycle)
         vmFactory = activity?.let { MainViewModelFactory(it) }!!
-        vm = ViewModelProvider(this, vmFactory)
-            .get(MainViewModel::class.java)
+        activity.let{
+            vm = ViewModelProvider(it!!.viewModelStore, vmFactory).get(MainViewModel::class.java)
+        }
         btnOpenActivity?.setOnClickListener {
+            vm.objectSet = ObjectSet()
             (activity as MainActivity).moveToCreateRankSet()
         }
 
         recycle?.layoutManager = LinearLayoutManager(context)
+        recycle?.itemAnimator = DefaultItemAnimator()
         adapter = MainViewAdaptor(_objectSets)
         recycle?.adapter = adapter
         val set = ItemTouchHelper(ItemTouchCallback(adapter!!))
@@ -62,8 +64,6 @@ open class MainFragment : Fragment() {
             _objectSets.addAll(it)
             recycle.adapter!!.notifyDataSetChanged()
         })
-
-
     }
 
     /**
@@ -80,7 +80,7 @@ open class MainFragment : Fragment() {
          * determines if the type of view based on if the menu is shown
          */
         override fun getItemViewType(position: Int): Int {
-            return if (elements[position].isShowMenu()) {
+            return if (elements[position].menu) {
                 SHOW_MENU
             } else {
                 HIDE_MENU
@@ -122,7 +122,6 @@ open class MainFragment : Fragment() {
 
             if (holder is MenuViewHolder) {
                 holder.setClickListeners(holder.adapterPosition, element)
-
             }
 
         }
@@ -133,9 +132,9 @@ open class MainFragment : Fragment() {
          */
         fun showMenu(position: Int) {
             for (i in 0 until elements.size) {
-                elements[i].setShowMenu(false)
+                elements[i].menu = false
             }
-            elements[position].setShowMenu(true)
+            elements[position].menu = true
             notifyDataSetChanged()
         }
 
@@ -146,7 +145,7 @@ open class MainFragment : Fragment() {
          */
         fun isMenuShown(): Boolean {
             for (i in 0 until elements.size) {
-                if (elements[i].isShowMenu()) {
+                if (elements[i].menu) {
                     return true
                 }
             }
@@ -158,7 +157,7 @@ open class MainFragment : Fragment() {
          */
         fun closeMenu() {
             for (i in 0 until elements.size) {
-                elements[i].setShowMenu(false)
+                elements[i].menu = false
             }
             notifyDataSetChanged()
         }
@@ -168,8 +167,8 @@ open class MainFragment : Fragment() {
          * What happens in dynamic_main_view
          */
         inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private var element: TextView = itemView.findViewById(R.id.dynamic_main_view_name)
-            private var image: ImageView = itemView.findViewById(R.id.dynamic_main_view_image)
+            private var element: TextView = itemView.findViewById(R.id.dynamic_name)
+            private var image: ImageView = itemView.findViewById(R.id.dynamic_image)
             fun updateElement(objectSet: ObjectSet) {
                 image.clipToOutline = true
                 element.text = objectSet.name
@@ -199,13 +198,14 @@ open class MainFragment : Fragment() {
                 element: ObjectSet
             ) {
                 rankBtn.setOnClickListener {
-                    MainViewModel.setData(element)
+                    vm.objectSet = element
+                    vm.fetchElements()
                     (activity as MainActivity).moveToRankSet()
                 }
 
                 editBtn.setOnClickListener {
-                    MainViewModel.setData(element)
-                    (activity as MainActivity).moveToEditFragment()
+                    vm.objectSet = element
+                    (activity as MainActivity).moveToCreateRankSet()
                 }
 
                 deleteBtn.setOnClickListener {
@@ -295,6 +295,3 @@ open class MainFragment : Fragment() {
     }
 
 }
-
-
-
