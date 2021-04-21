@@ -20,7 +20,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintFirstElement"
         android:layout_width="0dp"

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_gray"
+    tools:context=".ui.main.MainActivity">
+
+    <include
+        android:id="@+id/toolbarCreateRankSet"
+        layout="@layout/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:weightSum="3"
+        app:layout_constraintBottom_toTopOf="@+id/set_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarCreateRankSet">
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:backgroundTint="@color/light_green"
+            app:srcCompat="@drawable/ic_back_icon" />
+
+        <ImageButton
+            android:id="@+id/add_new_element_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_green"
+            app:srcCompat="@drawable/ic_plus_icon" />
+
+        <ImageButton
+            android:id="@+id/btn_Create_Ranking"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_green"
+            android:tint="@color/black"
+            app:srcCompat="@drawable/ic_rank_icon" />
+
+        <ImageButton
+            android:id="@+id/save_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:backgroundTint="@color/light_green"
+            android:tint="@color/black"
+            app:srcCompat="@android:drawable/ic_menu_save" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/set_image"
+        android:layout_width="136dp"
+        android:layout_height="136dp"
+        android:background="@drawable/ic_border"
+        android:onClick="onImageAdd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+    </ImageView>
+
+    <EditText
+        android:id="@+id/name_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:layout_weight="10"
+        android:backgroundTint="@color/white"
+        android:hint="Enter Name"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/rcyElements"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/set_image" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcyElements"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_edit_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
